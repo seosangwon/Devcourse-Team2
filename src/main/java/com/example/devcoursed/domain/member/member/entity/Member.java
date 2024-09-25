@@ -31,7 +31,6 @@ public class Member {
 
     @Column(unique = true)
     private String loginId;
-
     private String pw;
     private String name;
 
