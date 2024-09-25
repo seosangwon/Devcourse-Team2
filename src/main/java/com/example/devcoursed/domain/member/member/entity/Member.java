@@ -53,11 +53,19 @@ public class Member {
     List<Orders> ordersList = new ArrayList<>();
 
 
+    public void changeLoginId(String loginId) {
+        this.loginId = loginId;
+    }
 
+    public void changePw(String pw) {
+        this.pw = pw;
+    }
 
+    public void changeName(String name) {
+        this.name = name;
+    }
 
-
-
-
-
+    public void changeMImage(String mImage) {
+        this.mImage = mImage;
+    }
 }
