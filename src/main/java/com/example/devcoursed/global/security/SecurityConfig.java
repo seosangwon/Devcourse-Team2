@@ -53,7 +53,7 @@ public class SecurityConfig {
                                         "/h2-console/**"
                                 )
 
-                )//.formLogin(Customizer.withDefaults()) // formLogin().disalbe() 은 SpringSecurity 3.X,X 이후 버전부터 deprecated 실행
+                ).formLogin(Customizer.withDefaults()) // formLogin().disalbe() 은 SpringSecurity 3.X,X 이후 버전부터 deprecated 실행
         ;
         return http.build();
     }
