@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product")
@@ -47,5 +49,8 @@ public class Product {
         maker.getProductList().add(this);
     }
 
+    public void changeLoss(Long newLoss){
+        this.loss = newLoss;
+    }
 
 }
