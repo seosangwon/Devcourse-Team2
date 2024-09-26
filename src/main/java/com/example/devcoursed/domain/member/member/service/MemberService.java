@@ -11,11 +11,12 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
     private MemberRepository memberRepository;
 
+    @Transactional
     public MemberDTO.Create create(MemberDTO.Create dto) {
         try {
             memberRepository.save(dto.toEntity());
@@ -26,6 +27,7 @@ public class MemberService {
 
     }
 
+    @Transactional
     public MemberDTO.Update update(MemberDTO.Update dto) {
         Optional<Member> memberOptional = memberRepository.findById(dto.getId());
 
@@ -45,21 +47,21 @@ public class MemberService {
                     member.getMImage()
             );
         } else {
-            return null; //Exception 처리 예정
+            throw MemberException.MEMBER_NOT_MODIFIED.getMemberTaskException();
         }
     }
 
+    @Transactional
     public void delete(Long id) {
         Optional<Member> memberOptional = memberRepository.findById(id);
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
             memberRepository.delete(member);
         } else {
-            //Exception 처리
+            throw MemberException.MEMBER_NOT_REMOVED.getMemberTaskException();
         }
     }
 
-    @Transactional(readOnly = true)
     public MemberDTO.Response read(Long id) {
         Optional<Member> memberOptional = memberRepository.findById(id);
         if (memberOptional.isPresent()) {
@@ -73,7 +75,7 @@ public class MemberService {
                     member.getModifiedAt()
             );
         } else {
-            return null; //Exception 처리
+            throw MemberException.MEMBER_NOT_REMOVED.getMemberTaskException();
         }
     }
 
