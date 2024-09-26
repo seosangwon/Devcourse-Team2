@@ -16,7 +16,6 @@ import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Getter
 @AllArgsConstructor(access = PROTECTED)
@@ -52,7 +51,6 @@ public class Member {
 
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL , orphanRemoval = true)
     @ToString.Exclude
-    @JsonManagedReference // 상위 객체를 관리하는 쪽에서 사용
     List<Orders> ordersList = new ArrayList<>();
 
 

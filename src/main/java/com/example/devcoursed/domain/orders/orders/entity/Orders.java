@@ -37,7 +37,6 @@ public class Orders {
 
     @ManyToOne  // Member와 관계를 설정
     @JoinColumn(name = "member_id")  // 외래키 설정
-    @JsonBackReference // 하위 객체에서 참조할 때 사용
     private Member member;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)

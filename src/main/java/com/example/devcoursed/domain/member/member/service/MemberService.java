@@ -93,7 +93,7 @@ public class MemberService {
             throw MemberException.MEMBER_IMAGE_NOT_MODIFIED.getMemberTaskException();
         }
     }
-//findByLoginId 메소드 추가
+//findById 메소드 추가
     @Transactional(readOnly = true)
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId)
