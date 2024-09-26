@@ -13,7 +13,7 @@ public class JwtUtil {
 
     public static String encode(long expirationSeconds , Map<String , Object> data) {
         Claims claims = Jwts.claims()
-                .add("data", data)
+
                 .build();
         Date now = new Date();
         Date expiration = new Date(now.getTime() + 1000 * expirationSeconds);
