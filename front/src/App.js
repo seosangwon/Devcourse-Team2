@@ -11,7 +11,7 @@ function App() {
                 <button className="box color1">발주 관리</button>
                 <button className="box color2">상품 관리</button>
                 <button className="box color3">정보 관리</button>
-                <button className="box color4">현황 조회</button>
+                <button className="box color4">추가 기능</button>
             </div>
         </div>
     );

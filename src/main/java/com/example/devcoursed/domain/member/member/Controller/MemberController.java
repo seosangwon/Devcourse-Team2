@@ -21,19 +21,19 @@ public class MemberController {
 
     //주문하기
     @PostMapping("")
-    public ResponseEntity<MemberDTO.Create> MemberRegister(@Validated @RequestBody MemberDTO.Create dto) {
+    public ResponseEntity<MemberDTO.Create> register(@Validated @RequestBody MemberDTO.Create dto) {
         return ResponseEntity.ok(memberService.create(dto));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberDTO.Response> GetMember(@PathVariable Long id) {
+    public ResponseEntity<MemberDTO.Response> read(@PathVariable Long id) {
         return ResponseEntity.ok(memberService.read(id));
     }
 
 
     //주문 수정하기
     @PutMapping("/{id}")
-    public ResponseEntity<MemberDTO.Update> MemberModify(@PathVariable Long id,
+    public ResponseEntity<MemberDTO.Update> modify(@PathVariable Long id,
                                                 @Validated @RequestBody MemberDTO.Update dto) {
         dto.setId(id);
         return ResponseEntity.ok(memberService.update(dto));
@@ -41,7 +41,7 @@ public class MemberController {
 
     //주문 삭제하기
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> orderDelete(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
         memberService.delete(id);
         return ResponseEntity.ok(Map.of("result", "success"));
     }
