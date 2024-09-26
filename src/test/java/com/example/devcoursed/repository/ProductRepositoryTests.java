@@ -77,7 +77,6 @@ public class ProductRepositoryTests {
                 .pw("pw")
                 .mImage("image")
                 .build();
-
         memberRepository.save(member);
 
         //
@@ -86,7 +85,6 @@ public class ProductRepositoryTests {
                 .loss(3L)
                 .build();
         product.setMaker(member);
-
         productRepository.save(product);
 
     }
