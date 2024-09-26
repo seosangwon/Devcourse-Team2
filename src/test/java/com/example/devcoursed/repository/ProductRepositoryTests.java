@@ -3,13 +3,12 @@ package com.example.devcoursed.repository;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
-import com.example.devcoursed.domain.prodcut.prodcut.entity.Product;
-import com.example.devcoursed.domain.prodcut.prodcut.entity.ProductRepository;
+import com.example.devcoursed.domain.product.product.entity.Product;
+import com.example.devcoursed.domain.product.product.entity.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @SpringBootTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional
 public class ProductRepositoryTests {
 

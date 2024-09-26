@@ -1,10 +1,9 @@
 package com.example.devcoursed.domain.member.member.entity;
 
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
-import com.example.devcoursed.domain.prodcut.prodcut.entity.Product;
+import com.example.devcoursed.domain.product.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.query.Order;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
