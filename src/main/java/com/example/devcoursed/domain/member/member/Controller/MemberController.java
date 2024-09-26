@@ -80,7 +80,6 @@ public class MemberController {
         return ResponseEntity.ok("파일 업로드 성공");
     }
 
-
     @PutMapping("/{id}/update-image")
     public ResponseEntity<MemberDTO.ChangeImage> modifyImage(@PathVariable Long id,
                                                              @Validated @RequestBody MemberDTO.ChangeImage dto) {
