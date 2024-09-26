@@ -14,7 +14,8 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
+
 
     @Transactional
     public MemberDTO.Create create(MemberDTO.Create dto) {

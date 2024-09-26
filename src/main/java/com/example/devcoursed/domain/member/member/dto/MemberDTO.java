@@ -3,6 +3,7 @@ package com.example.devcoursed.domain.member.member.dto;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import com.example.devcoursed.domain.product.product.entity.Product;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class MemberDTO {
         private String loginId;
         private String pw;
         private String name;
+        @JsonProperty("mImage")
         private String mImage;
 
         public Member toEntity() {
@@ -50,10 +52,6 @@ public class MemberDTO {
         private String loginId;
         private String pw;
     }
-
-
-
-
 
     @Data
     @AllArgsConstructor

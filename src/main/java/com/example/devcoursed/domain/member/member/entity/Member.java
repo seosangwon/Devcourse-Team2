@@ -33,7 +33,6 @@ public class Member {
     private String pw;
     private String name;
 
-    @Column(columnDefinition = "TEXT")
     private String mImage;
 
     @CreatedDate
