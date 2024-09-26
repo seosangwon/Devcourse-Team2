@@ -46,16 +46,17 @@ public class Member {
 
     @OneToMany(mappedBy = "maker" , cascade = CascadeType.ALL , orphanRemoval = true)
     @ToString.Exclude
+    @Builder.Default
     List<Product> productList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL , orphanRemoval = true)
     @ToString.Exclude
+    @Builder.Default
     List<Orders> ordersList = new ArrayList<>();
 
-
-
-
-
+    public void updateName(String name){
+        this.name = name;
+    }
 
 
 
