@@ -4,10 +4,15 @@ import com.example.devcoursed.domain.member.member.Exception.MemberException;
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
-
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 import java.util.Optional;
 
+@Service
+@Transactional
+@RequiredArgsConstructor
 public class MemberService {
     private MemberRepository memberRepository;
 
@@ -20,6 +25,7 @@ public class MemberService {
         }
 
     }
+
     public MemberDTO.Update update(MemberDTO.Update dto) {
         Optional<Member> memberOptional = memberRepository.findById(dto.getId());
 
@@ -53,6 +59,7 @@ public class MemberService {
         }
     }
 
+    @Transactional(readOnly = true)
     public MemberDTO.Response read(Long id) {
         Optional<Member> memberOptional = memberRepository.findById(id);
         if (memberOptional.isPresent()) {

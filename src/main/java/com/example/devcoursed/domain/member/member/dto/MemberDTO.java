@@ -52,10 +52,7 @@ public class MemberDTO {
     }
 
 
-    @Data
-    public static class Request {
-        private String loginId;
-    }
+
 
 
     @Data
@@ -69,18 +66,18 @@ public class MemberDTO {
         private LocalDateTime modifiedAt;
     }
 
-    @Data
-    @AllArgsConstructor
-    public static class ProductGet {
-        private Long id;
-        private List<Product> productList = new ArrayList<>();
-    }
-
-    @Data
-    @AllArgsConstructor
-    public static class OrdersGet {
-        private List<Orders> ordersList = new ArrayList<>();
-    }
+//    @Data
+//    @AllArgsConstructor
+//    public static class ProductGet {
+//        private Long id;
+//        private List<Product> productList = new ArrayList<>();
+//    }
+//
+//    @Data
+//    @AllArgsConstructor
+//    public static class OrdersGet {
+//        private List<Orders> ordersList = new ArrayList<>();
+//    }
 
 }
 
