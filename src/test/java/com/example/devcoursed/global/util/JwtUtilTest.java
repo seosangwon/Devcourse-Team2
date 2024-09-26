@@ -26,7 +26,7 @@ class JwtUtilTest {
     @Test
     @DisplayName("jwt 토큰 생성 ")
     void t1() {
-        Map<String, Object> data = Map.of("name", "홍길동", "member_id", 1);
+        Map<String, Object> data = Map.of("loginId", "abcd", "id", "1","authorities","ROLE_MEMBER");
         String token = JwtUtil.encode(data);
         System.out.println(token);
 
