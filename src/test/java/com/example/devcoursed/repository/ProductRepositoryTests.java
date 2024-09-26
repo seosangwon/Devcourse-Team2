@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +28,7 @@ public class ProductRepositoryTests {
     @Autowired
     private MemberRepository memberRepository;
 
+    // Insert Test
     @Test
     @Transactional
     @DisplayName("식재료 등록 테스트")
@@ -65,31 +65,6 @@ public class ProductRepositoryTests {
         assertEquals(member.getName(), product.getMaker().getName());
         assertEquals("양파", savedProduct.getName());
         assertEquals(10L, savedProduct.getLoss());
-    }
-
-    // Insert Test
-    @Test
-    @DisplayName("member null test")
-    public void testInsert(){
-
-        Member member = Member.builder()
-                .name("name")
-                .loginId("login")
-                .pw("pw")
-                .mImage("image")
-                .build();
-
-        memberRepository.save(member);
-
-        //
-        Product product = Product.builder()
-                .name("sub")
-                .loss(3L)
-                .build();
-        product.setMaker(member);
-
-        productRepository.save(product);
-
     }
 
     // Update Test
@@ -132,5 +107,13 @@ public class ProductRepositoryTests {
         Optional<Product> updateProduct = productRepository.findById(productId);
         Assertions.assertEquals(newLoss, updateProduct.get().getLoss(), "Product loss should be updated");
     }
+
+    // Read Test
+//    @Test
+//    @Transactional(readOnly = true)
+//    public void testRead(){
+//
+//    }
+
 
 }

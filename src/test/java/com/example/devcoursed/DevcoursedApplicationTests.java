@@ -19,12 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ActiveProfiles("test")
 class DevcoursedApplicationTests {
 
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private MemberRepository memberRepository;
-
     @Test
     void contextLoads() {
     }
