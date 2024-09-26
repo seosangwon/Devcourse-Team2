@@ -51,6 +51,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+
 
 }
 
