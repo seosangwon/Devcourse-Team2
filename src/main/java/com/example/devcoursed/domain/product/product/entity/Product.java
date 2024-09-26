@@ -47,5 +47,8 @@ public class Product {
         maker.getProductList().add(this);
     }
 
+    public void changeLoss(Long newLoss){
+        this.loss = newLoss;
+    }
 
 }
