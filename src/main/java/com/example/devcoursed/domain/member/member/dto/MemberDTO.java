@@ -66,6 +66,7 @@ public class MemberDTO {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class ChangeImage{
         private Long id;
         private String mImage;
