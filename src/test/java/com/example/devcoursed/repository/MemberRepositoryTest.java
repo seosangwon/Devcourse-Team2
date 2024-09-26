@@ -23,8 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Log4j2
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Transactional(propagation = Propagation.REQUIRED)
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+
+//@Transactional(propagation = Propagation.REQUIRED)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
 public class MemberRepositoryTest {
@@ -34,9 +35,11 @@ public class MemberRepositoryTest {
     @Test
     @DisplayName("삽입 테스트")
     @org.junit.jupiter.api.Order(1)
+    @Rollback(value = false)
     public void testInsert() {
         //GIVENa
         Member member = Member.builder()
+                .id(1L)
                 .loginId("1112")
                 .pw("1111")
                 .name("tester")
@@ -57,7 +60,7 @@ public class MemberRepositoryTest {
         assertNotNull(savedMember.getProductList());
         assertNotNull(savedMember.getOrdersList());
 
-        log.info(savedMember);
+//        log.info(savedMember);
     }
 
     @Test
@@ -66,7 +69,7 @@ public class MemberRepositoryTest {
     @Commit
     @org.junit.jupiter.api.Order(2)
     public void testUpdate() {
-        Long id = 4L;
+        Long id = 1L;
 
         Optional<Member> foundMember = memberRepository.findById(id);
         assertTrue(foundMember.isPresent(), "Member should be present");
@@ -84,15 +87,26 @@ public class MemberRepositoryTest {
         assertEquals("changed title", member.getMImage(), "제품명 일치하지 않음");
     }
 
+    @Test
+    @DisplayName("단일조회 테스트")
+    @org.junit.jupiter.api.Order(3)
+    public void testRead() {
+        Long id = 1L;
 
+        Optional<Member> foundMember = memberRepository.findById(id);
+        assertTrue(foundMember.isPresent(), "Member should be present");
+
+        Member member = foundMember.get();
+        assertNotNull(member);
+    }
 
     @Test
     @DisplayName("삭제 테스트")
     @Commit
-    @org.junit.jupiter.api.Order(3)
+    @org.junit.jupiter.api.Order(4)
     public void testDelete() {
         //GIVEN
-        Long id = 4L;
+        Long id = 1L;
 
         //WHEN
         assertTrue(memberRepository.existsById(id));
@@ -103,18 +117,6 @@ public class MemberRepositoryTest {
     }
 
 
-//    @Test
-//    @DisplayName("단일조회 테스트")
-//    @org.junit.jupiter.api.Order(4)
-//    public void testRead() {
-//        Long id = 3L;
-//
-//        Optional<Member> foundMember = memberRepository.findById(id);
-//        assertTrue(foundMember.isPresent(), "Member should be present");
-//
-//        Member member = foundMember.get();
-//        assertNotNull(member);
-//        log.info(member);
-//    }
+
 
 }
