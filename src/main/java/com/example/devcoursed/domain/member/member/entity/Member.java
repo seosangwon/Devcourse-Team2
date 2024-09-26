@@ -20,7 +20,6 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode
-@Builder
 public class Member {
 
     @Id
@@ -30,6 +29,7 @@ public class Member {
 
     @Column(unique = true)
     private String loginId;
+
     private String pw;
     private String name;
 
@@ -50,6 +50,15 @@ public class Member {
     List<Orders> ordersList = new ArrayList<>();
 
 
+    @Builder
+    public Member(String loginId, String pw, String name, String mImage) {
+        this.loginId = loginId;
+        this.pw = pw;
+        this.name = name;
+        this.mImage = mImage;
+    }
+
+
     public void changeLoginId(String loginId) {
         this.loginId = loginId;
     }
@@ -57,8 +66,9 @@ public class Member {
 
     public void changePw(String pw) {
         this.pw = pw;
+    }
 
-    public void updateName(String name) {
+    public void changeName(String name) {
         this.name=name;
 
     }

@@ -39,13 +39,10 @@ public class MemberRepositoryTest {
     public void testInsert() {
         //GIVENa
         Member member = Member.builder()
-                .id(1L)
                 .loginId("1112")
                 .pw("1111")
                 .name("tester")
                 .mImage("테스트 이미지")
-                .productList(new ArrayList<>())
-                .ordersList(new ArrayList<>())
                 .build();
 
         //WHEN
