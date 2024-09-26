@@ -49,7 +49,6 @@ public class Orders {
     public void setMember(Member member) {
         this.member = member;
         member.getOrdersList().add(this);
-
     }
 
 
