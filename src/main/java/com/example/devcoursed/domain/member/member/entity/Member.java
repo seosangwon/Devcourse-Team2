@@ -1,10 +1,9 @@
 package com.example.devcoursed.domain.member.member.entity;
 
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
-import com.example.devcoursed.domain.prodcut.prodcut.entity.Product;
+import com.example.devcoursed.domain.product.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.query.Order;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -31,11 +30,9 @@ public class Member {
 
     @Column(unique = true)
     private String loginId;
-
     private String pw;
     private String name;
 
-    @Column(columnDefinition = "TEXT")
     private String mImage;
 
     @CreatedDate
@@ -53,6 +50,13 @@ public class Member {
     List<Orders> ordersList = new ArrayList<>();
 
 
+    public void changeLoginId(String loginId) {
+        this.loginId = loginId;
+    }
+
+
+    public void changePw(String pw) {
+        this.pw = pw;
 
     public void updateName(String name) {
         this.name=name;
@@ -60,8 +64,7 @@ public class Member {
     }
 
 
-
-
-
-
+    public void changeMImage(String mImage) {
+        this.mImage = mImage;
+    }
 }
