@@ -53,12 +53,8 @@ public class Member {
     @Builder.Default
     List<Orders> ordersList = new ArrayList<>();
 
-
-
-
-
-
-
-
+    public void updateName(String name){
+        this.name = name;
+    }
 
 }

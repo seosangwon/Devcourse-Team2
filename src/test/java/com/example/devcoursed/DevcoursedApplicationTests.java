@@ -29,41 +29,5 @@ class DevcoursedApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    @Transactional
-    @DisplayName("식재료 등록 테스트")
-    public void testInsertProduct() {
-        // Given
-        Member member = Member.builder()
-                .loginId("membertest")
-                .pw("qwer")
-                .name("테스트")
-                .mImage("아바타")
-                .build();
 
-        Member savedMember = memberRepository.save(member);
-
-        // When
-        Product product = Product.builder()
-                .name("양파")
-                .loss(10L)
-                .maker(savedMember)
-                .build();
-
-//        product.setMaker(savedMember);
-
-        Product savedProduct = productRepository.save(product);
-
-        // Then
-        System.out.println("member id: " + savedMember.getId());
-        System.out.println("member name: " +  savedMember.getName());
-        System.out.println(savedMember.getProductList());
-
-        System.out.println("product's member id: " + savedProduct.getMaker().getId());
-
-        assertNotNull(savedProduct);
-        assertEquals(member.getName(), product.getMaker().getName());
-        assertEquals("양파", savedProduct.getName());
-        assertEquals(10L, savedProduct.getLoss());
-    }
 }

@@ -1,4 +1,4 @@
-package com.example.devcoursed.domain.prodcut.prodcut.entity;
+package com.example.devcoursed.domain.product.product.entity;
 
 
 import com.example.devcoursed.domain.member.member.entity.Member;
