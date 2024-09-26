@@ -80,4 +80,17 @@ public class MemberService {
         }
     }
 
+    @Transactional
+    public MemberDTO.ChangeImage changeImage(MemberDTO.ChangeImage dto) {
+        Optional<Member> memberOptional = memberRepository.findById(dto.getId());
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            member.changeMImage(dto.getMImage());
+            memberRepository.save(member);
+
+            return new MemberDTO.ChangeImage(member.getId(),member.getMImage());
+        } else {
+            throw MemberException.MEMBER_IMAGE_NOT_MODIFIED.getMemberTaskException();
+        }
+    }
 }

@@ -7,7 +7,8 @@ public enum MemberException {
     MEMBER_NOT_REGISTERED("회원가입에 실패했습니다.", HttpStatus.BAD_REQUEST),
     MEMBER_NOT_MODIFIED("회원정보 수정에 실패했습니다.", HttpStatus.BAD_REQUEST),
     MEMBER_LOGIN_DENIED("로그인에 실패했습니다.", HttpStatus.BAD_REQUEST),
-    MEMBER_NOT_REMOVED("회원정보 삭제에 실패했습니다", HttpStatus.BAD_REQUEST);
+    MEMBER_NOT_REMOVED("회원정보 삭제에 실패했습니다", HttpStatus.BAD_REQUEST),
+    MEMBER_IMAGE_NOT_MODIFIED("이미지 변경에 실패했습니다", HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final HttpStatus status;

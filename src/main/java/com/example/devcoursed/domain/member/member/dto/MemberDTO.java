@@ -64,6 +64,13 @@ public class MemberDTO {
         private LocalDateTime modifiedAt;
     }
 
+    @Data
+    @AllArgsConstructor
+    public static class ChangeImage{
+        private Long id;
+        private String mImage;
+    }
+
 //    @Data
 //    @AllArgsConstructor
 //    public static class ProductGet {

@@ -20,7 +20,7 @@ public class MemberController {
     private final MemberService memberService;
 
     //주문하기
-    @PostMapping("")
+    @PostMapping("/register")
     public ResponseEntity<MemberDTO.Create> register(@Validated @RequestBody MemberDTO.Create dto) {
         return ResponseEntity.ok(memberService.create(dto));
     }
@@ -44,6 +44,13 @@ public class MemberController {
     public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
         memberService.delete(id);
         return ResponseEntity.ok(Map.of("result", "success"));
+    }
+
+    @PutMapping("/{id}/update-image")
+    public ResponseEntity<MemberDTO.ChangeImage> modifyImage(@PathVariable Long id,
+                                                   @Validated @RequestBody MemberDTO.ChangeImage dto) {
+        dto.setId(id);
+        return ResponseEntity.ok(memberService.changeImage(dto));
     }
 }
 
