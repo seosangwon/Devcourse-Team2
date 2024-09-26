@@ -2,7 +2,7 @@ package com.example.devcoursed.domain.orders.orderItem.entity;
 
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import jakarta.persistence.*;
-import com.example.devcoursed.domain.prodcut.prodcut.entity.Product;
+import com.example.devcoursed.domain.product.product.entity.Product;
 import lombok.*;
 
 @Entity
