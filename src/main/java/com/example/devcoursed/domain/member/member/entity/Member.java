@@ -2,6 +2,8 @@ package com.example.devcoursed.domain.member.member.entity;
 
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import com.example.devcoursed.domain.product.product.entity.Product;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,12 +16,15 @@ import java.util.List;
 
 import static lombok.AccessLevel.PROTECTED;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Getter
 @AllArgsConstructor(access = PROTECTED)
 @NoArgsConstructor(access = PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode
+
+
 public class Member {
 
     @Id
@@ -47,6 +52,7 @@ public class Member {
 
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL , orphanRemoval = true)
     @ToString.Exclude
+    @JsonManagedReference // 상위 객체를 관리하는 쪽에서 사용
     List<Orders> ordersList = new ArrayList<>();
 
 
