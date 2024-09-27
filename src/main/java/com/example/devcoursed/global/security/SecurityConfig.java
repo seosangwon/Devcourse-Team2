@@ -33,10 +33,10 @@ public class SecurityConfig {
                                 )
                                 .permitAll()
 
-                                .requestMatchers(
-                                        "/adm/**"
-                                )
-                                .hasRole("ADMIN")
+//                                .requestMatchers(
+//                                        "/adm/**"
+//                                )
+//                                .hasRole("ADMIN")
                                 .anyRequest()
                                 .permitAll()
                 )
