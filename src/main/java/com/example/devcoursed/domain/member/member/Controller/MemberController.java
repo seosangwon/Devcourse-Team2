@@ -71,22 +71,25 @@ public class MemberController {
 
     //주문 수정하기
     @PutMapping("/{id}")
-    public ResponseEntity<MemberDTO.Update> modify(@PathVariable Long id,
+    public ResponseEntity<MemberDTO.Update> modify(@AuthenticationPrincipal SecurityUser user,
                                                 @Validated @RequestBody MemberDTO.Update dto) {
+        long id = user.getId();
         dto.setId(id);
         return ResponseEntity.ok(memberService.update(dto));
     }
 
     //주문 삭제하기
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> delete(@AuthenticationPrincipal SecurityUser user) {
+        long id = user.getId();
         memberService.delete(id);
         return ResponseEntity.ok(Map.of("result", "success"));
     }
 
     @PutMapping("/{id}/update-image")
-    public ResponseEntity<MemberDTO.ChangeImage> modifyImage(@PathVariable Long id,
+    public ResponseEntity<MemberDTO.ChangeImage> modifyImage(@AuthenticationPrincipal SecurityUser user,
                                                    @Validated @RequestBody MemberDTO.ChangeImage dto) {
+        long id = user.getId();
         dto.setId(id);
         return ResponseEntity.ok(memberService.changeImage(dto));
     }
