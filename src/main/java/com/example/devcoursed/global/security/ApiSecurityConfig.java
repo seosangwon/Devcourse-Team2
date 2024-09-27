@@ -27,7 +27,7 @@ public class ApiSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         // 인증 없이 접근 가능한 엔드포인트
-                        .requestMatchers("/api/v1/members/login", "/api/v1/members/register").permitAll()
+                        .requestMatchers("/api/v1/members/login", "/api/v1/members/register", "api/v1/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

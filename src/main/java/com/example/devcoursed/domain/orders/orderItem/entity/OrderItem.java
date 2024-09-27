@@ -6,12 +6,11 @@ import com.example.devcoursed.domain.product.product.entity.Product;
 import lombok.*;
 
 @Entity
+@Data
 @Table(name = "orderItem")
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 @ToString(exclude = {"orders", "product"}) //순환 참조 방지
-@Builder
 public class OrderItem {
 
     @Id
@@ -30,4 +29,15 @@ public class OrderItem {
     private int quantity;
     private int price;
 
+    @Builder
+    public OrderItem(Orders orders, Product product, int quantity, int price) {
+        this.orders = orders;
+        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    public void changeOrder(Orders orders){
+        this.orders = orders;
+    }
 }
