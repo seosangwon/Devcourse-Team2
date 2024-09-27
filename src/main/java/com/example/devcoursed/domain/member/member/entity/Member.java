@@ -54,15 +54,13 @@ public class Member {
         this.loginId = loginId;
     }
 
-
     public void changePw(String pw) {
         this.pw = pw;
-
-    public void updateName(String name) {
-        this.name=name;
-
     }
 
+    public void changeName(String name) {
+        this.name=name;
+    }
 
     public void changeMImage(String mImage) {
         this.mImage = mImage;

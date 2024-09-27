@@ -70,6 +70,10 @@ public class MemberDTO {
     public static class ChangeImage{
         private Long id;
         private String mImage;
+
+        public void changeMImage(String mImage) {
+            this.mImage = mImage;
+        }
     }
 
 //    @Data
@@ -84,6 +88,7 @@ public class MemberDTO {
 //    public static class OrdersGet {
 //        private List<Orders> ordersList = new ArrayList<>();
 //    }
+
 
 }
 
