@@ -1,5 +1,6 @@
 package com.example.devcoursed.domain.product.product.controller;
 
+
 import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,9 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/{id}")
-    public ResponseEntity<ProductDTO> register(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO) {
-        ProductDTO registProduct = productService.insert(productDTO, id);
-        return ResponseEntity.ok(registProduct);
+    public ResponseEntity<ProductDTO> register(@PathVariable Long id,
+                                               @Validated @RequestBody ProductDTO productDTO) {
+        return ResponseEntity.ok(productService.insert(productDTO, id));
     }
 
     // 로스율 수정

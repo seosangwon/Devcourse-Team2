@@ -22,41 +22,39 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository; // 변경 예정
 
-    // 상품 등록
+    // 식재료 등록
     public ProductDTO insert(ProductDTO productDTO, Long id){
-
-        // 멤버 조회
+        // 회원 체크 >> 임시 member 객체 생성. 변경 예정
         Member member = memberRepository.findById(id)
                 .orElseThrow( () -> new NoSuchElementException("Member not found with id :" + id));
 
-        Product product = productDTO.toEntity(member);
+        // 식재료 유무 파악
+        productRepository.findByMakerAndName(member, productDTO.getName())
+                .ifPresent(product -> {
+                    throw ProductException.PRODUCT_ALREADY_EXIST.get();
+                });
 
-        // save
-        Product savedProduct = productRepository.save(product);
+        // 식재료 등록
+        Product savedProduct = productRepository.save(productDTO.toEntity(member));
 
-        // 저장된 데이터로 DTO 반환
         return new ProductDTO(savedProduct);
     }
 
     // 로스율 수정
     public ProductDTO modify(ProductDTO productDTO, long id) {
-        log.info("식자재 명: {}", productDTO.getName());
-        log.info("입력된 로스 값: {}", productDTO.getLoss());
-
-        // 회원 체크
-        Member member = memberRepository.findById(id).orElseThrow(); // 임시 member 객체 생성. 변경 예정
+        // 회원 체크 >> 임시 member 객체 생성. 변경 예정
+        Member member = memberRepository.findById(id)
+                .orElseThrow( () -> new NoSuchElementException("Member not found with id :" + id));
 
         // 식재료 유무 파악
         Product foundProduct = productRepository.findByMakerAndName(member, productDTO.getName())
                 .orElseThrow(ProductException.PRODUCT_NOT_FOUND::get);
 
-        // 로스율 변경
+        // 로스율 변경 및 저장
         long loss = (productDTO.getLoss() == null) ? 222L : productDTO.getLoss();
         foundProduct.changeLoss(loss);
         productRepository.save(foundProduct);
 
-        log.info("저장된 로스값: {}", foundProduct.getLoss());
-
-        return ProductDTO.builder().name(productDTO.getName()).loss(loss).build(); // 변경 가능
+        return new ProductDTO(foundProduct); // 변경 가능
     }
 }

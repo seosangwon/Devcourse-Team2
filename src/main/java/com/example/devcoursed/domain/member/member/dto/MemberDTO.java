@@ -42,10 +42,31 @@ public class MemberDTO {
     }
 
     @Data
-    public static class Login {
+    public static class LoginRequestDto {
         private String loginId;
         private String pw;
     }
+
+    @Data
+    public static class LoginResponseDto {
+        private long id;
+        private String LoginId;
+        private String name;
+        private String mImage;
+        private String accessToken;
+        private String refreshToken;
+
+        public LoginResponseDto(Member member) {
+            this.id = member.getId();
+            this.LoginId = member.getLoginId();
+            this.name = member.getName();
+            this.mImage = member.getMImage();
+        }
+
+
+    }
+
+
 
     @Data
     public static class Delete {
