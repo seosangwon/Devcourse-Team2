@@ -67,7 +67,7 @@ public class MemberController {
 
 
 
-    //myPage
+    // 나의 회원 정보 조회화기
     @GetMapping("/")
     public ResponseEntity<MemberDTO.Response> getMyPage(@AuthenticationPrincipal SecurityUser user) {
         long id = user.getId();
