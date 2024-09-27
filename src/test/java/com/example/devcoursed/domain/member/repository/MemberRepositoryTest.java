@@ -1,4 +1,4 @@
-package com.example.devcoursed.repository;
+package com.example.devcoursed.domain.member.repository;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;

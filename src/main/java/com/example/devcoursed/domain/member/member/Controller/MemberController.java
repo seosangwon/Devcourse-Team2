@@ -1,8 +1,9 @@
-package com.example.devcoursed.domain.member.member.Controller;
+package com.example.devcoursed.domain.member.member.controller;
 
 
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.service.MemberService;
+import com.example.devcoursed.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,45 @@ import java.util.Map;
 public class MemberController {
     private final MemberService memberService;
 
-    //주문하기
+    //회원가입
     @PostMapping("/register")
     public ResponseEntity<MemberDTO.Create> register(@Validated @RequestBody MemberDTO.Create dto) {
         return ResponseEntity.ok(memberService.create(dto));
     }
+
+    //로그인
+    @PostMapping("/login")
+    public ResponseEntity<MemberDTO.LoginResponseDto> logins(@Validated @RequestBody MemberDTO.LoginRequestDto request) {
+        //인증 성공
+        MemberDTO.LoginResponseDto responseDto = memberService.checkLoginIdAndPassword(request.getLoginId(), request.getPw());
+
+        Long id = responseDto.getId();
+        String loginId = responseDto.getLoginId();
+
+        List<String> authorities;
+        if (request.getLoginId().equals("admin")) {
+            authorities = List.of("ROLE_ADMIN");
+        } else {
+            authorities = List.of("ROLE_MEMBER");
+        }
+
+        String accessToken = JwtUtil.encode(
+                Map.of("id", id.toString(),
+                        "loginId", loginId,
+                        "authorities", authorities)
+        );
+
+        responseDto.setAccessToken(accessToken);
+
+        return ResponseEntity.ok(responseDto);
+
+
+    }
+
+
+
+//    @GetMapping("/login")
+//    public ResponseEntity<?>
 
     @GetMapping("/{id}")
     public ResponseEntity<MemberDTO.Response> read(@PathVariable Long id) {

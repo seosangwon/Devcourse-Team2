@@ -1,10 +1,12 @@
 package com.example.devcoursed.domain.member.member.service;
 
 import com.example.devcoursed.domain.member.member.Exception.MemberException;
+import com.example.devcoursed.domain.member.member.Exception.MemberTaskException;
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
@@ -15,11 +17,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Transactional
     public MemberDTO.Create create(MemberDTO.Create dto) {
         try {
+            //기존의 회원이 있는지 검사
+            Optional<Member> member = memberRepository.findByLoginId(dto.getLoginId());
+            if (member.isPresent()) {
+                throw new RuntimeException("해당 아이디로 회원가입한 회원이 존재합니다");
+            }
+
+            String password = dto.getPw();
+            dto.setPw(passwordEncoder.encode(password));
+
             memberRepository.save(dto.toEntity());
             return dto;
         } catch (Exception e) {
@@ -92,5 +104,24 @@ public class MemberService {
         } else {
             throw MemberException.MEMBER_IMAGE_NOT_MODIFIED.getMemberTaskException();
         }
+    }
+
+    public MemberDTO.LoginResponseDto checkLoginIdAndPassword(String loginId, String pw) {
+        Optional<Member> opMember = memberRepository.findByLoginId(loginId);
+
+        if (opMember.isEmpty()) {
+            throw MemberException.MEMBER_NOT_FOUND.getMemberTaskException();
+        }
+
+        if (!passwordEncoder.matches(pw, opMember.get().getPw())) {
+            throw MemberException.MEMBER_LOGIN_DENIED.getMemberTaskException();
+        }
+
+        Member member = opMember.get();
+        MemberDTO.LoginResponseDto responseDto = new MemberDTO.LoginResponseDto(member);
+
+        return responseDto;
+
+
     }
 }
