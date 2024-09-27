@@ -28,6 +28,7 @@ public class ProductRepositoryTests {
     @Autowired
     private MemberRepository memberRepository;
 
+    // Insert Test
     @Test
     @Transactional
     @DisplayName("식재료 등록 테스트")
@@ -64,29 +65,6 @@ public class ProductRepositoryTests {
         assertEquals(member.getName(), product.getMaker().getName());
         assertEquals("양파", savedProduct.getName());
         assertEquals(10L, savedProduct.getLoss());
-    }
-
-    // Insert Test
-    @Test
-    @DisplayName("member null test")
-    public void testInsert(){
-
-        Member member = Member.builder()
-                .name("name")
-                .loginId("login")
-                .pw("pw")
-                .mImage("image")
-                .build();
-        memberRepository.save(member);
-
-        //
-        Product product = Product.builder()
-                .name("sub")
-                .loss(3L)
-                .build();
-        product.setMaker(member);
-        productRepository.save(product);
-
     }
 
     // Update Test
@@ -127,7 +105,7 @@ public class ProductRepositoryTests {
 
         // 업데이트 확인
         Optional<Product> updateProduct = productRepository.findById(productId);
-        Assertions.assertEquals(newLoss, updateProduct.get().getLoss(), "Product loss should be updated");
+        assertEquals(newLoss, updateProduct.get().getLoss(), "Product loss should be updated");
     }
 
 }

@@ -1,23 +1,24 @@
 package com.example.devcoursed.domain.product.product.service;
 
-import com.example.devcoursed.domain.member.member.Exception.MemberException;
-import com.example.devcoursed.domain.member.member.Exception.MemberTaskException;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.exception.ProductException;
 import com.example.devcoursed.domain.product.product.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
+@Transactional
 @Log4j2
 public class ProductService {
+
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository; // 변경 예정
 
@@ -43,4 +44,23 @@ public class ProductService {
 
         return savedProductDTO;
     }
+
+
+    // 상품 등록
+    public ProductDTO insert(ProductDTO productDTO, Long id){
+
+        // 멤버 조회
+        Member member = memberRepository.findById(id)
+                .orElseThrow( () -> new NoSuchElementException("Member not found with id :" + id));
+
+        Product product = productDTO.toEntity(member);
+
+        // save
+        Product savedProduct = productRepository.save(product);
+
+        // 저장된 데이터로 DTO 반환
+        return new ProductDTO(savedProduct);
+    }
+
+
 }
