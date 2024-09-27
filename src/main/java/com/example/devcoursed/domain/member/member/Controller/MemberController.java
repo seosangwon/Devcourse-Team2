@@ -44,13 +44,19 @@ public class MemberController {
             authorities = List.of("ROLE_MEMBER");
         }
 
-        String accessToken = JwtUtil.encode(
+        String accessToken = JwtUtil.encode(5,
                 Map.of("id", id.toString(),
                         "loginId", loginId,
                         "authorities", authorities)
         );
 
+        String refreshToken = JwtUtil.encode(60,
+                Map.of("id", id.toString(),
+                        "loginId", loginId)
+        );
+
         responseDto.setAccessToken(accessToken);
+        memberService.setRefreshToken(id, refreshToken);
 
         return ResponseEntity.ok(responseDto);
 
@@ -59,12 +65,18 @@ public class MemberController {
 
 
 
-//    @GetMapping("/login")
-//    public ResponseEntity<?>
 
+
+    //myPage
     @GetMapping("/")
-    public ResponseEntity<MemberDTO.Response> read(@AuthenticationPrincipal SecurityUser user) {
+    public ResponseEntity<MemberDTO.Response> getMyPage(@AuthenticationPrincipal SecurityUser user) {
         long id = user.getId();
+        return ResponseEntity.ok(memberService.read(id));
+    }
+
+    //다른 유저의 회원정보 조회하기
+    @GetMapping("/{id}")
+    public ResponseEntity<MemberDTO.Response> read(@PathVariable Long id) {
         return ResponseEntity.ok(memberService.read(id));
     }
 
@@ -72,7 +84,7 @@ public class MemberController {
     //주문 수정하기
     @PutMapping("/{id}")
     public ResponseEntity<MemberDTO.Update> modify(@PathVariable Long id,
-                                                @Validated @RequestBody MemberDTO.Update dto) {
+                                                   @Validated @RequestBody MemberDTO.Update dto) {
         dto.setId(id);
         return ResponseEntity.ok(memberService.update(dto));
     }
@@ -86,7 +98,7 @@ public class MemberController {
 
     @PutMapping("/{id}/update-image")
     public ResponseEntity<MemberDTO.ChangeImage> modifyImage(@PathVariable Long id,
-                                                   @Validated @RequestBody MemberDTO.ChangeImage dto) {
+                                                             @Validated @RequestBody MemberDTO.ChangeImage dto) {
         dto.setId(id);
         return ResponseEntity.ok(memberService.changeImage(dto));
     }
