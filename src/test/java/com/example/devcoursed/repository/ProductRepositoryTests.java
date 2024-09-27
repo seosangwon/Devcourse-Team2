@@ -3,6 +3,7 @@ package com.example.devcoursed.repository;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
+import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
@@ -10,13 +11,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -95,7 +99,7 @@ public class ProductRepositoryTests {
 
         Optional<Product> foundProduct = productRepository.findById(productId);
 
-        Assertions.assertTrue(foundProduct.isPresent(), "Product should be present");
+        assertTrue(foundProduct.isPresent(), "Product should be present");
 
         Product productName = foundProduct.get();
 
@@ -108,6 +112,28 @@ public class ProductRepositoryTests {
         assertEquals(newLoss, updateProduct.get().getLoss(), "Product loss should be updated");
     }
 
+    // List Read Test
+    @Test
+    @Transactional
+    public void listTest(){
+
+        // 페이지 설정
+        Pageable pageable = PageRequest.of(0, 5, Sort.by("id").ascending());
+
+        Page<ProductDTO> productList = productRepository.findByName("apple", pageable);
+
+        // 리스트가 Null이 아님을 검증
+        assertNotNull( productList );
+
+        // 제품이 1개 이상 존재하는지 검증
+        assertTrue(productList.getTotalElements() > 0);
+        productList.getContent().forEach(System.out::println);
+
+        // 모든 제품이 name의 이름에 맞게 불러왔는지 검증
+        productList.getContent().forEach(product -> assertEquals("apple", product.getName()));
+        productList.getContent().forEach(System.out::println);
+
+    }
 
 
 }

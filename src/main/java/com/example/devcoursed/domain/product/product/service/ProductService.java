@@ -8,6 +8,8 @@ import com.example.devcoursed.domain.product.product.exception.ProductException;
 import com.example.devcoursed.domain.product.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,5 +64,10 @@ public class ProductService {
         return new ProductDTO(savedProduct);
     }
 
+
+    // 상품 목록 조회
+    public Page<ProductDTO> getProductByName(String name, Pageable pageable){
+        return productRepository.findByName(name, pageable);
+    }
 
 }
