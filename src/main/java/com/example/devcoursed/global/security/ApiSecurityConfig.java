@@ -26,9 +26,14 @@ public class ApiSecurityConfig {
                 .securityMatcher("/api/**")
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
+
+                        .requestMatchers("/adm/**")
+                        .hasRole("ADMIN")
+
                         // 인증 없이 접근 가능한 엔드포인트
                         .requestMatchers("/api/v1/members/login", "/api/v1/members/register").permitAll()
                         .anyRequest().authenticated()
+
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
