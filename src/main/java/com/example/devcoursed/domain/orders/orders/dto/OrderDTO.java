@@ -38,6 +38,7 @@ public class OrderDTO {
     }
 
     // 엔티티로부터 DTO 생성
+    @Builder
     public OrderDTO(Orders orders) {
         this.id = orders.getId();
         this.items = orders.getOrderItems().stream()
