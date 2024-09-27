@@ -124,4 +124,8 @@ public class MemberService {
 
 
     }
+
+    public int count() {
+        return memberRepository.findAll().size();
+    }
 }
