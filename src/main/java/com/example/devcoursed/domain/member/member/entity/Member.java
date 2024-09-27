@@ -34,6 +34,7 @@ public class Member {
     private String name;
 
     private String mImage;
+    private String refreshToken;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -75,5 +76,9 @@ public class Member {
 
     public void changeMImage(String mImage) {
         this.mImage = mImage;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

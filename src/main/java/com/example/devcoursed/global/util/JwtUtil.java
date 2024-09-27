@@ -18,7 +18,7 @@ public class JwtUtil {
     private static final SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
 
-    public static String encode(Map<String, Object> data) {
+    public static String encode(long minute,Map<String, Object> data) {
 
         Claims claims = Jwts
                 .claims()
@@ -27,7 +27,7 @@ public class JwtUtil {
                 .build();
 
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + 1000 * 60 * 5); // 1초 X 60 X 5
+        Date expiration = new Date(now.getTime() + 1000 * 60 * minute); // 1초 X 60 X 5
 
         return Jwts.builder()
                 .subject("NBE2_T2")

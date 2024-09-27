@@ -138,4 +138,11 @@ public class MemberService {
     public int count() {
         return memberRepository.findAll().size();
     }
+
+    @Transactional
+    public void setRefreshToken(Long id, String refreshToken) {
+        Member member = memberRepository.findById(id).get();
+        member.updateRefreshToken(refreshToken);
+
+    }
 }

@@ -66,6 +66,23 @@ public class MemberDTO {
 
     }
 
+    @Data
+    public static class RefreshAccessTokenRequestDto {
+        private String refreshToken;
+    }
+
+    @Data
+    public static class RefreshAccessTokenResponseDto {
+        private String accessToken;
+
+        public RefreshAccessTokenResponseDto(String accessToken) {
+            this.accessToken = accessToken;
+        }
+
+    }
+
+
+
 
 
     @Data
@@ -87,7 +104,7 @@ public class MemberDTO {
 
     @Data
     @AllArgsConstructor
-    public static class ChangeImage{
+    public static class ChangeImage {
         private Long id;
         private String mImage;
     }
