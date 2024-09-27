@@ -8,5 +8,4 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByMakerAndName(Member maker, String name);
-
 }

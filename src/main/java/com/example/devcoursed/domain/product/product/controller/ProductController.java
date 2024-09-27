@@ -17,10 +17,11 @@ public class ProductController {
 
     private final ProductService productService;
 
+    // 식재료 등록
     @PostMapping("/{id}")
-    public ResponseEntity<ProductDTO> register(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO) {
-        ProductDTO registProduct = productService.insert(productDTO, id);
-        return ResponseEntity.ok(registProduct);
+    public ResponseEntity<ProductDTO> register(@PathVariable Long id,
+                                               @Validated @RequestBody ProductDTO productDTO) {
+        return ResponseEntity.ok(productService.insert(productDTO, id));
     }
 
     // 로스율 수정
