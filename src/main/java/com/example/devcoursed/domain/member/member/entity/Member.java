@@ -20,7 +20,6 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode
-@Builder
 public class Member {
 
     @Id
@@ -34,7 +33,6 @@ public class Member {
     private String pw;
     private String name;
 
-    @Column(columnDefinition = "TEXT")
     private String mImage;
 
     @CreatedDate
@@ -45,16 +43,38 @@ public class Member {
 
     @OneToMany(mappedBy = "maker" , cascade = CascadeType.ALL , orphanRemoval = true)
     @ToString.Exclude
-    @Builder.Default
     List<Product> productList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL , orphanRemoval = true)
     @ToString.Exclude
-    @Builder.Default
     List<Orders> ordersList = new ArrayList<>();
 
-    public void updateName(String name){
+
+    @Builder
+    public Member(String loginId, String pw, String name, String mImage) {
+        this.loginId = loginId;
+        this.pw = pw;
         this.name = name;
+        this.mImage = mImage;
     }
 
+
+    public void changeLoginId(String loginId) {
+        this.loginId = loginId;
+    }
+
+
+    public void changePw(String pw) {
+        this.pw = pw;
+    }
+
+    public void changeName(String name) {
+        this.name=name;
+
+    }
+
+
+    public void changeMImage(String mImage) {
+        this.mImage = mImage;
+    }
 }

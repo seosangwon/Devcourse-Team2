@@ -5,16 +5,12 @@ import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("api/v1/products")
 @RequiredArgsConstructor
 @Log4j2
 public class ProductController {
@@ -22,8 +18,17 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<ProductDTO> register(@Validated @RequestBody ProductDTO productDTO){
-        ProductDTO registProduct = productService.insert(productDTO);
+    public ResponseEntity<ProductDTO> register(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO) {
+        ProductDTO registProduct = productService.insert(productDTO, id);
         return ResponseEntity.ok(registProduct);
     }
+
+    // 로스율 수정
+    @PutMapping("/{id}") // 임시 path
+    public ResponseEntity<ProductDTO> modifyLoss(@PathVariable Long id,
+                                             @Validated @RequestBody ProductDTO productDTO) {
+
+        return ResponseEntity.ok(productService.modify(productDTO, id));
+    }
+
 }

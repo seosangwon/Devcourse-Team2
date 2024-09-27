@@ -1,28 +1,37 @@
 package com.example.devcoursed.domain.product.product.dto;
 
+import com.example.devcoursed.domain.member.member.entity.Member;
+import com.example.devcoursed.domain.product.product.entity.Product;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-
-@Data
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
+@Builder
 public class ProductDTO {
-
-    private Long id;
-
-    @NotBlank
+    @NotBlank(message = "식재료 이름은 필수 값입니다.")
     private String name;
 
-    @Min(value = 0)
-    @Max(value = 100)
+    @Min(value = 0, message = "로스율은 0 이상이어야 합니다.")
+    @Max(value = 100, message = "로스율은 100 이하여야 합니다.")
     private Long loss;
 
-    private Long memberId;
 
+    public ProductDTO(Product product) {
+        this.name = product.getName();
+        this.loss = product.getLoss();
+    }
+
+    public Product toEntity(Member member) {
+        return Product.builder()
+                .name(name)
+                .loss(loss)
+                .maker(member)
+                .build();
+    }
 
 }
