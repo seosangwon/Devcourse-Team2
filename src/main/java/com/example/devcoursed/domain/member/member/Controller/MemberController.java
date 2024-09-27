@@ -3,10 +3,12 @@ package com.example.devcoursed.domain.member.member.controller;
 
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.service.MemberService;
+import com.example.devcoursed.global.security.SecurityUser;
 import com.example.devcoursed.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,8 +62,9 @@ public class MemberController {
 //    @GetMapping("/login")
 //    public ResponseEntity<?>
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MemberDTO.Response> read(@PathVariable Long id) {
+    @GetMapping("/")
+    public ResponseEntity<MemberDTO.Response> read(@AuthenticationPrincipal SecurityUser user) {
+        long id = user.getId();
         return ResponseEntity.ok(memberService.read(id));
     }
 
