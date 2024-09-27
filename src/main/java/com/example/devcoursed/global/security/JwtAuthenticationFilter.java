@@ -57,6 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 //SecurityContext에 넣을  Authenticiation 생성
                 Authentication auth = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
 
+
                 //SecurityContext에 auth 넣기
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (JwtException e) {
