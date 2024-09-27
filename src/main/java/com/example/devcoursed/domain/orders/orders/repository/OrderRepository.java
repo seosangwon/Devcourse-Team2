@@ -1,5 +1,6 @@
 package com.example.devcoursed.domain.orders.orders.repository;
 
+import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,5 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
     Optional<Orders> findById(Long id);
     List<Orders> findAllByOrderByIdDesc();
-    //    Page<OrderDTO> list(Pageable pageable);
-    Page<Orders> findAll(Pageable pageable);
+    Page<Orders> findByMember(Member member, Pageable pageable);
 }

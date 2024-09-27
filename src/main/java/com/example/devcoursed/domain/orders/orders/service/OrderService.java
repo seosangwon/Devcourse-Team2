@@ -1,5 +1,7 @@
 package com.example.devcoursed.domain.orders.orders.service;
 
+import com.example.devcoursed.domain.member.member.Exception.MemberException;
+import com.example.devcoursed.domain.member.member.Exception.MemberTaskException;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.domain.orders.exception.OrderException;
@@ -15,10 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @Transactional(readOnly = true)
 @Log4j2
@@ -29,15 +27,20 @@ public class OrderService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Orders createOrder(OrderDTO orderDTO, Member member) {
+    public Orders createOrder(OrderDTO orderDTO, Long memberId) {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberException.MEMBER_NOT_FOUND::getMemberTaskException);
+
         memberRepository.save(member);
         Orders orders = orderDTO.toEntity(member, productRepository); // DTO에서 엔티티로 변환
         return orderRepository.save(orders);      // 엔티티 저장
 
     }
     public OrderDTO read(Long orderId) {
-        Orders orders = orderRepository.findById(orderId).orElseThrow(OrderException.NOT_FOUND::get);
-        log.info(orders);
+        Orders orders = orderRepository.findById(orderId).
+                orElseThrow(OrderException.NOT_FOUND::get);
+
         return new OrderDTO(orders);
     }
     @Transactional
@@ -51,11 +54,14 @@ public class OrderService {
             throw OrderException.NOT_REMOVED.get();
         }
     }
-    public Page<OrderDTO.OrderListDTO> getList(OrderDTO.PageRequestDTO pageRequestDTO) {
+    public Page<OrderDTO.OrderListDTO> getList(OrderDTO.PageRequestDTO pageRequestDTO, Long memberId) {
         try {
             Sort sort = Sort.by("id").descending();
             Pageable pageable = pageRequestDTO.getPageable(sort);
-            Page<Orders> ordersPage = orderRepository.findAll(pageable);
+
+            Member member = memberRepository.findById(memberId)
+                    .orElseThrow(MemberException.MEMBER_NOT_FOUND::getMemberTaskException);
+            Page<Orders> ordersPage = orderRepository.findByMember(member,pageable);
             return ordersPage.map(OrderDTO.OrderListDTO::new);
         } catch (Exception e) {
             throw OrderException.NOT_REMOVED.get();

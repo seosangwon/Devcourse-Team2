@@ -40,6 +40,7 @@ public class Orders {
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
 
     private List<OrderItem> orderItems = new ArrayList<>();
+
     @Builder
     public Orders(Long totalPrice, Member member) {
         this.totalPrice = totalPrice;
@@ -49,16 +50,19 @@ public class Orders {
     public void setMember(Member member) {
         this.member = member;
         member.getOrdersList().add(this);
-
     }
 
     public void addOrderItem(Product product, int quantity, int price) {
-        OrderItem orderItem = new OrderItem(this, product, quantity, price);
-        System.out.println("addOrderItem: " + orderItem);
+//        OrderItem orderItem1 = new OrderItem(this, product, quantity, price);
+        OrderItem orderItem = OrderItem.builder()
+                .orders(this)
+                .product(product)
+                .quantity(quantity)
+                .price(price)
+                .build();
+
         this.orderItems.add(orderItem);
-        this.totalPrice += price * quantity;  // 총액 계산
-        System.out.println("Entity total price: " + totalPrice);
-        System.out.println("Entity Order Items: " + this.orderItems.get(0));
+        this.totalPrice += (long) price * quantity;
     }
 
     public void calculateTotalPrice() {
