@@ -37,6 +37,8 @@ function Register({ onRegister }) {
 
             // 토큰을 로컬 스토리지에 저장
             localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('id', id);
+            localStorage.setItem('LoginId', loginId);
 
             // 사용자의 이름이나 ID를 상태에 저장하거나 다른 작업 수행
             setSuccessMessage(`환영합니다, ${name}!`);

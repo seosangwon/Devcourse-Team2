@@ -1,6 +1,6 @@
 package com.example.devcoursed.domain.member.service;
 
-import com.example.devcoursed.domain.member.member.Exception.MemberTaskException;
+import com.example.devcoursed.domain.member.member.exception.MemberTaskException;
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @SpringBootTest
 @ActiveProfiles("test")

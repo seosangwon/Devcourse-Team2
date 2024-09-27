@@ -67,8 +67,7 @@
 .submenu {
   position: absolute; /* 부모 버튼에 상대적인 절대 위치 설정 */
   top: 10%; /* 버튼 아래에 위치하도록 설정 */
-  left: 20%; /* 버튼의 좌측에 위치하도록 설정 */
-  transform: translateX(-50%); /* 중앙 정렬을 위해 왼쪽으로 이동 */
+  left: 0; /* 버튼의 좌측에 위치하도록 설정 */
   background-color: rgba(0, 0, 0, 0); /* 배경색 흰색 */
   border-radius: 5px; /* 모서리 둥글게 */
   z-index: 1; /* 다른 요소들 위에 표시 */
@@ -166,4 +165,27 @@ button[type="submit"]:hover {
 
 .auth-button:hover {
   background-color: #0056b3; /* 호버 시 색상 변경 */
+}
+
+/*UserDelete*/
+/* src/components/UserDelete.css */
+
+.user-delete-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.delete-button {
+  background-color: #e94e77; /* 탈퇴 버튼 색상 */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #c63952; /* 호버 시 색상 변화 */
 }

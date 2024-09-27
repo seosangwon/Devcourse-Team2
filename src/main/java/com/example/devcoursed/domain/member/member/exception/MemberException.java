@@ -1,4 +1,4 @@
-package com.example.devcoursed.domain.member.member.Exception;
+package com.example.devcoursed.domain.member.member.exception;
 
 import org.springframework.http.HttpStatus;
 

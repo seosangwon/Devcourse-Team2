@@ -5,6 +5,7 @@ import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -87,9 +88,10 @@ public class MemberDTO {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class ChangeImage{
         private Long id;
-        private String mImage;
+        private MultipartFile mImage;
     }
 
 //    @Data
