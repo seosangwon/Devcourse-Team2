@@ -46,6 +46,7 @@ public class Product {
         this.maker = maker;
         setMaker(maker);
     }
+
     public void setMaker(Member maker) {
         //this.maker = maker;
         maker.getProductList().add(this);

@@ -108,4 +108,6 @@ public class ProductRepositoryTests {
         assertEquals(newLoss, updateProduct.get().getLoss(), "Product loss should be updated");
     }
 
+
+
 }
