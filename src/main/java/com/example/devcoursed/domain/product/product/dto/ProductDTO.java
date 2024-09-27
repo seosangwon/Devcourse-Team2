@@ -1,5 +1,6 @@
 package com.example.devcoursed.domain.product.product.dto;
 
+import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -24,10 +25,11 @@ public class ProductDTO {
         this.loss = product.getLoss();
     }
 
-    public Product toEntity() {
+    public Product toEntity(Member member) {
         return Product.builder()
                 .name(name)
                 .loss(loss)
+                .maker(member)
                 .build();
     }
 

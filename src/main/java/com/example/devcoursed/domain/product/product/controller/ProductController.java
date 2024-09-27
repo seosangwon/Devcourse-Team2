@@ -16,6 +16,12 @@ public class ProductController {
 
     private final ProductService productService;
 
+    @PostMapping
+    public ResponseEntity<ProductDTO> register(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO) {
+        ProductDTO registProduct = productService.insert(productDTO, id);
+        return ResponseEntity.ok(registProduct);
+    }
+
     // 로스율 수정
     @PutMapping("/{id}") // 임시 path
     public ResponseEntity<ProductDTO> modifyLoss(@PathVariable Long id,
@@ -23,4 +29,5 @@ public class ProductController {
 
         return ResponseEntity.ok(productService.modify(productDTO, id));
     }
+
 }

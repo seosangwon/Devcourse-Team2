@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @Getter
-@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product")
+@EntityListeners(value = AuditingEntityListener.class)
 public class Product {
 
     @Id
@@ -43,14 +43,17 @@ public class Product {
     public Product(String name,  Long loss, Member maker) {
         this.name = name;
         this.loss = loss;
+        this.maker = maker;
+        setMaker(maker);
     }
     public void setMaker(Member maker) {
-        this.maker = maker;
+        //this.maker = maker;
         maker.getProductList().add(this);
     }
 
     public void changeLoss(Long newLoss){
         this.loss = newLoss;
+        this.modifiedAt = LocalDateTime.now();
     }
 
 }
