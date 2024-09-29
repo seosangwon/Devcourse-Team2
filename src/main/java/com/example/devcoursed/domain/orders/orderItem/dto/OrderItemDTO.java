@@ -26,7 +26,5 @@ public class OrderItemDTO {
         this.quantity = orderItem.getQuantity();
         this.price = orderItem.getPrice();
     }
-
-    // 기본 생성자
     public OrderItemDTO() {}
 }

@@ -8,9 +8,11 @@ import com.example.devcoursed.domain.member.member.service.MemberService;
 import com.example.devcoursed.domain.orders.orders.dto.OrderDTO;
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import com.example.devcoursed.domain.orders.orders.service.OrderService;
+import com.example.devcoursed.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,19 +26,10 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
-    // 주문 생성
-//    @PostMapping
-//    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO, @RequestParam Long memberId) {
-//        // memberId는 로그인된 사용자 정보를 받아와야 함
-//        // memberService로 멤버 조회
-//        memberService.read(1L).
-////        Member member = memberRepository.findById(memberId)
-////                .orElseThrow(MemberException.MEMBER_NOT_FOUND::getMemberTaskException);
-//        Orders newOrder = orderService.createOrder(orderDTO, member);
-//        return ResponseEntity.ok(new OrderDTO(newOrder));
-//    }
+
     @PostMapping
-    public Map<String, String> createOrder(@RequestBody OrderDTO orderDTO, @RequestParam Long memberId) {
+    public Map<String, String> createOrder(@RequestBody OrderDTO orderDTO, @AuthenticationPrincipal SecurityUser user) {
+        long memberId = user.getId();
         orderService.createOrder(orderDTO, memberId);
 
         return Map.of("success", "create");
@@ -50,7 +43,8 @@ public class OrderController {
     // 주문 목록 조회
     @GetMapping("/list")
     public ResponseEntity<Page<OrderDTO.OrderListDTO>> getList(@Validated OrderDTO.PageRequestDTO pageRequestDTO
-    ,@RequestParam Long memberId){
+    ,@AuthenticationPrincipal SecurityUser user){
+        long memberId = user.getId();
         return ResponseEntity.ok(orderService.getList(pageRequestDTO, memberId));
     }
 

@@ -53,7 +53,6 @@ public class Orders {
     }
 
     public void addOrderItem(Product product, int quantity, int price) {
-//        OrderItem orderItem1 = new OrderItem(this, product, quantity, price);
         OrderItem orderItem = OrderItem.builder()
                 .orders(this)
                 .product(product)
@@ -63,19 +62,6 @@ public class Orders {
 
         this.orderItems.add(orderItem);
         this.totalPrice += (long) price * quantity;
-    }
-
-    public void calculateTotalPrice() {
-        this.totalPrice = this.orderItems.stream()
-                .mapToLong(orderItem -> (long) orderItem.getPrice() * orderItem.getQuantity())
-                .sum();
-    }
-
-
-    public void removeOrderItem(OrderItem orderItem) {
-        orderItems.remove(orderItem);
-        orderItem.changeOrder(null);
-
     }
 
 
