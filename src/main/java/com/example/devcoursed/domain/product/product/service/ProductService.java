@@ -1,7 +1,7 @@
 package com.example.devcoursed.domain.product.product.service;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
-import com.example.devcoursed.domain.member.member.repository.MemberRepository;
+import com.example.devcoursed.domain.member.member.service.MemberService;
 import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.exception.ProductException;
@@ -11,8 +11,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -20,21 +18,17 @@ import java.util.NoSuchElementException;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final MemberRepository memberRepository; // 변경 예정
+    private final MemberService memberService;
 
     // 식재료 등록
     public ProductDTO insert(ProductDTO productDTO, Long id){
-        // 회원 체크 >> 임시 member 객체 생성. 변경 예정
-        Member member = memberRepository.findById(id)
-                .orElseThrow( () -> new NoSuchElementException("Member not found with id :" + id));
+        Member member = memberService.getMemberById(id);
 
-        // 식재료 유무 파악
         productRepository.findByMakerAndName(member, productDTO.getName())
                 .ifPresent(product -> {
-                    throw ProductException.PRODUCT_ALREADY_EXIST.get();
+                    throw ProductException.PRODUCT_ALREADY_EXIST.getProductException();
                 });
 
-        // 식재료 등록
         Product savedProduct = productRepository.save(productDTO.toEntity(member));
 
         return new ProductDTO(savedProduct);
@@ -42,19 +36,16 @@ public class ProductService {
 
     // 로스율 수정
     public ProductDTO modify(ProductDTO productDTO, long id) {
-        // 회원 체크 >> 임시 member 객체 생성. 변경 예정
-        Member member = memberRepository.findById(id)
-                .orElseThrow( () -> new NoSuchElementException("Member not found with id :" + id));
+        Member member = memberService.getMemberById(id);
 
-        // 식재료 유무 파악
         Product foundProduct = productRepository.findByMakerAndName(member, productDTO.getName())
-                .orElseThrow(ProductException.PRODUCT_NOT_FOUND::get);
+                .orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);
 
-        // 로스율 변경 및 저장
+        // 로스율 null인 경우 default value로 변경
         long loss = (productDTO.getLoss() == null) ? 222L : productDTO.getLoss();
         foundProduct.changeLoss(loss);
         productRepository.save(foundProduct);
 
-        return new ProductDTO(foundProduct); // 변경 가능
+        return new ProductDTO(foundProduct);
     }
 }

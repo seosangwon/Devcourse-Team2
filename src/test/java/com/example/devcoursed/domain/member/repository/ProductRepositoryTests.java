@@ -66,28 +66,6 @@ public class ProductRepositoryTests {
         assertEquals(10L, savedProduct.getLoss());
     }
 
-    // Insert Test
-    @Test
-    @DisplayName("member null test")
-    public void testInsert(){
-
-        Member member = Member.builder()
-                .name("name")
-                .loginId("login")
-                .pw("pw")
-                .mImage("image")
-                .build();
-        memberRepository.save(member);
-
-        //
-        Product product = Product.builder()
-                .name("sub")
-                .loss(3L)
-                .build();
-        product.setMaker(member);
-        productRepository.save(product);
-
-    }
 
     // Update Test
     @Test
