@@ -1,14 +1,10 @@
 package com.example.devcoursed.domain.member.member.dto;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
-import com.example.devcoursed.domain.orders.orders.entity.Orders;
-import com.example.devcoursed.domain.product.product.entity.Product;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Builder
 public class MemberDTO {
@@ -66,6 +62,25 @@ public class MemberDTO {
 
     }
 
+    @Data
+    public static class RefreshAccessTokenRequestDto {
+        private String refreshToken;
+    }
+
+    @Data
+    public static class RefreshAccessTokenResponseDto {
+        private String accessToken;
+        private String message;
+
+        public RefreshAccessTokenResponseDto(String accessToken , String message) {
+            this.accessToken = accessToken;
+            this.message = message;
+        }
+
+    }
+
+
+
 
 
     @Data
@@ -87,9 +102,18 @@ public class MemberDTO {
 
     @Data
     @AllArgsConstructor
-    public static class ChangeImage{
+    public static class ChangeImage {
         private Long id;
         private String mImage;
+    }
+
+    @Data
+    public static class logoutResponseDto {
+        private String message;
+
+        public logoutResponseDto(String message) {
+            this.message = message;
+        }
     }
 
 //    @Data
