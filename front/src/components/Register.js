@@ -51,23 +51,33 @@ function Register({ onRegister }) {
 
     return (
         <form onSubmit={handleRegister}>
-            <div>
-                <label>이름:</label>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+            <div className="inputform">
+                <div>
+                    <label htmlFor="name">이름:</label>
+                    <input
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="이름을 입력하세요" // placeholder 속성 추가
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label>ID:</label>
+                    <input type="text" value={loginId} onChange={(e) => setLoginId(e.target.value)} placeholder="ID를 입력하세요" required/>
+                </div>
+                <div>
+                    <label>비밀번호:</label>
+                    <input type="password" value={pw} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호를 입력하세요" required/>
+                </div>
             </div>
-            <div>
-                <label>로그인 ID:</label>
-                <input type="text" value={loginId} onChange={(e) => setLoginId(e.target.value)} required />
-            </div>
-            <div>
-                <label>비밀번호:</label>
-                <input type="password" value={pw} onChange={(e) => setPassword(e.target.value)} required />
-            </div>
-            {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-            {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
-            <button type="submit">회원가입</button>
+                {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
+                {successMessage && <div style={{color: 'green'}}>{successMessage}</div>}
+                <button type="submit">회원가입</button>
         </form>
-    );
+);
 }
 
 export default Register;

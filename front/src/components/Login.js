@@ -25,13 +25,15 @@ function Login({ onLogin }) {
 
     return (
         <form onSubmit={handleLogin}>
+            <div className="inputform">
             <div>
-                <label>로그인 ID:</label>
+                <label>ID:</label>
                 <input type="text" value={loginId} onChange={(e) => setLoginId(e.target.value)} required />
             </div>
             <div>
                 <label>비밀번호:</label>
                 <input type="password" value={pw} onChange={(e) => setPassword(e.target.value)} required />
+            </div>
             </div>
             {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
             <button type="submit">로그인</button>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-function ProfileImageChange({ userId }) {
+function ProfileImageChange({ userId, onProfileImageChange }) {
     const [file, setFile] = useState(null); // 파일 상태 추가
 
     const handleFileChange = (e) => {
@@ -17,23 +17,24 @@ function ProfileImageChange({ userId }) {
         }
 
         const token = localStorage.getItem('token');
-        console.log(`Authorization: Bearer ${token}`); // 로그 확인
 
         try {
             const response = await fetch(`/api/v1/members/update-image`, {
                 method: 'PUT',
                 headers: {
-                    Authorization: `Bearer ${token}`, // Content-Type은 자동으로 설정됩니다.
+                    Authorization: `Bearer ${token}`,
                 },
-                body: formData, // FormData를 요청 본문에 포함
+                body: formData,
             });
 
             if (response.ok) {
+                const updatedImageUrl = `/api/v1/members/upload/${file.name}`; // 예시로 업데이트된 이미지 URL
+                onProfileImageChange(updatedImageUrl); // 부모 컴포넌트에 이미지 변경 통지
                 alert('프로필 이미지가 업데이트되었습니다.');
             } else {
                 alert('프로필 이미지 업데이트에 실패했습니다.');
                 const errorData = await response.json();
-                console.error('Error:', errorData); // 서버에서 반환한 에러 메시지 확인
+                console.error('Error:', errorData);
             }
         } catch (error) {
             console.error('프로필 이미지 업데이트 에러:', error);
@@ -41,12 +42,11 @@ function ProfileImageChange({ userId }) {
         }
     };
 
-
     return (
         <form onSubmit={handleSubmit}>
             <div>
                 <label>새 프로필 이미지:</label>
-                <input type="file" onChange={handleFileChange} /> {/* 파일 입력 추가 */}
+                <input type="file" onChange={handleFileChange} />
             </div>
             <button type="submit">업데이트</button>
         </form>

@@ -13,6 +13,7 @@ function App() {
     const [showSubMenu, setShowSubMenu] = useState(false);
     const [profileImage, setProfileImage] = useState(''); // 프로필 이미지 상태 추가
 
+
     const handleLogin = (name, mImage) => {
         setUserName(name);
         setProfileImage(mImage ? `/api/v1/members/upload/${mImage}` : '/api/v1/members/upload/defaultImageUrl.jpg'); // mImage가 없으면 기본 이미지 사용
@@ -47,72 +48,83 @@ function App() {
         setActiveComponent('');
     };
 
+    const handleProfileImageChange = (newImage) => {
+        setProfileImage(newImage); // 프로필 이미지 업데이트
+    };
+
+
     return (
-        <div className="App">
-            <h1>발주 관리 통합 솔루션</h1>
+            <div className="App">
+                <h1 >발주 관리 통합 솔루션</h1>
+                <h2 className="index-info">
+                    {userName ? (
+                        <>
+                            <img
+                                src={profileImage}
+                                alt="Profile"
+                                style={{width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px'}}
+                            />
+                            {userName}
+                            <button
+                                className="delete-button"
+                                onClick={() => setUserName('')}
+                                style={{marginLeft: '10px', background: 'red'}}>로그아웃</button>
+                        </>
+                    ) : '로그인 해주세요'}
 
-            <h2>
-                {userName ? (
-                    <>
-                        <img
-                            src={profileImage}
-                            alt="Profile"
-                            style={{width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px'}}
-                        />
+                </h2>
 
-                        {userName}
-                    </>
-                ) : '로그인 해주세요'}
-            </h2>
-
-            {!userName ? (
-                <div className="auth-container">
-                    {activeComponent === '' && (
-                        <button className="auth-button" onClick={() => setActiveComponent('login')}>
-                            로그인
-                        </button>
-                    )}
-                    {activeComponent === '' && (
-                        <button className="auth-button" onClick={() => setActiveComponent('register')}>
-                            회원가입
-                        </button>
-                    )}
-                    {activeComponent === 'login' && <Login onLogin={handleLogin} />}
-                    {activeComponent === 'register' && <Register onRegister={handleRegister} />}
-                    {(activeComponent === 'login' || activeComponent === 'register') && (
-                        <button className="back-button" onClick={handleBack}>뒤로가기</button>
-                    )}
-                </div>
-            ) : activeComponent ? (
-                <div className="component-container">
-                    {activeComponent === 'userInfo' && <UserInfo userId={userId} onUpdate={setUserName} />}
-                    {activeComponent === 'profileImageChange' && <ProfileImageChange userId={userId} />}
-                    {activeComponent === 'userDelete' && <UserDelete userId={userId} onDelete={handleUserDelete} />}
-                    <button className="back-button" onClick={handleBack}>뒤로가기</button>
-                </div>
-            ) : (
-                <div>
-                    <div className="container">
-                        <button className="box color1">발주 관리</button>
-                        <button className="box color2">상품 관리</button>
-                        <button className="box color3" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                            {showSubMenu ? (
-                                <div className="submenu">
-                                    <ul>
-                                        <li onClick={() => showComponent('userInfo')}>▶ 회원 정보 수정</li>
-                                        <li onClick={() => showComponent('profileImageChange')}>▶ 프로필 사진 수정</li>
-                                        <li onClick={() => showComponent('userDelete')}>▶ 회원 탈퇴</li>
-                                    </ul>
-                                </div>
-                            ) : (
-                                "정보 관리"
-                            )}
-                        </button>
+                {!userName ? (
+                    <div className="auth-container">
+                        {activeComponent === '' && (
+                            <button className="auth-button" onClick={() => setActiveComponent('login')}>
+                                로그인
+                            </button>
+                        )}
+                        {activeComponent === '' && (
+                            <button className="auth-button" onClick={() => setActiveComponent('register')}>
+                                회원가입
+                            </button>
+                        )}
+                        {activeComponent === 'login' && <Login onLogin={handleLogin}/>}
+                        {activeComponent === 'register' && <Register onRegister={handleRegister}/>}
+                        {(activeComponent === 'login' || activeComponent === 'register') && (
+                            <button className="back-button" onClick={handleBack}>뒤로가기</button>
+                        )}
                     </div>
-                </div>
-            )}
-        </div>
-    );
-}
 
-export default App;
+                ) : activeComponent ? (
+                    <div className="component-container">
+                        {activeComponent === 'userInfo' && <UserInfo userId={userId} onUpdate={setUserName}/>}
+                        {activeComponent === 'profileImageChange' &&
+                            <ProfileImageChange userId={userId} onProfileImageChange={handleProfileImageChange}/>}
+                        {activeComponent === 'userDelete' && <UserDelete userId={userId} onDelete={handleUserDelete}/>}
+                        <button className="back-button" onClick={handleBack}>뒤로가기</button>
+                    </div>
+                ) : (
+                    <div>
+                        <div className="container">
+                            <button className="box color1">발주 관리</button>
+                            <button className="box color2">상품 관리</button>
+                            <button className="box color3" onMouseEnter={handleMouseEnter}
+                                    onMouseLeave={handleMouseLeave}>
+                                {showSubMenu ? (
+                                    <div className="submenu">
+                                        <ul>
+                                            <li onClick={() => showComponent('userInfo')}>▶ 회원 정보 수정</li>
+                                            <li onClick={() => showComponent('profileImageChange')}>▶ 프로필 사진 수정</li>
+                                            <li onClick={() => showComponent('userDelete')}>▶ 회원 탈퇴</li>
+                                        </ul>
+                                    </div>
+                                ) : (
+                                    "정보 관리"
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
+            );
+            }
+
+            export default App;

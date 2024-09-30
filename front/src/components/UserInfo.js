@@ -84,13 +84,13 @@ function UserProfile() {
                     </div>
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
                     <button type="submit" className="button">수정하기</button>
-                    <button type="button" className="button" onClick={handleEditToggle}>취소</button>
+                    <button type="submit" className="button" onClick={handleEditToggle}>취소</button>
                 </form>
             ) : (
                 <div>
                     <p>이름: {userInfo.name}</p>
                     <p>로그인 ID: {userInfo.loginId}</p>
-                    <button className="button" onClick={handleEditToggle}>수정하기</button>
+                    <button type="submit" className="button" onClick={handleEditToggle}>수정하기</button>
                 </div>
             )}
         </div>
