@@ -1,4 +1,4 @@
-package com.example.devcoursed.repository;
+package com.example.devcoursed.domain.product.repository;
 
 
 import com.example.devcoursed.domain.member.member.entity.Member;
@@ -65,7 +65,6 @@ public class ProductRepositoryTests {
         assertEquals("양파", savedProduct.getName());
         assertEquals(10L, savedProduct.getLoss());
     }
-
 
     // Update Test
     @Test
