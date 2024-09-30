@@ -160,7 +160,7 @@ public class MemberService {
             authorities = List.of("ROLE_MEMBER");
         }
 
-        return JwtUtil.encodeAccessToken(1,
+        return JwtUtil.encodeAccessToken(15,
                 Map.of("id", id.toString(),
                         "loginId", loginId,
                         "authorities", authorities)
@@ -170,7 +170,7 @@ public class MemberService {
     }
 
     public String generateRefreshToken(Long id, String loginId) {
-        return JwtUtil.encodeRefreshToken(2,
+        return JwtUtil.encodeRefreshToken(60 * 24 * 3,
                 Map.of("id", id.toString(),
                         "loginId", loginId)
         );
