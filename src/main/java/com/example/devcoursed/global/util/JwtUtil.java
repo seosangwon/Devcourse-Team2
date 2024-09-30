@@ -2,8 +2,6 @@ package com.example.devcoursed.global.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
@@ -18,7 +16,7 @@ public class JwtUtil {
     private static final SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
 
-    public static String encode(long minute,Map<String, Object> data) {
+    public static String encodeAccessToken(long minute, Map<String, Object> data) {
 
         Claims claims = Jwts
                 .claims()
@@ -27,7 +25,28 @@ public class JwtUtil {
                 .build();
 
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + 1000 * 60 * minute); // 1초 X 60 X 5
+        Date expiration = new Date(now.getTime() + 1000 * 60 * minute); // 1초 X 60 X
+
+        return Jwts.builder()
+                .subject("NBE2_T2")
+                .claims(claims)
+                .issuedAt(now)
+                .expiration(expiration)
+                .signWith(key)
+                .compact();
+
+
+    }
+    public static String encodeRefreshToken(long minute,Map<String, Object> data) {
+
+        Claims claims = Jwts
+                .claims()
+                .add("data", data)
+                .add("type", "refresh_token")
+                .build();
+
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + 1000 * 60 * minute); // 1초 X 60 X
 
         return Jwts.builder()
                 .subject("NBE2_T2")

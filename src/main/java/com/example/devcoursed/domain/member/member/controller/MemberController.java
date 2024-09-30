@@ -7,6 +7,7 @@ import com.example.devcoursed.global.security.SecurityUser;
 import com.example.devcoursed.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -40,8 +41,10 @@ public class MemberController {
         String accessToken = memberService.generateAccessToken(id, loginId);
         String refreshToken = memberService.generateRefreshToken(id, loginId);
 
-        responseDto.setAccessToken(accessToken);
         memberService.setRefreshToken(id, refreshToken);
+
+        responseDto.setAccessToken(accessToken);
+        responseDto.setRefreshToken(refreshToken);
 
         return ResponseEntity.ok(responseDto);
 
@@ -51,10 +54,12 @@ public class MemberController {
     @PostMapping("/refreshAccessToken")
     public ResponseEntity<MemberDTO.RefreshAccessTokenResponseDto> login (@RequestBody MemberDTO.RefreshAccessTokenRequestDto request) {
         String accessToken = memberService.refreshAccessToken(request.getRefreshToken());
-        MemberDTO.RefreshAccessTokenResponseDto responseDto = new MemberDTO.RefreshAccessTokenResponseDto(accessToken);
+        MemberDTO.RefreshAccessTokenResponseDto responseDto = new MemberDTO.RefreshAccessTokenResponseDto(accessToken , "새로운 AccessToken 발급");
 
         return ResponseEntity.ok(responseDto);
     }
+
+
 
 
 

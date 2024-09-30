@@ -1,16 +1,19 @@
 package com.example.devcoursed.domain.member.member.service;
 
 import com.example.devcoursed.domain.member.member.Exception.MemberException;
-import com.example.devcoursed.domain.member.member.Exception.MemberTaskException;
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.global.util.JwtUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -156,28 +159,40 @@ public class MemberService {
         } else {
             authorities = List.of("ROLE_MEMBER");
         }
-        String accessToken = JwtUtil.encode(5,
+
+        return JwtUtil.encodeAccessToken(1,
                 Map.of("id", id.toString(),
                         "loginId", loginId,
                         "authorities", authorities)
         );
 
-        return accessToken;
-
 
     }
 
     public String generateRefreshToken(Long id, String loginId) {
-        String refreshToken = JwtUtil.encode(60,
+        return JwtUtil.encodeRefreshToken(2,
                 Map.of("id", id.toString(),
                         "loginId", loginId)
         );
-        return refreshToken;
 
     }
 
     public String refreshAccessToken(String refreshToken) {
-        Member member = memberRepository.findByRefreshToken(refreshToken).get();
+        //화이트리스트 처리
+        Member member = memberRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() ->  MemberException.MEMBER_LOGIN_DENIED.getMemberTaskException());
+
+        //리프레시 토큰이 만료되었다면 로그아웃
+        try {
+            Claims claims = JwtUtil.decode(refreshToken); // 여기서 에러 처리가 남
+        } catch (ExpiredJwtException e) {
+            // 클라이언트한테 만료되었다고 알려주기
+            throw MemberException.MEMBER_REFRESHTOKEN_EXPIRED.getMemberTaskException();
+
+        }
+
+
+
         return  generateAccessToken(member.getId(), member.getLoginId());
     }
 
