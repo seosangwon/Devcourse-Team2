@@ -58,7 +58,6 @@ public class Member {
         this.mImage = mImage;
     }
 
-
     public void changeLoginId(String loginId) {
         this.loginId = loginId;
     }
