@@ -3,6 +3,7 @@ package com.example.devcoursed.domain.product.repository;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
+import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
@@ -10,6 +11,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,5 +113,68 @@ public class ProductRepositoryTests {
         Optional<Product> updateProduct = productRepository.findById(productId);
         Assertions.assertEquals(newLoss, updateProduct.get().getLoss(), "Product loss should be updated");
     }
+
+    //Read Average Loss Test
+    @Test
+    @Transactional
+    public void averageLossTest(){
+
+        Member member = Member.builder()
+                .loginId("membertest")
+                .pw("qwer")
+                .name("테스트")
+                .mImage("아바타")
+                .build();
+
+        // Given: 테스트 데이터 준비
+        Product product1 = new Product("apple", 5L, member);
+        Product product2 = new Product("apple", 10L, member);
+        Product product3 = new Product("apple", 15L, member);
+
+        productRepository.save(product1);
+        productRepository.save(product2);
+        productRepository.save(product3);
+
+        Double averageLoss = productRepository.findAverageLossByName("apple");
+
+        // 평균 로스율이 예상과 동일한지 검증
+        assertEquals(10L, averageLoss);
+
+    }
+
+
+    // List Test
+    @Test
+    @Transactional
+    public void listTest(){
+        // Given: 테스트 데이터 준비
+        Member member = Member.builder()
+                .loginId("membertest")
+                .pw("qwer")
+                .name("테스트")
+                .mImage("아바타")
+                .build();
+
+        Product product1 = new Product("apple", 5L, member);
+        Product product2 = new Product("apple", 10L, member);
+        Product product3 = new Product("apple", 15L, member);
+
+        productRepository.save(product1);
+        productRepository.save(product2);
+        productRepository.save(product3);
+
+        // 페이지 구성 설정
+        Pageable pageable = PageRequest.of(0, 5, Sort.by("id").descending());
+        Page<ProductDTO> productList = productRepository.listAll(pageable);
+
+        // 검증 과정
+        assertNotNull( productList );
+        assertEquals(3, productList.getTotalElements());
+        assertEquals(1, productList.getTotalPages());
+        assertEquals(0, productList.getNumber());
+        assertEquals(5, productList.getSize());
+        assertEquals(3, productList.getContent().size());
+
+        productList.getContent().forEach(System.out::println);}
 
 }
