@@ -32,11 +32,10 @@ public class SecurityConfig {
                                         new AntPathRequestMatcher("/h2-console/**")
                                 )
                                 .permitAll()
-
-                                .requestMatchers(
-                                        "/adm/**"
-                                )
-                                .hasRole("ADMIN")
+//                                .requestMatchers(
+//                                        "/adm/**"
+//                                )
+//                                .hasRole("ADMIN")
                                 .anyRequest()
                                 .permitAll()
                 )

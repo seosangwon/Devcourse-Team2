@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Optional<Product> findByMaker(Member maker);
+    Optional<Product> findByMakerAndName(Member maker, String name);
 
     // 목록 전체 불러오기
     @Query("SELECT p FROM Product p ORDER BY p.id")
