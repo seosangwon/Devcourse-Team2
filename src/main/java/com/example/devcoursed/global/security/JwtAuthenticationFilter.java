@@ -1,8 +1,8 @@
 package com.example.devcoursed.global.security;
 
 import com.example.devcoursed.global.util.JwtUtil;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,11 +60,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 //SecurityContext에 auth 넣기
                 SecurityContextHolder.getContext().setAuthentication(auth);
-            } catch (JwtException e) {
-                log.warn("유효하지 않는 JWT 토큰 :  {}", e.getMessage());
+            } catch (SignatureException | MalformedJwtException | UnsupportedJwtException |
+                     IllegalArgumentException e) {
+                log.debug("유효하지 않는 JWT 토큰 :  {}", e.getMessage());
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 토큰입니다.");
                 return;
+            } catch (ExpiredJwtException e ) {
+                log.debug("만료된 JWT 토큰 : {}",e.getMessage());
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED , "Access 토큰이 만료되었습니다");
+                return;
             }
+
 
 
         }
