@@ -34,6 +34,7 @@ public class Member {
     private String name;
 
     private String mImage;
+    @Column(columnDefinition = "TEXT")
     private String refreshToken;
 
     @CreatedDate

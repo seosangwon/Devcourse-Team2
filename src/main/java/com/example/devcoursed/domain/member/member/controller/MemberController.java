@@ -30,30 +30,15 @@ public class MemberController {
 
     //로그인
     @PostMapping("/login")
-    public ResponseEntity<MemberDTO.LoginResponseDto> logins(@Validated @RequestBody MemberDTO.LoginRequestDto request) {
+    public ResponseEntity<MemberDTO.LoginResponseDto> login(@Validated @RequestBody MemberDTO.LoginRequestDto request) {
         //인증 성공
         MemberDTO.LoginResponseDto responseDto = memberService.checkLoginIdAndPassword(request.getLoginId(), request.getPw());
 
         Long id = responseDto.getId();
         String loginId = responseDto.getLoginId();
 
-        List<String> authorities;
-        if (request.getLoginId().equals("admin")) {
-            authorities = List.of("ROLE_ADMIN");
-        } else {
-            authorities = List.of("ROLE_MEMBER");
-        }
-
-        String accessToken = JwtUtil.encode(5,
-                Map.of("id", id.toString(),
-                        "loginId", loginId,
-                        "authorities", authorities)
-        );
-
-        String refreshToken = JwtUtil.encode(60,
-                Map.of("id", id.toString(),
-                        "loginId", loginId)
-        );
+        String accessToken = memberService.generateAccessToken(id, loginId);
+        String refreshToken = memberService.generateRefreshToken(id, loginId);
 
         responseDto.setAccessToken(accessToken);
         memberService.setRefreshToken(id, refreshToken);
@@ -61,6 +46,14 @@ public class MemberController {
         return ResponseEntity.ok(responseDto);
 
 
+    }
+
+    @PostMapping("/refreshAccessToken")
+    public ResponseEntity<MemberDTO.RefreshAccessTokenResponseDto> login (@RequestBody MemberDTO.RefreshAccessTokenRequestDto request) {
+        String accessToken = memberService.refreshAccessToken(request.getRefreshToken());
+        MemberDTO.RefreshAccessTokenResponseDto responseDto = new MemberDTO.RefreshAccessTokenResponseDto(accessToken);
+
+        return ResponseEntity.ok(responseDto);
     }
 
 

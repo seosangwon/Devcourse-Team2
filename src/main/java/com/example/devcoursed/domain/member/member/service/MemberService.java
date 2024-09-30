@@ -5,10 +5,13 @@ import com.example.devcoursed.domain.member.member.Exception.MemberTaskException
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
+import com.example.devcoursed.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -145,4 +148,37 @@ public class MemberService {
         member.updateRefreshToken(refreshToken);
 
     }
+
+    public String generateAccessToken(Long id, String loginId) {
+        List<String> authorities;
+        if (loginId.equals("admin")) {
+            authorities = List.of("ROLE_ADMIN");
+        } else {
+            authorities = List.of("ROLE_MEMBER");
+        }
+        String accessToken = JwtUtil.encode(5,
+                Map.of("id", id.toString(),
+                        "loginId", loginId,
+                        "authorities", authorities)
+        );
+
+        return accessToken;
+
+
+    }
+
+    public String generateRefreshToken(Long id, String loginId) {
+        String refreshToken = JwtUtil.encode(60,
+                Map.of("id", id.toString(),
+                        "loginId", loginId)
+        );
+        return refreshToken;
+
+    }
+
+    public String refreshAccessToken(String refreshToken) {
+        Member member = memberRepository.findByRefreshToken(refreshToken).get();
+        return  generateAccessToken(member.getId(), member.getLoginId());
+    }
+
 }
