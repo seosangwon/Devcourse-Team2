@@ -34,14 +34,18 @@ public class ProductController {
         return ResponseEntity.ok(productService.modify(productDTO, id));
     }
 
-    // 이름에 따른 항목 조회(이후 로스율 평균을 구하기 위함)
-    @GetMapping("/search")
-    public ResponseEntity<Page<ProductDTO>> getProductByName(@RequestParam("name") String name, PageRequestDTO pageRequestDTO) {
+    // 평균 로스율 조회
+    @GetMapping("/{name}")
+    public ResponseEntity<Double> readLoss(@PathVariable("name") String name) {
+        Double averageLoss = productService.getAverageLossByName(name);
 
-        Pageable pageable = pageRequestDTO.getPageable();
-        Page<ProductDTO> products = productService.getProductByName(name, pageable);
+        return ResponseEntity.ok(averageLoss);
+    }
 
-        return ResponseEntity.ok(products);
+    // 상품 목록 조회
+    @GetMapping
+    public ResponseEntity<Page<ProductDTO>> getList(PageRequestDTO pageRequestDTO) {
+        return ResponseEntity.ok(productService.getList(pageRequestDTO));
     }
 
 }

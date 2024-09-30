@@ -2,6 +2,7 @@ package com.example.devcoursed.domain.product.product.service;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
+import com.example.devcoursed.domain.product.product.dto.PageRequestDTO;
 import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.exception.ProductException;
@@ -65,9 +66,15 @@ public class ProductService {
     }
 
 
+    // 상품의 평균 로스율 조회
+    public Double getAverageLossByName(String name){
+        return productRepository.findAverageLossByName(name);
+    }
+
     // 상품 목록 조회
-    public Page<ProductDTO> getProductByName(String name, Pageable pageable){
-        return productRepository.findByName(name, pageable);
+    public Page<ProductDTO> getList(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable();
+        return productRepository.listAll(pageable);
     }
 
 }

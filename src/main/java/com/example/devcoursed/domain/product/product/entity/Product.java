@@ -43,12 +43,10 @@ public class Product {
     public Product(String name,  Long loss, Member maker) {
         this.name = name;
         this.loss = loss;
-        this.maker = maker;
-        setMaker(maker);
     }
 
     public void setMaker(Member maker) {
-        //this.maker = maker;
+        this.maker = maker;
         maker.getProductList().add(this);
     }
 

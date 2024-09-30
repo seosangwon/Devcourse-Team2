@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -17,8 +18,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p ORDER BY p.id")
     Page<ProductDTO> listAll(Pageable pageable);
 
-    // 이름별 로스율을 구하기 위한 제품이름에 맞는 항목만 반환한는 문장
+    // 이름별 로스율을 구하기 위한 제품이름에 맞는 항목만 반환한는 문장 // 삭제 예정
     @Query("SELECT p FROM Product p WHERE p.name = :name ORDER BY p.id")
     Page<ProductDTO> findByName(String name, Pageable pageable);
+
+    // 사용자에게 식재료 name을 받아 평균 로스율 반환
+    @Query("SELECT AVG(p.loss) FROM Product p WHERE p.name = :name")
+    Double findAverageLossByName(@Param("name") String name);
 
 }
