@@ -51,7 +51,6 @@ public class Product {
 
     public void changeLoss(Long newLoss){
         this.loss = newLoss;
-        this.modifiedAt = LocalDateTime.now();
     }
 
 }
