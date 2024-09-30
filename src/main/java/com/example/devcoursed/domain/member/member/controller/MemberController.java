@@ -1,17 +1,19 @@
 package com.example.devcoursed.domain.member.member.controller;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.service.MemberService;
 import com.example.devcoursed.global.security.SecurityUser;
 import com.example.devcoursed.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import java.util.Map;
 @Log4j2
 public class MemberController {
     private final MemberService memberService;
+    private final ResourceLoader resourceLoader;
 
     //회원가입
     @PostMapping("/register")
@@ -52,16 +55,8 @@ public class MemberController {
         );
 
         responseDto.setAccessToken(accessToken);
-
         return ResponseEntity.ok(responseDto);
-
-
     }
-
-
-
-//    @GetMapping("/login")
-//    public ResponseEntity<?>
 
     @GetMapping("/")
     public ResponseEntity<MemberDTO.Response> read(@AuthenticationPrincipal SecurityUser user) {
@@ -69,11 +64,10 @@ public class MemberController {
         return ResponseEntity.ok(memberService.read(id));
     }
 
-
     //주문 수정하기
     @PutMapping("/")
     public ResponseEntity<MemberDTO.Update> modify(@AuthenticationPrincipal SecurityUser user,
-                                                @Validated @RequestBody MemberDTO.Update dto) {
+                                                   @Validated @RequestBody MemberDTO.Update dto) {
         long id = user.getId();
         dto.setId(id);
         return ResponseEntity.ok(memberService.update(dto));
@@ -94,22 +88,13 @@ public class MemberController {
         MemberDTO.ChangeImage dto = new MemberDTO.ChangeImage();
         dto.setId(user.getId());
         dto.setMImage(mImage);
-
         return ResponseEntity.ok(memberService.changeImage(dto, mImage));
     }
+
+    // 이미지 서빙 엔드포인트
+    @GetMapping("/upload/{filename:.+}")
+    public ResponseEntity<Resource> serveImage(@PathVariable String filename) {
+        Resource file = resourceLoader.getResource("file:upload/" + filename);
+        return ResponseEntity.ok(file);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

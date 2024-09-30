@@ -107,8 +107,9 @@ public class MemberService {
             Member member = memberOptional.get();
             String fileName = saveImage(imageFile); // MultipartFile로 파일 저장
 
-            member.changeMImage(fileName); // 파일 이름을 저장
+            member.changeMImage(fileName); // URL 저장
             memberRepository.save(member);
+
             return new MemberDTO.ChangeImage(member.getId(), imageFile);
         } else {
             throw MemberException.MEMBER_IMAGE_NOT_MODIFIED.getMemberTaskException();

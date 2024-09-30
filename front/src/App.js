@@ -1,5 +1,3 @@
-// src/App.js
-
 import React, { useState } from 'react';
 import './App.css';
 import UserInfo from './components/UserInfo';
@@ -13,10 +11,11 @@ function App() {
     const [userId, setUserId] = useState(null);
     const [activeComponent, setActiveComponent] = useState('');
     const [showSubMenu, setShowSubMenu] = useState(false);
+    const [profileImage, setProfileImage] = useState(''); // 프로필 이미지 상태 추가
 
-    const handleLogin = (name, id) => {
+    const handleLogin = (name, mImage) => {
         setUserName(name);
-        setUserId(id);
+        setProfileImage(mImage ? `/api/v1/members/upload/${mImage}` : '/api/v1/members/upload/defaultImageUrl.jpg'); // mImage가 없으면 기본 이미지 사용
         setActiveComponent('');
     };
 
@@ -28,6 +27,7 @@ function App() {
     const handleUserDelete = () => {
         setUserName('');
         setUserId(null);
+        setProfileImage(''); // 이미지 초기화
         setActiveComponent('');
     };
 
@@ -50,7 +50,20 @@ function App() {
     return (
         <div className="App">
             <h1>발주 관리 통합 솔루션</h1>
-            <h2>{userName ? `${userName}` : '로그인 해주세요'}</h2>
+
+            <h2>
+                {userName ? (
+                    <>
+                        <img
+                            src={profileImage}
+                            alt="Profile"
+                            style={{width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px'}}
+                        />
+
+                        {userName}
+                    </>
+                ) : '로그인 해주세요'}
+            </h2>
 
             {!userName ? (
                 <div className="auth-container">
