@@ -8,7 +8,7 @@ import com.example.devcoursed.domain.orders.orders.dto.OrderDTO;
 
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import com.example.devcoursed.domain.orders.orders.repository.OrderRepository;
-import com.example.devcoursed.domain.product.product.entity.ProductRepository;
+import com.example.devcoursed.domain.product.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;

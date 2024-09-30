@@ -4,7 +4,7 @@ import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.orders.orderItem.dto.OrderItemDTO;
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import com.example.devcoursed.domain.product.product.entity.Product;
-import com.example.devcoursed.domain.product.product.entity.ProductRepository;
+import com.example.devcoursed.domain.product.product.repository.ProductRepository;
 import lombok.*;
 
 import java.time.LocalDateTime;

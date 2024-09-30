@@ -100,7 +100,7 @@ public class MemberService {
             member.changeMImage(dto.getMImage());
             memberRepository.save(member);
 
-            return new MemberDTO.ChangeImage(member.getId(),member.getMImage());
+            return new MemberDTO.ChangeImage(member.getId(), member.getMImage());
         } else {
             throw MemberException.MEMBER_IMAGE_NOT_MODIFIED.getMemberTaskException();
         }
@@ -123,6 +123,16 @@ public class MemberService {
         return responseDto;
 
 
+    }
+
+    public Member getMemberById(Long id) {
+        Optional<Member> opMember = memberRepository.findById(id);
+
+        if (opMember.isEmpty()) {
+            throw MemberException.MEMBER_NOT_FOUND.getMemberTaskException();
+        }
+
+        return opMember.get();
     }
 
     public int count() {
