@@ -60,6 +60,13 @@ public class MemberController {
     }
 
 
+    @PostMapping("/logout")
+    public ResponseEntity<MemberDTO.logoutResponseDto> logout(@AuthenticationPrincipal SecurityUser user) {
+        memberService.setRefreshToken(user.getId(),"null");
+
+        return ResponseEntity.ok(new MemberDTO.logoutResponseDto("로그아웃 되었습니다"));
+
+    }
 
 
 

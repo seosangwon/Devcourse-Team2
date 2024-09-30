@@ -196,4 +196,5 @@ public class MemberService {
         return  generateAccessToken(member.getId(), member.getLoginId());
     }
 
+
 }

@@ -107,6 +107,15 @@ public class MemberDTO {
         private String mImage;
     }
 
+    @Data
+    public static class logoutResponseDto {
+        private String message;
+
+        public logoutResponseDto(String message) {
+            this.message = message;
+        }
+    }
+
 //    @Data
 //    @AllArgsConstructor
 //    public static class ProductGet {
