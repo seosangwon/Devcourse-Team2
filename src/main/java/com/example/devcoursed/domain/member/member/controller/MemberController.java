@@ -14,6 +14,11 @@ import com.example.devcoursed.global.security.SecurityUser;
 import com.example.devcoursed.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -34,37 +39,62 @@ public class MemberController {
 
     //로그인
     @PostMapping("/login")
-    public ResponseEntity<MemberDTO.LoginResponseDto> logins(@Validated @RequestBody MemberDTO.LoginRequestDto request) {
+    public ResponseEntity<MemberDTO.LoginResponseDto> login(@Validated @RequestBody MemberDTO.LoginRequestDto request) {
         //인증 성공
         MemberDTO.LoginResponseDto responseDto = memberService.checkLoginIdAndPassword(request.getLoginId(), request.getPw());
 
         Long id = responseDto.getId();
         String loginId = responseDto.getLoginId();
 
-        List<String> authorities;
-        if (request.getLoginId().equals("admin")) {
-            authorities = List.of("ROLE_ADMIN");
-        } else {
-            authorities = List.of("ROLE_MEMBER");
-        }
+        String accessToken = memberService.generateAccessToken(id, loginId);
+        String refreshToken = memberService.generateRefreshToken(id, loginId);
 
-        String accessToken = JwtUtil.encode(
-                Map.of("id", id.toString(),
-                        "loginId", loginId,
-                        "authorities", authorities)
-        );
+        memberService.setRefreshToken(id, refreshToken);
 
         responseDto.setAccessToken(accessToken);
+        responseDto.setRefreshToken(refreshToken);
+
+        return ResponseEntity.ok(responseDto);
+
+
+    }
+
+    @PostMapping("/refreshAccessToken")
+    public ResponseEntity<MemberDTO.RefreshAccessTokenResponseDto> login (@RequestBody MemberDTO.RefreshAccessTokenRequestDto request) {
+        String accessToken = memberService.refreshAccessToken(request.getRefreshToken());
+        MemberDTO.RefreshAccessTokenResponseDto responseDto = new MemberDTO.RefreshAccessTokenResponseDto(accessToken , "새로운 AccessToken 발급");
+
         return ResponseEntity.ok(responseDto);
     }
 
+
+    @PostMapping("/logout")
+    public ResponseEntity<MemberDTO.logoutResponseDto> logout(@AuthenticationPrincipal SecurityUser user) {
+        memberService.setRefreshToken(user.getId(),"null");
+
+        return ResponseEntity.ok(new MemberDTO.logoutResponseDto("로그아웃 되었습니다"));
+
+    }
+
+
+
+
+
+    // 나의 회원 정보 조회화기
     @GetMapping("/")
-    public ResponseEntity<MemberDTO.Response> read(@AuthenticationPrincipal SecurityUser user) {
+    public ResponseEntity<MemberDTO.Response> getMyPage(@AuthenticationPrincipal SecurityUser user) {
         long id = user.getId();
         return ResponseEntity.ok(memberService.read(id));
     }
 
-    //주문 수정하기
+    //다른 유저의 회원정보 조회하기
+    @GetMapping("/{id}")
+    public ResponseEntity<MemberDTO.Response> read(@PathVariable Long id) {
+        return ResponseEntity.ok(memberService.read(id));
+    }
+
+
+    //내 정보 수정하기
     @PutMapping("/")
     public ResponseEntity<MemberDTO.Update> modify(@AuthenticationPrincipal SecurityUser user,
                                                    @Validated @RequestBody MemberDTO.Update dto) {

@@ -1,20 +1,27 @@
 package com.example.devcoursed.domain.member.member.service;
 
+import com.example.devcoursed.domain.member.member.exception.MemberException;
+import com.example.devcoursed.domain.member.member.dto.MemberDTO;
+import com.example.devcoursed.domain.member.member.entity.Member;
+import com.example.devcoursed.domain.member.member.repository.MemberRepository;
+import com.example.devcoursed.global.util.JwtUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import com.example.devcoursed.domain.member.member.exception.MemberException;
-import com.example.devcoursed.domain.member.member.dto.MemberDTO;
-import com.example.devcoursed.domain.member.member.entity.Member;
-import com.example.devcoursed.domain.member.member.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -51,8 +58,6 @@ public class MemberService {
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
             member.changeLoginId(dto.getLoginId());
-            String password = dto.getPw();
-            dto.setPw(passwordEncoder.encode(password));
             member.changePw(dto.getPw());
             member.changeName(dto.getName());
             member.changeMImage(dto.getMImage());
@@ -156,4 +161,57 @@ public class MemberService {
     public int count() {
         return memberRepository.findAll().size();
     }
+
+    @Transactional
+    public void setRefreshToken(Long id, String refreshToken) {
+        Member member = memberRepository.findById(id).get();
+        member.updateRefreshToken(refreshToken);
+
+    }
+
+    public String generateAccessToken(Long id, String loginId) {
+        List<String> authorities;
+        if (loginId.equals("admin")) {
+            authorities = List.of("ROLE_ADMIN");
+        } else {
+            authorities = List.of("ROLE_MEMBER");
+        }
+
+        return JwtUtil.encodeAccessToken(15,
+                Map.of("id", id.toString(),
+                        "loginId", loginId,
+                        "authorities", authorities)
+        );
+
+
+    }
+
+    public String generateRefreshToken(Long id, String loginId) {
+        return JwtUtil.encodeRefreshToken(60 * 24 * 3,
+                Map.of("id", id.toString(),
+                        "loginId", loginId)
+        );
+
+    }
+
+    public String refreshAccessToken(String refreshToken) {
+        //화이트리스트 처리
+        Member member = memberRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() ->  MemberException.MEMBER_LOGIN_DENIED.getMemberTaskException());
+
+        //리프레시 토큰이 만료되었다면 로그아웃
+        try {
+            Claims claims = JwtUtil.decode(refreshToken); // 여기서 에러 처리가 남
+        } catch (ExpiredJwtException e) {
+            // 클라이언트한테 만료되었다고 알려주기
+            throw MemberException.MEMBER_REFRESHTOKEN_EXPIRED.getMemberTaskException();
+
+        }
+
+
+
+        return  generateAccessToken(member.getId(), member.getLoginId());
+    }
+
+
 }

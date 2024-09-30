@@ -20,4 +20,6 @@ public class SecurityUser extends User {
         this.loginId = username;
         this.authorities = authorities.stream().collect(Collectors.toSet());
     }
+
+
 }

@@ -21,7 +21,7 @@ spring:
 
 logging:
   level:
-    com.example.devcoursed: DEBUG
+    com.example.com.example.devcoursed: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
