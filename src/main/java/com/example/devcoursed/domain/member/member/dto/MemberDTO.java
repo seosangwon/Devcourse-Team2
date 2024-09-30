@@ -3,6 +3,7 @@ package com.example.devcoursed.domain.member.member.dto;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -102,9 +103,10 @@ public class MemberDTO {
 
     @Data
     @AllArgsConstructor
-    public static class ChangeImage {
+    @NoArgsConstructor
+    public static class ChangeImage{
         private Long id;
-        private String mImage;
+        private MultipartFile mImage;
     }
 
     @Data

@@ -1,4 +1,4 @@
-package com.example.devcoursed.domain.member.member.Exception;
+package com.example.devcoursed.domain.member.member.exception;
 
 public class MemberTaskException extends RuntimeException {
 
