@@ -4,18 +4,19 @@ import axios from 'axios';
 function InsertOrder({ memberId }) {
     const [items, setItems] = useState([]);
     const [products, setProducts] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalPrice, setTotalPrice] = useState('');
 
     // 주문 등록 핸들러
+    const id = localStorage.getItem('id');
     const handleRegister = async (e) => {
         e.preventDefault();
         const dataToSend = {
             items: items.map(item => ({
-                productId: item.productId,  // 여기서는 ID를 사용합니다.
+                productId: item.productId, // ID 사용
                 quantity: item.quantity,
                 price: item.price,
             })),
-            memberId,
+            id,
             totalPrice,
         };
 
@@ -27,8 +28,10 @@ function InsertOrder({ memberId }) {
                 headers: { Authorization: `Bearer ${token}` },
             });
             console.log('주문 등록 성공:', response.data);
+            alert('주문 등록 성공');
         } catch (error) {
             console.error('주문 등록 실패:', error.response ? error.response.data : error.message);
+            alert('주문 등록 실패');
         }
     };
 
@@ -55,25 +58,25 @@ function InsertOrder({ memberId }) {
     // 아이템 변경 시
     const handleItemChange = (index, field, value) => {
         const newItems = [...items];
-
         if (field === 'productId') {
-            const selectedProduct = products.find(product => product.id === value);
-            newItems[index] = {
-                productId: value,
-                quantity: newItems[index]?.quantity || 1,
-                price: selectedProduct ? selectedProduct.price : 0,
-            };
+            const selectedProduct = products.find(product => product.id === Number(value));
+            if (selectedProduct) {
+                newItems[index] = {
+                    productId: selectedProduct.id,  // ID 사용
+                    quantity: newItems[index]?.quantity,
+                    price: selectedProduct.price,   // 선택한 상품의 가격
+                };
+            }
         } else {
             newItems[index][field] = value;
         }
-
         setItems(newItems);
         calculateTotalPrice(); // 총 가격 재계산
     };
 
     // 항목 추가
     const addItem = () => {
-        setItems([...items, { productId: '', quantity: 1, price: 0 }]);
+        setItems([...items, { productId: '', quantity: '', price: '' }]);
     };
 
     // 항목 제거
@@ -89,26 +92,28 @@ function InsertOrder({ memberId }) {
                 <div key={index}>
                     <select
                         value={item.productId}
-                        onChange={(e) => handleItemChange(index, 'productId', e.target.value)}
+                        onChange={(e) => handleItemChange(index, 'productId', e.target.value)} // ID 사용
                     >
                         <option value="">Select a product</option>
                         {products.map((product) => (
-                            <option key={product.id} value={product.id}>
+                            <option key={product.id} value={product.id}> {/* ID로 바인딩 */}
                                 {product.name}
                             </option>
                         ))}
                     </select>
                     <input
                         type="number"
-                        value={item.quantity || 1}
-                        onChange={(e) => handleItemChange(index, 'quantity', Number(e.target.value))}
+                        value={item.quantity || ''}
+                        onChange={(e) => handleItemChange(index, 'quantity', Number(e.target.value))} // 수량 업데이트
                         placeholder="개수를 입력하세요"
                         required
                     />
                     <input
                         type="number"
-                        value={item.price}
-                        readOnly // 가격은 자동으로 설정되므로 읽기 전용으로 설정
+                        value={item.price || ''}
+                        onChange={(e) => handleItemChange(index, 'price', Number(e.target.value))} // 가격 업데이트
+                        placeholder="가격을 입력하세요"
+                        required
                     />
                     <button type="button" onClick={() => removeItem(index)}>Remove</button>
                 </div>

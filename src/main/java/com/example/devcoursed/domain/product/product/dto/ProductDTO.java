@@ -13,6 +13,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class ProductDTO {
+    private Long id;
     @NotBlank(message = "식재료 이름은 필수 값입니다.")
     private String name;
 
@@ -21,6 +22,7 @@ public class ProductDTO {
     private Long loss;
 
     public ProductDTO(Product product) {
+        this.id = product.getId();
         this.name = product.getName();
         this.loss = product.getLoss();
     }
