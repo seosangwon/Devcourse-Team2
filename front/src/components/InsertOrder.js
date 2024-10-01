@@ -87,12 +87,13 @@ function InsertOrder({ memberId }) {
     };
 
     return (
-        <form onSubmit={handleRegister}>
+        <form onSubmit={handleRegister} >
             {items.map((item, index) => (
                 <div key={index}>
                     <select
                         value={item.productId}
                         onChange={(e) => handleItemChange(index, 'productId', e.target.value)} // ID 사용
+                        style={{ display: 'block' }}
                     >
                         <option value="">Select a product</option>
                         {products.map((product) => (
