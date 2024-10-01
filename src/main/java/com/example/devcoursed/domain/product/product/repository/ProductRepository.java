@@ -1,7 +1,6 @@
 package com.example.devcoursed.domain.product.product.repository;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
-import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
