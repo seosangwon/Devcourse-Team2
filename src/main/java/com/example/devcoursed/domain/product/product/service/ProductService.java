@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -56,6 +58,14 @@ public class ProductService {
     // 상품의 평균 로스율 조회
     public Double getAverageLossByName(String name){
         return productRepository.findAverageLossByName(name);
+    }
+
+    // 상품(식재료) 단건 조회
+    public ProductDTO read(String name){
+        Optional<ProductDTO> productDTO = productRepository.findByName(name);
+
+        return productDTO.orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);
+
     }
 
     // 상품 목록 조회

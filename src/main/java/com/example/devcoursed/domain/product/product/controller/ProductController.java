@@ -39,12 +39,15 @@ public class ProductController {
     }
 
     // 평균 로스율 조회
-    @GetMapping("/{name}")
-    public ResponseEntity<Double> readLoss(@AuthenticationPrincipal SecurityUser user,
-                                               @PathVariable("name") String name) {
-        Double averageLoss = productService.getAverageLossByName(name);
+    @GetMapping("/loss/{name}")
+    public ResponseEntity<Double> readLoss(@PathVariable("name") String name) {
+        return ResponseEntity.ok(productService.getAverageLossByName(name));
+    }
 
-        return ResponseEntity.ok(averageLoss);
+    // 상품 단건 조회
+    @GetMapping("/{name}")
+    public ResponseEntity<ProductDTO> read(@AuthenticationPrincipal SecurityUser user, @PathVariable("name") String name){
+        return ResponseEntity.ok(productService.read(name));
     }
 
     // 상품 목록 조회

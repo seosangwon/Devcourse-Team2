@@ -21,8 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -101,7 +100,7 @@ public class ProductRepositoryTests {
 
         Optional<Product> foundProduct = productRepository.findById(productId);
 
-        Assertions.assertTrue(foundProduct.isPresent(), "Product should be present");
+        assertTrue(foundProduct.isPresent(), "Product should be present");
 
         Product productName = foundProduct.get();
 
@@ -142,6 +141,32 @@ public class ProductRepositoryTests {
 
     }
 
+    // Read Test
+    @Test
+    @Transactional(readOnly = true)
+    public void readTest(){
+        Member member = Member.builder()
+                .loginId("membertest")
+                .pw("qwer")
+                .name("테스트")
+                .mImage("아바타")
+                .build();
+
+        // Given: 테스트 데이터 준비
+        Product product1 = new Product("apple", 5L, member);
+        Product product2 = new Product("orange", 10L, member);
+
+        productRepository.save(product1);
+        productRepository.save(product2);
+
+        String productIfind = "apple";
+
+        Optional<ProductDTO> foundProduct = productRepository.findByName(productIfind);
+
+        // 검증
+        assertTrue(foundProduct.isPresent(), "Product should be present");
+
+    }
 
     // List Test
     @Test
