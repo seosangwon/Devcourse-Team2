@@ -1,3 +1,4 @@
+// src/components/UserProfile.js
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../axiosInstance'; // 커스텀 Axios 인스턴스 사용
 

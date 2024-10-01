@@ -9,6 +9,7 @@ import InsertOrder from "./components/InsertOrder";
 import OrderListPage from "./components/OrderListPage";
 import Logout from "./components/Logout";
 
+
 function App() {
     const [userName, setUserName] = useState('');
     const [userId, setUserId] = useState(null);
@@ -23,6 +24,14 @@ function App() {
         setUserName(name);
         setProfileImage(mImage ? `/api/v1/members/upload/${mImage}` : '/api/v1/members/upload/defaultImageUrl.jpg'); // mImage가 없으면 기본 이미지 사용
 
+        setActiveComponent('');
+    };
+
+
+    const handleLogout = () => {
+        setUserName('');
+        setUserId(null);
+        setProfileImage('');
         setActiveComponent('');
     };
 

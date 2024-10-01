@@ -21,6 +21,7 @@ function Login({ onLogin }) {
             localStorage.setItem('id', id); // id 저장
 
             onLogin( name, mimage); // 로그인 후 사용자 이름과 이미지 전달
+
         } catch (error) {
             setErrorMessage('로그인 실패: ' + (error.response?.data?.message || '서버에 문제가 발생했습니다.'));
         }
