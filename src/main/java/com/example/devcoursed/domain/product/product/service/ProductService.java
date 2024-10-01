@@ -2,7 +2,7 @@ package com.example.devcoursed.domain.product.product.service;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.service.MemberService;
-import com.example.devcoursed.domain.product.product.dto.PageRequestDTO;
+import com.example.devcoursed.domain.product.product.dto.ProductDTO.PageRequestDTO;
 import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.exception.ProductException;
@@ -61,17 +61,18 @@ public class ProductService {
     }
 
     // 상품(식재료) 단건 조회
-    public ProductDTO read(String name){
-        Optional<ProductDTO> productDTO = productRepository.findByName(name);
+    public ProductDTO read(String name, Long memberId){
+        Product product = productRepository.findByName(name, memberId).orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);;
 
-        return productDTO.orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);
+        return new ProductDTO(product);
 
     }
 
     // 상품 목록 조회
-    public Page<ProductDTO> getList(PageRequestDTO pageRequestDTO) {
+    public Page<ProductDTO> getList(ProductDTO.PageRequestDTO pageRequestDTO, Long memberId) {
         Pageable pageable = pageRequestDTO.getPageable();
-        return productRepository.listAll(pageable);
+        Page<Product> productPage = productRepository.listAll(memberId, pageable);
+        return productPage.map(ProductDTO::new);
     }
 
 }

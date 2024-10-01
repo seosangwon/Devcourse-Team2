@@ -1,6 +1,6 @@
 package com.example.devcoursed.domain.product.product.controller;
 
-import com.example.devcoursed.domain.product.product.dto.PageRequestDTO;
+import com.example.devcoursed.domain.product.product.dto.ProductDTO.PageRequestDTO;
 import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.service.ProductService;
 import com.example.devcoursed.global.security.SecurityUser;
@@ -47,13 +47,16 @@ public class ProductController {
     // 상품 단건 조회
     @GetMapping("/{name}")
     public ResponseEntity<ProductDTO> read(@AuthenticationPrincipal SecurityUser user, @PathVariable("name") String name){
-        return ResponseEntity.ok(productService.read(name));
+        Long memberId = user.getId();
+        return ResponseEntity.ok(productService.read(name, memberId));
     }
 
     // 상품 목록 조회
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> getList(PageRequestDTO pageRequestDTO) {
-        return ResponseEntity.ok(productService.getList(pageRequestDTO));
+    public ResponseEntity<Page<ProductDTO>> getList(@AuthenticationPrincipal SecurityUser user, ProductDTO.PageRequestDTO pageRequestDTO) {
+        Long memberId = user.getId();
+        Page<ProductDTO> productDTOPage = productService.getList(pageRequestDTO, memberId);
+        return ResponseEntity.ok(productDTOPage);
     }
 
 }

@@ -125,16 +125,32 @@ public class ProductRepositoryTests {
                 .mImage("아바타")
                 .build();
 
+        memberRepository.save(member);
+
         // Given: 테스트 데이터 준비
-        Product product1 = new Product("apple", 5L, member);
-        Product product2 = new Product("apple", 10L, member);
-        Product product3 = new Product("apple", 15L, member);
+        Product product1 = Product.builder()
+                .name("sub")
+                .loss(5L)
+                .build();
+        product1.setMaker(member);
+
+        Product product2 = Product.builder()
+                .name("sub")
+                .loss(10L)
+                .build();
+        product2.setMaker(member);
+
+        Product product3 = Product.builder()
+                .name("sub")
+                .loss(15L)
+                .build();
+        product3.setMaker(member);
 
         productRepository.save(product1);
         productRepository.save(product2);
         productRepository.save(product3);
 
-        Double averageLoss = productRepository.findAverageLossByName("apple");
+        Double averageLoss = productRepository.findAverageLossByName("sub");
 
         // 평균 로스율이 예상과 동일한지 검증
         assertEquals(10L, averageLoss);
@@ -143,8 +159,10 @@ public class ProductRepositoryTests {
 
     // Read Test
     @Test
-    @Transactional(readOnly = true)
+    @Transactional
     public void readTest(){
+
+        // Given: 테스트 데이터 준비
         Member member = Member.builder()
                 .loginId("membertest")
                 .pw("qwer")
@@ -152,16 +170,25 @@ public class ProductRepositoryTests {
                 .mImage("아바타")
                 .build();
 
-        // Given: 테스트 데이터 준비
-        Product product1 = new Product("apple", 5L, member);
-        Product product2 = new Product("orange", 10L, member);
+        memberRepository.save(member);
+
+        Product product1 = Product.builder()
+                .name("apple")
+                .loss(5L)
+                .build();
+        product1.setMaker(member);
+        Product product2 = Product.builder()
+                .name("orange")
+                .loss(10L)
+                .build();
+        product2.setMaker(member);
 
         productRepository.save(product1);
         productRepository.save(product2);
 
         String productIfind = "apple";
 
-        Optional<ProductDTO> foundProduct = productRepository.findByName(productIfind);
+        Optional<Product> foundProduct = productRepository.findByName(productIfind, member.getId());
 
         // 검증
         assertTrue(foundProduct.isPresent(), "Product should be present");
@@ -180,9 +207,25 @@ public class ProductRepositoryTests {
                 .mImage("아바타")
                 .build();
 
-        Product product1 = new Product("apple", 5L, member);
-        Product product2 = new Product("apple", 10L, member);
-        Product product3 = new Product("apple", 15L, member);
+        memberRepository.save(member);
+
+        Product product1 = Product.builder()
+                .name("water")
+                .loss(5L)
+                .build();
+        product1.setMaker(member);
+
+        Product product2 = Product.builder()
+                .name("ice")
+                .loss(10L)
+                .build();
+        product2.setMaker(member);
+
+        Product product3 = Product.builder()
+                .name("juice")
+                .loss(15L)
+                .build();
+        product3.setMaker(member);
 
         productRepository.save(product1);
         productRepository.save(product2);
@@ -190,7 +233,7 @@ public class ProductRepositoryTests {
 
         // 페이지 구성 설정
         Pageable pageable = PageRequest.of(0, 5, Sort.by("id").descending());
-        Page<ProductDTO> productList = productRepository.listAll(pageable);
+        Page<Product> productList = productRepository.listAll(member.getId(), pageable);
 
         // 검증 과정
         assertNotNull( productList );
