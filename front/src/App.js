@@ -11,6 +11,7 @@ function App() {
     const [userId, setUserId] = useState(null);
     const [activeComponent, setActiveComponent] = useState('');
     const [showSubMenu, setShowSubMenu] = useState(false);
+    const [showOrderSubMenu, setOrderShowSubMenu] = useState(false);
     const [profileImage, setProfileImage] = useState(''); // 프로필 이미지 상태 추가
     const [isActive, setIsActive] = useState(false);
 
