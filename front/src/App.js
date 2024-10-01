@@ -28,13 +28,6 @@ function App() {
     };
 
 
-    const handleLogout = () => {
-        setUserName('');
-        setUserId(null);
-        setProfileImage('');
-        setActiveComponent('');
-    };
-
 
     const handleLogout = () => {
         setUserName('');
