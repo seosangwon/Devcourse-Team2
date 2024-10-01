@@ -158,6 +158,16 @@ public class MemberService {
 
     }
 
+    public Member getMemberById(Long id) {
+        Optional<Member> opMember = memberRepository.findById(id);
+
+        if (opMember.isEmpty()) {
+            throw MemberException.MEMBER_NOT_FOUND.getMemberTaskException();
+        }
+
+        return opMember.get();
+    }
+
     public int count() {
         return memberRepository.findAll().size();
     }

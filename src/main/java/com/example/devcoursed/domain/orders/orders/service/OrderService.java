@@ -1,6 +1,6 @@
 package com.example.devcoursed.domain.orders.orders.service;
 
-import com.example.devcoursed.domain.member.member.Exception.MemberException;
+import com.example.devcoursed.domain.member.member.exception.MemberException;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.domain.orders.exception.OrderException;
