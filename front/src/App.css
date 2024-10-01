@@ -9,7 +9,7 @@
   margin: 20px auto; /* 외부 여백, 자동 중앙 정렬 */
   width: 80%; /* 너비 설정 */
   max-width: 600px; /* 최대 너비 설정 */
-  background-color: #69a0d6; /* 배경색 */
+  background-color: #113a8e; /* 배경색 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
   height: 60vh;
   position: relative;
@@ -17,7 +17,14 @@
 .App {
   text-align: left;
   padding: 20px;
+  background-color: #69a0d6;
+  color: #ffffff;
 }
+
+.inputform{
+  color: black;
+}
+
 .index-info {
   display: flex;              /* Flexbox 사용 */
   align-items: center;       /* 수직 중앙 정렬 */
@@ -182,7 +189,7 @@ button[type="submit"]:hover {
 }
 .auth-container {
   position: absolute;
-  border:1px solid gray;
+  /*border:1px solid gray;*/
   display: flex;
   flex-direction: column;
   align-items: center; /* 수평 중앙 정렬 */
@@ -190,7 +197,7 @@ button[type="submit"]:hover {
   height: 60%; /* 높이 조정 */
   width: 50%;
   left:25%;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .auth-button {

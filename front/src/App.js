@@ -12,6 +12,11 @@ function App() {
     const [activeComponent, setActiveComponent] = useState('');
     const [showSubMenu, setShowSubMenu] = useState(false);
     const [profileImage, setProfileImage] = useState(''); // 프로필 이미지 상태 추가
+    const [isActive, setIsActive] = useState(false);
+
+    const toggleActive = () => {
+        setIsActive(prev => !prev);
+    };
 
 
     const handleLogin = (name, mImage) => {
@@ -54,8 +59,9 @@ function App() {
 
 
     return (
+        <div className={isActive ? 'active' : 'inactive'}>
             <div className="App">
-                <h1 >발주 관리 통합 솔루션</h1>
+                <h1>발주 관리 통합 솔루션</h1>
                 <h2 className="index-info">
                     {userName ? (
                         <>
@@ -68,7 +74,8 @@ function App() {
                             <button
                                 className="delete-button"
                                 onClick={() => setUserName('')}
-                                style={{marginLeft: '10px', background: 'red'}}>로그아웃</button>
+                                style={{marginLeft: '10px', background: 'red'}}>로그아웃
+                            </button>
                         </>
                     ) : '로그인 해주세요'}
 
@@ -124,6 +131,7 @@ function App() {
                     </div>
                 )}
             </div>
+        </div>
             );
             }
 

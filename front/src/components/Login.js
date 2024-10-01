@@ -28,11 +28,11 @@ function Login({ onLogin }) {
             <div className="inputform">
             <div>
                 <label>ID:</label>
-                <input type="text" value={loginId} onChange={(e) => setLoginId(e.target.value)} required />
+                <input type="text" value={loginId} onChange={(e) => setLoginId(e.target.value)} placeholder="ID를 입력하세요" required />
             </div>
             <div>
                 <label>비밀번호:</label>
-                <input type="password" value={pw} onChange={(e) => setPassword(e.target.value)} required />
+                <input type="password" value={pw} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호를 입력하세요" required />
             </div>
             </div>
             {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
