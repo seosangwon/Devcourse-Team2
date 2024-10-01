@@ -1,6 +1,6 @@
 package com.example.devcoursed.domain.orders.orders.contorller;
 
-import com.example.devcoursed.domain.member.member.Exception.MemberException;
+import com.example.devcoursed.domain.member.member.exception.MemberException;
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;

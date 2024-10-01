@@ -100,7 +100,7 @@ public class ProductRepositoryTests {
 
         Optional<Product> foundProduct = productRepository.findById(productId);
 
-        assertTrue(foundProduct.isPresent(), "Product should be present");
+        Assertions.assertTrue(foundProduct.isPresent(), "Product should be present");
 
         Product productName = foundProduct.get();
 

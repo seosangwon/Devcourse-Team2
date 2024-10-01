@@ -1,5 +1,12 @@
 package com.example.devcoursed.domain.member.member.controller;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.service.MemberService;
@@ -22,6 +29,7 @@ import java.util.Map;
 @Log4j2
 public class MemberController {
     private final MemberService memberService;
+    private final ResourceLoader resourceLoader;
 
     //회원가입
     @PostMapping("/register")
@@ -86,40 +94,37 @@ public class MemberController {
     }
 
 
-    //주문 수정하기
-    @PutMapping("/{id}")
-    public ResponseEntity<MemberDTO.Update> modify(@PathVariable Long id,
+    //내 정보 수정하기
+    @PutMapping("/")
+    public ResponseEntity<MemberDTO.Update> modify(@AuthenticationPrincipal SecurityUser user,
                                                    @Validated @RequestBody MemberDTO.Update dto) {
+        long id = user.getId();
         dto.setId(id);
         return ResponseEntity.ok(memberService.update(dto));
     }
 
     //주문 삭제하기
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
+    @DeleteMapping("/")
+    public ResponseEntity<Map<String, String>> delete(@AuthenticationPrincipal SecurityUser user) {
+        long id = user.getId();
         memberService.delete(id);
         return ResponseEntity.ok(Map.of("result", "success"));
     }
 
-    @PutMapping("/{id}/update-image")
-    public ResponseEntity<MemberDTO.ChangeImage> modifyImage(@PathVariable Long id,
-                                                             @Validated @RequestBody MemberDTO.ChangeImage dto) {
-        dto.setId(id);
-        return ResponseEntity.ok(memberService.changeImage(dto));
+    @PutMapping("/update-image")
+    public ResponseEntity<MemberDTO.ChangeImage> modifyImage(
+            @AuthenticationPrincipal SecurityUser user,
+            @RequestParam("mImage") MultipartFile mImage) {
+        MemberDTO.ChangeImage dto = new MemberDTO.ChangeImage();
+        dto.setId(user.getId());
+        dto.setMImage(mImage);
+        return ResponseEntity.ok(memberService.changeImage(dto, mImage));
+    }
+
+    // 이미지 서빙 엔드포인트
+    @GetMapping("/upload/{filename:.+}")
+    public ResponseEntity<Resource> serveImage(@PathVariable String filename) {
+        Resource file = resourceLoader.getResource("file:upload/" + filename);
+        return ResponseEntity.ok(file);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
