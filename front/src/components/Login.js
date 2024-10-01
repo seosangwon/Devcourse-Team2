@@ -14,9 +14,11 @@ function Login({ onLogin }) {
 
         try {
             const response = await axios.post('/api/v1/members/login', dataToSend);
-            const { accessToken, name, mimage } = response.data; // mImage 추가
+            const { accessToken,refreshToken ,name, mimage } = response.data; // mImage 추가
 
-            localStorage.setItem('token', accessToken); // JWT 저장
+            localStorage.setItem('accessToken', accessToken); // JWT 저장
+            localStorage.setItem('refreshToken', refreshToken); // JWT 저장
+
             onLogin(name, mimage); // 로그인 후 사용자 이름과 이미지 전달
         } catch (error) {
             setErrorMessage('로그인 실패: ' + (error.response?.data?.message || '서버에 문제가 발생했습니다.'));
