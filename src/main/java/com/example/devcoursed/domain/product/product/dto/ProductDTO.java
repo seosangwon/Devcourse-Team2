@@ -32,5 +32,4 @@ public class ProductDTO {
                 .maker(member)
                 .build();
     }
-
 }

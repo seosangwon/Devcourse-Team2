@@ -2,12 +2,15 @@ package com.example.devcoursed.domain.product.product.service;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.service.MemberService;
+import com.example.devcoursed.domain.product.product.dto.PageRequestDTO;
 import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.exception.ProductException;
 import com.example.devcoursed.domain.product.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,4 +51,17 @@ public class ProductService {
 
         return new ProductDTO(foundProduct);
     }
+
+
+    // 상품의 평균 로스율 조회
+    public Double getAverageLossByName(String name){
+        return productRepository.findAverageLossByName(name);
+    }
+
+    // 상품 목록 조회
+    public Page<ProductDTO> getList(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable();
+        return productRepository.listAll(pageable);
+    }
+
 }
