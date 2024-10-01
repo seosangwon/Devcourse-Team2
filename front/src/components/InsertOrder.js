@@ -93,6 +93,7 @@ function InsertOrder({ memberId }) {
                     <select
                         value={item.productId}
                         onChange={(e) => handleItemChange(index, 'productId', e.target.value)} // ID 사용
+                        style={{ display: 'block' }}
                     >
                         <option value="">Select a product</option>
                         {products.map((product) => (
@@ -114,7 +115,9 @@ function InsertOrder({ memberId }) {
                         onChange={(e) => handleItemChange(index, 'price', Number(e.target.value))} // 가격 업데이트
                         placeholder="가격을 입력하세요"
                         required
+                        style={{ display: 'block' }}
                     />
+
                     <button type="button" onClick={() => removeItem(index)}>Remove</button>
                 </div>
             ))}

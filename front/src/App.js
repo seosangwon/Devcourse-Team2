@@ -13,7 +13,7 @@ function App() {
     const [userId, setUserId] = useState(null);
     const [activeComponent, setActiveComponent] = useState('');
     const [showSubMenu, setShowSubMenu] = useState(false);
-    const [showOrderSubMenu, setOrderShowSubMenu] = useState(false);
+    const [showOrderSubMenu, setShowOrderSubMenu] = useState(false);
     const [profileImage, setProfileImage] = useState(''); // 프로필 이미지 상태 추가
     const [isActive, setIsActive] = useState(false);
 
@@ -42,6 +42,9 @@ function App() {
     const showComponent = (component) => {
         setActiveComponent(component);
     };
+
+    const handleOrderMouseEnter = () => setShowOrderSubMenu(true);
+    const handleOrderMouseLeave = () => setShowOrderSubMenu(false);
 
     const handleMouseEnter = () => {
         setShowSubMenu(true);
@@ -112,9 +115,9 @@ function App() {
                 ) : (
                     <div>
                         <div className="container">
-                            <button className="box color1" onMouseEnter={handleMouseEnter}
-                                    onMouseLeave={handleMouseLeave}>
-                                {showSubMenu ? (
+                            <button className="box color1" onMouseEnter={handleOrderMouseEnter}
+                                    onMouseLeave={handleOrderMouseLeave}>
+                                {showOrderSubMenu ? (
                                     <div className="submenu">
                                         <ul>
                                             <li onClick={() => showComponent('insertOrder')}>▶ 발주 신청</li>
