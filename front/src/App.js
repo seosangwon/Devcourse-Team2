@@ -17,6 +17,7 @@ function App() {
     const [showSubMenuM, setShowSubMenuM] = useState(false);
     const [showSubMenuO, setShowSubMenuO] = useState(false);
     const [showSubMenuP, setShowSubMenuP] = useState(false);
+    const [showSubMenuE, setShowSubMenuE] = useState(false);
     const [profileImage, setProfileImage] = useState(''); // 프로필 이미지 상태 추가
 
 
@@ -74,6 +75,14 @@ function App() {
 
     const handleMouseLeaveO = () => {
         setShowSubMenuO(false);
+    };
+
+    const handleMouseEnterE = () => {
+        setShowSubMenuE(true);
+    };
+
+    const handleMouseLeaveE = () => {
+        setShowSubMenuE(false);
     };
 
     const handleBack = () => {
@@ -165,12 +174,26 @@ function App() {
                                 <div className="submenu">
                                     <ul>
                                         <li onClick={() => showComponent('userInfo')}>▶ 회원 정보 수정</li>
-                                        <li onClick={() => showComponent('profileImageChange')}>▶ 프로필 사진 수정</li>
+                                        <li onClick={() => showComponent('profileImageChange')}>▶ 프로필</li>
                                         <li onClick={() => showComponent('userDelete')}>▶ 회원 탈퇴</li>
                                     </ul>
                                 </div>
                             ) : (
                                 "정보 관리"
+                            )}
+                        </button>
+                        <button className="box color4" onMouseEnter={handleMouseEnterE}
+                                onMouseLeave={handleMouseLeaveE}>
+                            {showSubMenuE ? (
+                                <div className="submenu">
+                                    <ul>
+                                        <li onClick={() => showComponent('ect1')}>▶ 추가 기능</li>
+                                        <li onClick={() => showComponent('ect2')}>▶ 추가 기능</li>
+                                        <li onClick={() => showComponent('ect3')}>▶ 추가 기능</li>
+                                    </ul>
+                                </div>
+                            ) : (
+                                "상품 관리"
                             )}
                         </button>
                     </div>

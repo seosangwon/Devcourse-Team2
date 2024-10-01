@@ -94,6 +94,10 @@ input:focus::placeholder {
   background-color: #f5a623; /* 세 번째 색상 */
 }
 
+.color4 {
+  background-color: #339e17; /* 세 번째 색상 */
+}
+
 .back-button {
   position: absolute;
   display: block; /* 블록 요소로 설정 */
