@@ -7,6 +7,7 @@ import UserDelete from './components/UserDelete';
 import Register from './components/Register';
 import InsertOrder from "./components/InsertOrder";
 import OrderListPage from "./components/OrderListPage";
+import Logout from "./components/Logout";
 
 function App() {
     const [userName, setUserName] = useState('');
@@ -17,9 +18,19 @@ function App() {
     const [showSubMenuP, setShowSubMenuP] = useState(false);
     const [profileImage, setProfileImage] = useState(''); // 프로필 이미지 상태 추가
 
-    const handleLogin = ( name, mImage ) => {
+
+    const handleLogin = (name, mImage) => {
         setUserName(name);
-        setProfileImage(mImage ? `/api/v1/members/upload/${mImage}` : '/api/v1/members/upload/defaultImageUrl.jpg');
+        setProfileImage(mImage ? `/api/v1/members/upload/${mImage}` : '/api/v1/members/upload/defaultImageUrl.jpg'); // mImage가 없으면 기본 이미지 사용
+
+        setActiveComponent('');
+    };
+
+
+    const handleLogout = () => {
+        setUserName('');
+        setUserId(null);
+        setProfileImage('');
         setActiveComponent('');
     };
 
@@ -83,11 +94,7 @@ function App() {
                             style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px' }}
                         />
                         {userName}
-                        <button
-                            className="delete-button"
-                            onClick={handleUserDelete}
-                            style={{ marginLeft: '10px', background: 'red' }}>로그아웃
-                        </button>
+                        <Logout onLogout={handleLogout} /> {/* Logout 컴포넌트 사용 */}
                     </>
                 ) : '로그인 해주세요'}
             </h2>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosInstance'; // 커스텀 Axios 인스턴스 사용
 
 function UserProfile() {
     const [userInfo, setUserInfo] = useState(null);
@@ -11,12 +11,8 @@ function UserProfile() {
 
     useEffect(() => {
         const fetchUserInfo = async () => {
-            const token = localStorage.getItem('token');
-
             try {
-                const response = await axios.get('/api/v1/members/', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const response = await axiosInstance.get('/api/v1/members/');
                 setUserInfo(response.data);
                 setName(response.data.name);
                 setLoginId(response.data.loginId);
@@ -35,16 +31,12 @@ function UserProfile() {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
-        const token = localStorage.getItem('token');
-
         try {
-            const response = await axios.put('/api/v1/members/', { name, loginId, pw }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await axiosInstance.put('/api/v1/members/', { name, loginId, pw });
             setUserInfo(response.data);
             setIsEditing(false); // 수정 모드 종료
         } catch (error) {
-            setErrorMessage('정보 수정 실패: ' + (error.response.data.message || '알 수 없는 오류'));
+            setErrorMessage('정보 수정 실패: ' + (error.response?.data?.message || '알 수 없는 오류'));
         }
     };
 
@@ -76,7 +68,7 @@ function UserProfile() {
                     <div>
                         <label>비밀번호:</label>
                         <input
-                            type="text"
+                            type="password"
                             value={pw}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -84,13 +76,13 @@ function UserProfile() {
                     </div>
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
                     <button type="submit" className="button">수정하기</button>
-                    <button type="submit" className="button" onClick={handleEditToggle}>취소</button>
+                    <button type="button" className="button" onClick={handleEditToggle}>취소</button>
                 </form>
             ) : (
                 <div>
                     <p>이름: {userInfo.name}</p>
                     <p>로그인 ID: {userInfo.loginId}</p>
-                    <button type="submit" className="button" onClick={handleEditToggle}>수정하기</button>
+                    <button type="button" className="button" onClick={handleEditToggle}>수정하기</button>
                 </div>
             )}
         </div>
