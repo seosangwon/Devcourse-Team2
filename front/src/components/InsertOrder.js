@@ -35,7 +35,7 @@ function InsertOrder({ memberId }) {
         }
     };
 
-    // 상품 목록 가져오기
+    // 토글에 상품 목록 가져오기
     useEffect(() => {
         const fetchProducts = async () => {
             try {
