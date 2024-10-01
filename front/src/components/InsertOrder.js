@@ -12,7 +12,7 @@ function InsertOrder({ memberId }) {
         e.preventDefault();
         const dataToSend = {
             items: items.map(item => ({
-                productId: item.productId, // ID 사용
+                productId: item.productId,
                 quantity: item.quantity,
                 price: item.price,
             })),
@@ -35,7 +35,7 @@ function InsertOrder({ memberId }) {
         }
     };
 
-    // 토글에 상품 목록 가져오기
+    // 상품 목록 가져오기
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -62,9 +62,10 @@ function InsertOrder({ memberId }) {
             const selectedProduct = products.find(product => product.id === Number(value));
             if (selectedProduct) {
                 newItems[index] = {
-                    productId: selectedProduct.id,  // ID 사용
+                    productId: selectedProduct.id,
                     quantity: newItems[index]?.quantity,
-                    price: selectedProduct.price,   // 선택한 상품의 가격
+                    price: selectedProduct.price,
+                    productName: selectedProduct.name,
                 };
             }
         } else {
@@ -87,17 +88,17 @@ function InsertOrder({ memberId }) {
     };
 
     return (
-        <form onSubmit={handleRegister}>
+        <form onSubmit={handleRegister} className="insert-order-container">
             {items.map((item, index) => (
-                <div key={index}>
+                <div key={index} style={{ marginBottom: '15px' }}>
                     <select
                         value={item.productId}
-                        onChange={(e) => handleItemChange(index, 'productId', e.target.value)} // ID 사용
+                        onChange={(e) => handleItemChange(index, 'productId', e.target.value)}
                         style={{ display: 'block' }}
                     >
                         <option value="">Select a product</option>
                         {products.map((product) => (
-                            <option key={product.id} value={product.id}> {/* ID로 바인딩 */}
+                            <option key={product.id} value={product.id}>
                                 {product.name}
                             </option>
                         ))}
@@ -105,25 +106,26 @@ function InsertOrder({ memberId }) {
                     <input
                         type="number"
                         value={item.quantity || ''}
-                        onChange={(e) => handleItemChange(index, 'quantity', Number(e.target.value))} // 수량 업데이트
+                        onChange={(e) => handleItemChange(index, 'quantity', Number(e.target.value))}
                         placeholder="개수를 입력하세요"
                         required
+                        style={{ display: 'block', marginBottom: '10px' }}
                     />
                     <input
                         type="number"
                         value={item.price || ''}
-                        onChange={(e) => handleItemChange(index, 'price', Number(e.target.value))} // 가격 업데이트
+                        onChange={(e) => handleItemChange(index, 'price', Number(e.target.value))}
                         placeholder="가격을 입력하세요"
                         required
-                        style={{ display: 'block' }}
+                        style={{ display: 'block', marginBottom: '10px' }}
                     />
-
-                    <button type="button" onClick={() => removeItem(index)}>Remove</button>
+                    <div>상품 이름: {item.productName || 'N/A'}</div>
+                    <button type="button" onClick={() => removeItem(index)} style={{ marginTop: '10px' }}>Remove</button>
                 </div>
             ))}
-            <button type="button" onClick={addItem}>Add Item</button>
+            <button type="button" onClick={addItem} style={{ marginTop: '20px' }}>Add Item</button>
             <h3>Total Price: {totalPrice}</h3>
-            <button type="submit">Register Order</button>
+            <button type="submit" style={{ marginTop: '20px' }}>Register Order</button>
         </form>
     );
 }

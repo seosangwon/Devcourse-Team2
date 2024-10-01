@@ -104,14 +104,15 @@ function App() {
                     </div>
                 ) : activeComponent ? (
                     <div className="component-container">
-                        {activeComponent === 'userInfo' && <UserInfo userId={userId} onUpdate={setUserName} />}
+                        {activeComponent === 'userInfo' && <UserInfo userId={userId} onUpdate={setUserName}/>}
                         {activeComponent === 'profileImageChange' &&
-                            <ProfileImageChange userId={userId} onProfileImageChange={handleProfileImageChange} />}
-                        {activeComponent === 'userDelete' && <UserDelete userId={userId} onDelete={handleUserDelete} />}
-                        {activeComponent === 'insertOrder' && <InsertOrder memberId={userId} />}
-                        {activeComponent === 'orderListPage' && <OrderListPage />}
+                            <ProfileImageChange userId={userId} onProfileImageChange={handleProfileImageChange}/>}
+                        {activeComponent === 'userDelete' && <UserDelete userId={userId} onDelete={handleUserDelete}/>}
+                        {activeComponent === 'insertOrder' && <InsertOrder memberId={userId}/>}
+                        {activeComponent === 'orderListPage' && <OrderListPage/>}
                         <button className="back-button" onClick={handleBack}>뒤로가기</button>
                     </div>
+
                 ) : (
                     <div>
                         <div className="container">

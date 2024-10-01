@@ -87,9 +87,14 @@ input:focus::placeholder {
   background-color: #f5a623; /* 세 번째 색상 */
 }
 
+.insert-order-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px; /* Adjust as needed */
+}
+
 .back-button {
-  position: absolute;
-  display: block; /* 블록 요소로 설정 */
+  display: flex; flex-direction: column; justify-content: space-between; /* 블록 요소로 설정 */
   padding: 10px; /* 여백 추가 */
   background-color: #007bff; /* 배경색 */
   color: white; /* 글자색 */
@@ -97,7 +102,7 @@ input:focus::placeholder {
   border-radius: 5px; /* 모서리 둥글게 */
   cursor: pointer; /* 커서 포인터로 변경 */
   font-size: 16px; /* 글자 크기 */
-  margin-top: 10px; /* 위쪽 여백 추가 */
+  margin-top: auto; /* 위쪽 여백 추가 */
   bottom: 1%;
 }
 
