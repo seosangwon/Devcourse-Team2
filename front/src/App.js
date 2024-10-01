@@ -5,6 +5,8 @@ import Login from './components/Login';
 import ProfileImageChange from './components/ProfileImageChange';
 import UserDelete from './components/UserDelete';
 import Register from './components/Register';
+import InsertOrder from "./components/InsertOrder";
+import OrderListPage from "./components/OrderListPage";
 
 function App() {
     const [userName, setUserName] = useState('');
@@ -19,10 +21,9 @@ function App() {
         setIsActive(prev => !prev);
     };
 
-
     const handleLogin = (name, mImage) => {
         setUserName(name);
-        setProfileImage(mImage ? `/api/v1/members/upload/${mImage}` : '/api/v1/members/upload/defaultImageUrl.jpg'); // mImage가 없으면 기본 이미지 사용
+        setProfileImage(mImage ? `/api/v1/members/upload/${mImage}` : '/api/v1/members/upload/defaultImageUrl.jpg');
         setActiveComponent('');
     };
 
@@ -58,7 +59,6 @@ function App() {
         setProfileImage(newImage); // 프로필 이미지 업데이트
     };
 
-
     return (
         <div className={isActive ? 'active' : 'inactive'}>
             <div className="App">
@@ -69,17 +69,16 @@ function App() {
                             <img
                                 src={profileImage}
                                 alt="Profile"
-                                style={{width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px'}}
+                                style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px' }}
                             />
                             {userName}
                             <button
                                 className="delete-button"
-                                onClick={() => setUserName('')}
-                                style={{marginLeft: '10px', background: 'red'}}>로그아웃
+                                onClick={handleUserDelete}
+                                style={{ marginLeft: '10px', background: 'red' }}>로그아웃
                             </button>
                         </>
                     ) : '로그인 해주세요'}
-
                 </h2>
 
                 {!userName ? (
@@ -94,25 +93,38 @@ function App() {
                                 회원가입
                             </button>
                         )}
-                        {activeComponent === 'login' && <Login onLogin={handleLogin}/>}
-                        {activeComponent === 'register' && <Register onRegister={handleRegister}/>}
+                        {activeComponent === 'login' && <Login onLogin={handleLogin} />}
+                        {activeComponent === 'register' && <Register onRegister={handleRegister} />}
                         {(activeComponent === 'login' || activeComponent === 'register') && (
                             <button className="back-button" onClick={handleBack}>뒤로가기</button>
                         )}
                     </div>
-
                 ) : activeComponent ? (
                     <div className="component-container">
-                        {activeComponent === 'userInfo' && <UserInfo userId={userId} onUpdate={setUserName}/>}
+                        {activeComponent === 'userInfo' && <UserInfo userId={userId} onUpdate={setUserName} />}
                         {activeComponent === 'profileImageChange' &&
-                            <ProfileImageChange userId={userId} onProfileImageChange={handleProfileImageChange}/>}
-                        {activeComponent === 'userDelete' && <UserDelete userId={userId} onDelete={handleUserDelete}/>}
+                            <ProfileImageChange userId={userId} onProfileImageChange={handleProfileImageChange} />}
+                        {activeComponent === 'userDelete' && <UserDelete userId={userId} onDelete={handleUserDelete} />}
+                        {activeComponent === 'insertOrder' && <InsertOrder memberId={userId} />}
+                        {activeComponent === 'orderListPage' && <OrderListPage />}
                         <button className="back-button" onClick={handleBack}>뒤로가기</button>
                     </div>
                 ) : (
                     <div>
                         <div className="container">
-                            <button className="box color1">발주 관리</button>
+                            <button className="box color1" onMouseEnter={handleMouseEnter}
+                                    onMouseLeave={handleMouseLeave}>
+                                {showSubMenu ? (
+                                    <div className="submenu">
+                                        <ul>
+                                            <li onClick={() => showComponent('insertOrder')}>▶ 발주 신청</li>
+                                            <li onClick={() => showComponent('orderListPage')}>▶ 발주 목록 확인</li>
+                                        </ul>
+                                    </div>
+                                ) : (
+                                    "발주 관리"
+                                )}
+                            </button>
                             <button className="box color2">상품 관리</button>
                             <button className="box color3" onMouseEnter={handleMouseEnter}
                                     onMouseLeave={handleMouseLeave}>
@@ -133,7 +145,7 @@ function App() {
                 )}
             </div>
         </div>
-            );
-            }
+    );
+}
 
-            export default App;
+export default App;
