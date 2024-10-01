@@ -63,11 +63,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (SignatureException | MalformedJwtException | UnsupportedJwtException |
                      IllegalArgumentException e) {
                 log.debug("유효하지 않는 JWT 토큰 :  {}", e.getMessage());
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 토큰입니다.");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "유효하지 않은 토큰입니다.");
                 return;
             } catch (ExpiredJwtException e ) {
                 log.debug("만료된 JWT 토큰 : {}",e.getMessage());
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED , "Access 토큰이 만료되었습니다");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access 토큰이 만료되었습니다");
                 return;
             }
 

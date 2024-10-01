@@ -5,6 +5,8 @@ import Login from './components/Login';
 import ProfileImageChange from './components/ProfileImageChange';
 import UserDelete from './components/UserDelete';
 import Register from './components/Register';
+import axios from "axios";
+
 
 function App() {
     const [userName, setUserName] = useState('');
@@ -52,6 +54,33 @@ function App() {
         setProfileImage(newImage); // 프로필 이미지 업데이트
     };
 
+    // 로그아웃 시 호출되는 함수
+    const handleLogout = async () => {
+        try {
+            await axios.post('/api/v1/members/logout', {}, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                }
+            });
+        } catch (error) {
+            console.error('서버 로그아웃 실패:', error);
+            // 서버 로그아웃이 필수가 아닌 경우, 에러 무시 가능
+        } finally {
+            // 토큰 제거
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            // 사용자 상태 초기화
+            setUserName('');
+            setUserId(null);
+            setProfileImage('');
+            setActiveComponent('');
+            // 로그인 페이지로 리다이렉트
+            window.location.href = '/login';
+        }
+    };
+
+
+
 
     return (
             <div className="App">
@@ -67,7 +96,7 @@ function App() {
                             {userName}
                             <button
                                 className="delete-button"
-                                onClick={() => setUserName('')}
+                                onClick={handleLogout} // 로그아웃 핸들러 호출
                                 style={{marginLeft: '10px', background: 'red'}}>로그아웃</button>
                         </>
                     ) : '로그인 해주세요'}
