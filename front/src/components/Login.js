@@ -14,12 +14,14 @@ function Login({ onLogin }) {
 
         try {
             const response = await axios.post('/api/v1/members/login', dataToSend);
-            const { accessToken,refreshToken ,name, mimage } = response.data; // mImage 추가
+            const { id, refreshToken, accessToken, name, mimage } = response.data; // mImage 추가
 
             localStorage.setItem('accessToken', accessToken); // JWT 저장
             localStorage.setItem('refreshToken', refreshToken); // JWT 저장
+            localStorage.setItem('id', id); // id 저장
 
-            onLogin(name, mimage); // 로그인 후 사용자 이름과 이미지 전달
+            onLogin( name, mimage); // 로그인 후 사용자 이름과 이미지 전달
+
         } catch (error) {
             setErrorMessage('로그인 실패: ' + (error.response?.data?.message || '서버에 문제가 발생했습니다.'));
         }
@@ -30,11 +32,11 @@ function Login({ onLogin }) {
             <div className="inputform">
             <div>
                 <label>ID:</label>
-                <input type="text" value={loginId} onChange={(e) => setLoginId(e.target.value)} required />
+                <input type="text" value={loginId} onChange={(e) => setLoginId(e.target.value)} placeholder="ID를 입력하세요" required />
             </div>
             <div>
                 <label>비밀번호:</label>
-                <input type="password" value={pw} onChange={(e) => setPassword(e.target.value)} required />
+                <input type="password" value={pw} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호를 입력하세요" required />
             </div>
             </div>
             {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
