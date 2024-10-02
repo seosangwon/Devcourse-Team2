@@ -9,14 +9,16 @@ function ProductList() {
 
     // 제품 목록을 가져오는 함수
     const fetchProducts = async (page) => {
+        console.log(`Fetching products from: /api/v1/products?page=${page}&size=${pageSize}`);
         const token = localStorage.getItem('accessToken');
         try {
             const response = await axios.get(`/api/v1/products`, {
                 headers: { Authorization: `Bearer ${token}` },
-                params: { page, size: pageSize }, // 페이지와 페이지 크기 전달
+                params: { page, size: pageSize }, // page와 size를 params로 전달
             });
 
-            console.log('API Response:', response.data); // 응답을 콘솔에 출력
+            console.log('Requested Page:', page); // 요청한 페이지 로그
+            console.log('API Response:', response.data); // 응답 로그
 
             setProducts(response.data.content); // 실제 제품 목록
             setTotalPages(response.data.totalPages); // 전체 페이지 수
@@ -25,10 +27,12 @@ function ProductList() {
         }
     };
 
-    // 컴포넌트가 마운트될 때 제품 목록을 가져옴
+    // currentPage가 변경될 때마다 fetchProducts 호출
     useEffect(() => {
-        fetchProducts(currentPage);
-    }, [currentPage]); // currentPage가 바뀔 때마다 호출
+        console.log(`Fetching products for page: ${currentPage}`); // 현재 페이지 로그
+        fetchProducts(currentPage); // fetchProducts 함수 호출
+    }, [currentPage]); // currentPage가 바뀔 때마다 실행
+
 
     return (
         <div>
@@ -41,25 +45,31 @@ function ProductList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {products.map((product, index) => (
-                        <tr key={index}>
-                            <td style={{ padding: '8px', border: '1px solid #ccc' }}>{product.name}</td>
-                            <td style={{ padding: '8px', border: '1px solid #ccc' }}>{product.loss}</td>
+                    {products.length > 0 ? (
+                        products.map((product, index) => (
+                            <tr key={index}>
+                                <td style={{ padding: '8px', border: '1px solid #ccc' }}>{product.name}</td>
+                                <td style={{ padding: '8px', border: '1px solid #ccc' }}>{product.loss}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="2" style={{ textAlign: 'center', padding: '8px' }}>제품이 없습니다</td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
             <div style={{ marginTop: '16px' }}>
                 <button
-                    onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-                    disabled={currentPage === 0}
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage <= 0}
                 >
                     이전
                 </button>
                 <span> 페이지 {currentPage + 1} / {totalPages} </span>
                 <button
-                    onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
-                    disabled={currentPage === totalPages - 1}
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={currentPage >= totalPages - 1}
                 >
                     다음
                 </button>

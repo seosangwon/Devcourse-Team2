@@ -1,6 +1,7 @@
 package com.example.devcoursed.domain.product.product.controller;
 
 import com.example.devcoursed.domain.product.product.dto.ProductDTO;
+import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.service.ProductService;
 import com.example.devcoursed.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
