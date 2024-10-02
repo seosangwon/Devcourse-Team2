@@ -1,0 +1,290 @@
+[33mcommit afffe5aefb3af4037d808493f46af571ead210fc[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/TT-24-Product_Read[m[33m)[m
+Author: subbb-in <48655473+subbb-in@users.noreply.github.com>
+Date:   Tue Oct 1 10:40:18 2024 +0900
+
+    feat : TT-24 single item read
+
+[33mcommit 0279fb3ab7247515513154190e9e38261eb68d13[m[33m ([m[1;31morigin/feature/TT-24-Product_Read[m[33m)[m
+Merge: 623346f c1db0ff
+Author: subbb-in <48655473+subbb-in@users.noreply.github.com>
+Date:   Mon Sep 30 15:35:09 2024 +0900
+
+    feat : TT-24 pull origin develop
+
+[33mcommit c1db0ff2a1cca8175051723444b556f3dddfa44a[m[33m ([m[1;31morigin/develop[m[33m)[m
+Author: seosangwon <39723498+seosangwon@users.noreply.github.com>
+Date:   Mon Sep 30 15:28:03 2024 +0900
+
+    [Feat] RefreshToken 로직을 구현하다 (#21)
+    
+    * refactor : TT-26 read -> getMyPage
+    
+    * refactor : TT-26 getMyPage , read 구분
+    
+    * bugfix : TT-26 conflict resolve
+    
+    * refactor : TT-26 test refreshToken
+    
+    * feat : TT-26 add refreshToken
+    
+    * refactor : TT-26 test expired refreshToken
+    
+    * feat : TT-26 logout
+    
+    * refactor : TT-26 update token's expired time
+    
+    * refactor : TT-26 add request path in apiSecurity
+
+[33mcommit 623346f1fc02db22d8e2110f102cb2c52c3b59f0[m
+Merge: 2a6aca0 e7835c9
+Author: subbb-in <48655473+subbb-in@users.noreply.github.com>
+Date:   Mon Sep 30 14:04:52 2024 +0900
+
+    feat : TT-24 pull origin develop
+
+[33mcommit 2a6aca01dbd8e7ba899faac3342f28af43947e3f[m
+Author: subbb-in <48655473+subbb-in@users.noreply.github.com>
+Date:   Mon Sep 30 11:55:07 2024 +0900
+
+    refactor : TT-24 Read Average and List
+
+[33mcommit e7835c99c19f004e877e69fde48e04e3976f3767[m
+Author: JIEUN LIM <sumthq@gmail.com>
+Date:   Mon Sep 30 11:23:53 2024 +0900
+
+    [Feat] Product 등록 및 수정 기능 구현 (#20)
+    
+    * update test
+    
+    * Change Product Path and Add Product Test
+    
+    * Merge
+    
+    * save local before pulling
+    
+    * feat: product repository 테스트
+    
+    * feat: product 수정 기능 추가
+    
+    * InsertProduct
+    
+    * InsertProduct 수정
+    
+    * index on TT-12: 78f1cb7 feat: product 수정 기능 추가
+    
+    * feat : TT-23 Product insert, update
+    
+    * feat: TT-23 product-update
+    
+    feat: product 수정 기능 추가
+    
+    * index on TT-12: 78f1cb7 feat: product 수정 기능 추가
+    
+    * update test
+    
+    * Change Product Path and Add Product Test
+    
+    Product merge
+    
+    * InsertProduct
+    
+    InsertProduct 수정
+    
+    * feat : TT-23 Product insert, update
+    
+    * refactor : TT-23 product 등록 및 수정
+    
+    * refactor : product ì일 수정
+    
+    * refactor : TT-23 product 로그인 적용하여 수정
+    
+    * refactor : TT-23 product PR 리뷰 피드백 반영
+    
+    ---------
+    
+    Co-authored-by: subbb-in <48655473+subbb-in@users.noreply.github.com>
+
+[33mcommit d2a05bcdb60e9b8d98d454cb5c26bc881139f72f[m
+Merge: f673cfa a176c0f
+Author: CryingPerson <134962465+CryingPerson@users.noreply.github.com>
+Date:   Mon Sep 30 10:05:57 2024 +0900
+
+    Merge pull request #19 from seosangwon/origin/sihyeon
+    
+     [mod] Order 작성 완료 #17
+
+[33mcommit a176c0fbd4e97889bb7e4f57b867b3384d4b2b79[m[33m ([m[1;31morigin/origin/sihyeon[m[33m)[m
+Author: your-username <your-email@example.com>
+Date:   Mon Sep 30 01:45:56 2024 +0900
+
+    [mod] Order CRUD
+
+[33mcommit 20ca7adadef96c6ae26c40be5b6687596f146f32[m
+Merge: 9538155 f673cfa
+Author: your-username <your-email@example.com>
+Date:   Fri Sep 27 15:39:49 2024 +0900
+
+    Merge develop into sihyeon
+
+[33mcommit a386034e185699e2adc95487989de025533ab9de[m
+Author: subbb-in <48655473+subbb-in@users.noreply.github.com>
+Date:   Fri Sep 27 15:37:39 2024 +0900
+
+    feat : TT-24 read function
+
+[33mcommit 9538155087b308bf9ee003793b401f74e73b1754[m
+Author: your-username <your-email@example.com>
+Date:   Fri Sep 27 15:33:49 2024 +0900
+
+    TT-25 [BE-Mod] Order CRUD
+
+[33mcommit f673cfa802e3fee04a83f343b2eeb7d9405b2785[m
+Author: seosangwon <39723498+seosangwon@users.noreply.github.com>
+Date:   Fri Sep 27 15:09:23 2024 +0900
+
+    [Feat] 로그인을 구현하다 (#14)
+    
+    * feat : TT-22 Add login and register
+    
+    * feat : TT-22 Add initData
+    
+    * feat : TT-22 test login with postman
+    
+    * refactor : TT-22 api/adm/** 으로 접근시 인가처리
+    
+    * refactor : TT-22 api/adm/**.permitAll() for team to easy test
+
+[33mcommit c3c711124f8a2887db75a087852d908f38984d87[m
+Author: your-username <your-email@example.com>
+Date:   Fri Sep 27 14:33:27 2024 +0900
+
+    [mod] Order CRUD
+
+[33mcommit f41eaea84fadeb9467bb4cffeb68c28d43d5d55a[m
+Author: your-username <your-email@example.com>
+Date:   Fri Sep 27 12:22:35 2024 +0900
+
+    [mod] Order CRUD
+
+[33mcommit 25d7da331d0119bae25c8e7b33309ee426f59902[m
+Author: subbb-in <48655473+subbb-in@users.noreply.github.com>
+Date:   Fri Sep 27 12:06:10 2024 +0900
+
+    feat : TT-24 read test
+
+[33mcommit c08cee839419bcfba92b62889254a4eb1cafccdf[m[33m ([m[1;32mproduct[m[33m)[m
+Merge: 78f1cb7 7b54474
+Author: subbb-in <48655473+subbb-in@users.noreply.github.com>
+Date:   Fri Sep 27 10:26:33 2024 +0900
+
+    Product에 insert 및 update 추가 완료
+
+[33mcommit 7b54474371426e605b62ea344a29b4fe74dc8697[m
+Author: subbb-in <48655473+subbb-in@users.noreply.github.com>
+Date:   Fri Sep 27 10:05:05 2024 +0900
+
+    InsertProduct 수정
+
+[33mcommit 03844b4b010baf5a570476194c8837122fff2f14[m
+Author: subbb-in <48655473+subbb-in@users.noreply.github.com>
+Date:   Thu Sep 26 23:25:31 2024 +0900
+
+    InsertProduct
+
+[33mcommit 6219d531a11caee3710da0bf345374926220ce39[m[33m ([m[1;31morigin/sihyeon[m[33m)[m
+Merge: 4b97708 8bf4b5d
+Author: your-username <your-email@example.com>
+Date:   Thu Sep 26 21:47:49 2024 +0900
+
+    merge
+
+[33mcommit 4b97708840c9d588e5e58eb2bfb871a798f5acc4[m
+Author: your-username <your-email@example.com>
+Date:   Thu Sep 26 21:37:51 2024 +0900
+
+    [add] TEST
+
+[33mcommit 78f1cb702e9d702deb3728bc2275fc859eb73c00[m
+Author: 1mjay <sumthq@gmail.com>
+Date:   Thu Sep 26 17:45:44 2024 +0900
+
+    feat: product 수정 기능 추가
+
+[33mcommit 1439bd40db5b880ed2cd54f84f7c90eb027528ad[m
+Author: 1mjay <sumthq@gmail.com>
+Date:   Thu Sep 26 11:36:59 2024 +0900
+
+    feat: product repository 테스트
+
+[33mcommit 8bf4b5d89c9f832ff126b3c75987d3db0bdd82a0[m
+Author: seosangwon <39723498+seosangwon@users.noreply.github.com>
+Date:   Thu Sep 26 17:14:09 2024 +0900
+
+    [Refactor] Member Conflict를 해결하다  (#10)
+    
+    * refactor : TT-21 Member Conflict
+    
+    * refactor : TT-20 move webConfig to global
+
+[33mcommit 5fc927965a3aaf5157934eca6b7a83505cc64e16[m
+Author: asklas <121223022+asklas@users.noreply.github.com>
+Date:   Thu Sep 26 17:00:08 2024 +0900
+
+    Member back (#7)
+    
+    * TT-17 RepositoryTest코드 작성
+    
+    * TT-18 Member CRUD
+    
+    * TT-18 Member CRUD
+    
+    * + DTO Inner Class로 관리
+    + Service CRUD 기본구성
+    + RepositoryTest 일괄실행 가능
+    
+    * + DTO Inner Class로 관리
+    + Service CRUD 기본구성
+    + RepositoryTest 일괄실행 가능
+    
+    * + DTO Inner Class로 관리
+    + Service CRUD 기본구성
+    + RepositoryTest 일괄실행 가능
+    
+    * + Exception
+    
+    * 리뷰사항 수정
+    
+    * 리뷰사항 반영
+    + Service Exception 처리
+    
+    * +Controller 기본 기능 구현
+    +React frame 설정
+    
+    * 리뷰사항 수정
+    
+    * 프론트 CSS 일부 수정
+    login기능 구현 후 추가개발예정
+    
+    ---------
+    
+    Co-authored-by: seosangwon <39723498+seosangwon@users.noreply.github.com>
+
+[33mcommit e6e11cf1f683cfdbd10dcf6b7a8e8d2375d6ed1f[m
+Author: seosangwon <39723498+seosangwon@users.noreply.github.com>
+Date:   Thu Sep 26 16:39:26 2024 +0900
+
+    [Feat] JWT 필터 체인을 구현하다 (#9)
+    
+    * feat: [BE-Feat] Add JWT dependency
+    
+    * feat: [BE-Feat] update JWT dependency
+    
+    * feat: [BE-Feat] update JWT dependency 0.12.3
+    
+    * feat: TT-19 Add JwtUtil
+    
+    * feat: TT-19 Add JwtUtilTest
+    
+    * feat: TT-19 Add authenticate logic in JwtFilterChain and Add SecurityUser
+    
+   

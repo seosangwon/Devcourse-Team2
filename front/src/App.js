@@ -101,7 +101,7 @@ function App() {
             <h2 className="index-info">
                 {userName ? (
                     <>
-                        <img onChange={handleProfileImageChange}
+                        <img
                             src={profileImage}
                             alt="Profile"
                             style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px' }}
@@ -134,10 +134,7 @@ function App() {
                 <div className="component-container">
                     {activeComponent === 'userInfo' && <UserInfo userId={userId} onUpdate={setUserName} />}
                     {activeComponent === 'profileImageChange' &&
-                        <ProfileImageChange
-                            userId={userId}
-                            onProfileImageChange={handleProfileImageChange}
-                            />}
+                        <ProfileImageChange userId={userId} onProfileImageChange={handleProfileImageChange} />}
                     {activeComponent === 'userDelete' && <UserDelete userId={userId} onDelete={handleUserDelete} />}
                     {activeComponent === 'insertOrder' && <InsertOrder memberId={userId} />}
                     {activeComponent === 'orderListPage' && <OrderListPage />}
@@ -181,7 +178,7 @@ function App() {
                         <button className="box color3" onMouseEnter={handleMouseEnterM}
                                 onMouseLeave={handleMouseLeaveM}>
                             {showSubMenuM ? (
-                                userName === 'admin' ? (
+                                userName === '운영자' ? (
                                 <div className="submenu">
                                     <ul>
                                         <li onClick={() => showComponent('userControl')}>▶ 회원 정보 조회</li>
@@ -197,7 +194,7 @@ function App() {
                                     </ul>
                                 </div>
                                 )
-                            ) : userName === 'admin' ? (
+                            ) : userName === '운영자' ? (
                                 "관리자 정보 관리"
                             ) : (
                                 "정보 관리"

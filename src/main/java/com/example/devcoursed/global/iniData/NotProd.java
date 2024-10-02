@@ -4,6 +4,9 @@ import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.domain.member.member.service.MemberService;
+import com.example.devcoursed.domain.product.product.dto.ProductDTO;
+import com.example.devcoursed.domain.product.product.entity.Product;
+import com.example.devcoursed.domain.product.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
@@ -14,6 +17,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 @Configuration
 @RequiredArgsConstructor
@@ -25,7 +30,8 @@ public class NotProd {
     private NotProd self;
 
     private final MemberService memberService;
-
+    private final MemberRepository memberRepository;
+    private final ProductRepository productRepository;
 
 
     @Bean
@@ -38,34 +44,65 @@ public class NotProd {
     @Transactional
     public void work1() {
 
-        if(memberService.count() > 0 )
-            return ;
+        if (memberService.count() > 0)
+            return;
 
 
+        //운영자 생성
         MemberDTO.Create requestDto = new MemberDTO.Create();
         requestDto.setLoginId("admin");
         requestDto.setPw("1234");
         requestDto.setName("운영자");
-        // 회원1 DTO 생성
-        MemberDTO.Create member1Dto = new MemberDTO.Create();
-        member1Dto.setLoginId("abc1234");
-        member1Dto.setPw("12345678");
-        member1Dto.setName("회원1");
-
-// 회원2 DTO 생성
-        MemberDTO.Create member2Dto = new MemberDTO.Create();
-        member2Dto.setLoginId("def1234");
-        member2Dto.setPw("12345678");
-        member2Dto.setName("회원2");
-
-// memberService로 각각의 회원 생성
         memberService.create(requestDto);
-        memberService.create(member1Dto);
-        memberService.create(member2Dto);
 
+        //member 50명 생성
+        for (int i = 1; i < 51; i++) {
+            MemberDTO.Create createDto = new MemberDTO.Create();
+            createDto.setLoginId("abc" + i);
+            createDto.setPw("1234");
+            createDto.setName("회원" + i);
 
+            memberService.create(createDto);
+        }
 
+        // 양파-5, 당근-2, 샐러리-10 생성
+        Random random = new Random();
+
+        for (long i = 2; i < 52; i++) {
+            Member member = memberRepository.findById(i).get();
+
+            // 양파 생성
+            Product onionProduct = Product.builder()
+                    .name("양파" + i)
+                    .maker(member)
+                    .loss(randomLossRate(random, 3, 7)) // 3~7 사이 랜덤값
+                    .build();
+            productRepository.save(onionProduct);
+
+            // 당근 생성
+            Product carrotProduct = Product.builder()
+                    .name("당근" + i)
+                    .maker(member)
+                    .loss(randomLossRate(random, 0, 2)) // 0~2 사이 랜덤 값
+                    .build();
+            productRepository.save(carrotProduct);
+
+            // 샐러리 생성
+            Product celeryProduct = Product.builder()
+                    .name("샐러리" + i)
+                    .maker(member)
+                    .loss(randomLossRate(random, 7, 13)) // 7~13 사이 랜덤값
+                    .build();
+            productRepository.save(celeryProduct);
+        }
+    }
+
+    private long randomLossRate(Random random, double min, double max) {
+        return  (long)min + (long)(random.nextDouble() * (max - min));
     }
 
 
 }
+
+
+

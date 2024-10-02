@@ -3,7 +3,6 @@ package com.example.devcoursed.domain.product.repository;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
-import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
