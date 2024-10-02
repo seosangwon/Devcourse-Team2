@@ -55,18 +55,25 @@ function InsertOrder({ memberId }) {
     // 아이템 변경 시
     const handleItemChange = (index, field, value) => {
         const newItems = [...items];
-        if (field === 'productId') {
-            const selectedProduct = products.find(product => product.id === Number(value));
-            if (selectedProduct) {
+        const selectedProduct = products.find(product => product.id === Number(value));
+
+        if (field === 'productId' && selectedProduct) {
+            const existingItemIndex = newItems.findIndex(item => item.productId === selectedProduct.id);
+            if (existingItemIndex > -1) {
+                newItems[existingItemIndex].quantity += 1; // 수량 증가
+            } else {
+                // 새로운 상품인 경우
                 newItems[index] = {
-                    productId: selectedProduct.id,  // ID 사용
-                    quantity: newItems[index]?.quantity,
-                    price: selectedProduct.price,   // 선택한 상품의 가격
+                    productId: selectedProduct.id,
+                    quantity: 1,
+                    price: selectedProduct.price,
+                    productName: selectedProduct.name,
                 };
             }
         } else {
             newItems[index][field] = value;
         }
+
         setItems(newItems);
         calculateTotalPrice(); // 총 가격 재계산
     };
