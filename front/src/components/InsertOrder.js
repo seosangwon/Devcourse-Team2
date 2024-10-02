@@ -13,7 +13,7 @@ function InsertOrder({ memberId }) {
         e.preventDefault();
         const dataToSend = {
             items: items.map(item => ({
-                productId: item.productId,
+                productId: item.productId, // ID 사용
                 quantity: item.quantity,
                 price: item.price,
             })),
@@ -108,7 +108,6 @@ function InsertOrder({ memberId }) {
                         onChange={(e) => handleItemChange(index, 'quantity', Number(e.target.value))}
                         placeholder="개수를 입력하세요"
                         required
-                        style={{ display: 'block', marginBottom: '10px' }}
                     />
                     <input
                         type="number"
@@ -116,7 +115,6 @@ function InsertOrder({ memberId }) {
                         onChange={(e) => handleItemChange(index, 'price', Number(e.target.value))}
                         placeholder="가격을 입력하세요"
                         required
-                        style={{ display: 'block', marginBottom: '10px' }}
                     />
                     <div>상품 이름: {item.productName || 'N/A'}</div>
                     <button type="button" onClick={() => removeItem(index)} style={{ marginTop: '10px' }}>Remove</button>
