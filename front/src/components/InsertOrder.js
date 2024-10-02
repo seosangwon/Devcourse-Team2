@@ -116,7 +116,8 @@ function InsertOrder({ memberId }) {
                         placeholder="가격을 입력하세요"
                         required
                     />
-                    <button type="button" onClick={() => removeItem(index)}>Remove</button>
+                    <div>상품 이름: {item.productName || 'N/A'}</div>
+                    <button type="button" onClick={() => removeItem(index)} style={{ marginTop: '10px' }}>Remove</button>
                 </div>
             ))}
             <button type="button" onClick={addItem}>Add Item</button>
