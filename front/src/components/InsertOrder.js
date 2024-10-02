@@ -6,8 +6,8 @@ function InsertOrder({ memberId }) {
     const [products, setProducts] = useState([]);
     const [totalPrice, setTotalPrice] = useState('');
 
-    // 주문 등록 핸들러
     const id = localStorage.getItem('id');
+
     const handleRegister = async (e) => {
         e.preventDefault();
         const dataToSend = {
