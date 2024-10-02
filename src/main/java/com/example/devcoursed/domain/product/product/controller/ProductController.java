@@ -1,6 +1,7 @@
 package com.example.devcoursed.domain.product.product.controller;
 
 import com.example.devcoursed.domain.product.product.dto.ProductDTO;
+import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.service.ProductService;
 import com.example.devcoursed.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/products")
+@RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 @Log4j2
 public class ProductController {
