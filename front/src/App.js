@@ -180,7 +180,7 @@ function App() {
                                 <div className="submenu">
                                     <ul>
                                         <li onClick={() => showComponent('userInfo')}>▶ 회원 정보 수정</li>
-                                        <li onClick={() => showComponent('profileImageChange')}>▶ 프로필</li>
+                                        <li onClick={() => showComponent('profileImageChange')}>▶ 프로필 사진 수정</li>
                                         <li onClick={() => showComponent('userDelete')}>▶ 회원 탈퇴</li>
                                     </ul>
                                 </div>
