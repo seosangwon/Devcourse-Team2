@@ -90,17 +90,20 @@ public class MemberService {
         Optional<Member> memberOptional = memberRepository.findById(id);
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
-            return new MemberDTO.Response(
-                    member.getLoginId(),
-                    member.getPw(),
-                    member.getName(),
-                    member.getMImage(),
-                    member.getCreatedAt(),
-                    member.getModifiedAt()
-            );
+            return new MemberDTO.Response(member);
         } else {
             throw MemberException.MEMBER_NOT_REMOVED.getMemberTaskException();
         }
+    }
+
+    public List<MemberDTO.Response> allRead() {
+        List<Member> all = memberRepository.findAll();
+
+        return all.stream()
+                .map(MemberDTO.Response::new)
+                .toList();
+
+
     }
 
     private final String uploadDir = "upload/"; // 현재 디렉토리의 upload 폴더
@@ -207,7 +210,7 @@ public class MemberService {
     public String refreshAccessToken(String refreshToken) {
         //화이트리스트 처리
         Member member = memberRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() ->  MemberException.MEMBER_LOGIN_DENIED.getMemberTaskException());
+                .orElseThrow(() -> MemberException.MEMBER_LOGIN_DENIED.getMemberTaskException());
 
         //리프레시 토큰이 만료되었다면 로그아웃
         try {
@@ -219,8 +222,7 @@ public class MemberService {
         }
 
 
-
-        return  generateAccessToken(member.getId(), member.getLoginId());
+        return generateAccessToken(member.getId(), member.getLoginId());
     }
 
 
