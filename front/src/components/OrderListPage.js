@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Order.css'; // CSS 파일 임포트
+import './Order.css';
+import axiosInstance from "../axiosInstance"; // CSS 파일 임포트
 
 function OrderListPage() {
     const [orders, setOrders] = useState([]);
@@ -8,13 +9,8 @@ function OrderListPage() {
 
     useEffect(() => {
         const fetchOrderList = async () => {
-            const token = localStorage.getItem('token');
             try {
-                const response = await axios.get('/api/v1/orders/list', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const response = await axiosInstance().get('/api/v1/orders/list');
                 setOrders(response.data.content);
             } catch (error) {
                 console.error('주문 목록 조회 실패:', error);
@@ -22,12 +18,8 @@ function OrderListPage() {
         };
 
         const fetchProducts = async () => {
-            const token = localStorage.getItem('token');
             try {
-                const response = await axios.get('/api/v1/products', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+                const response = await axiosInstance().get('/api/v1/products', {
                 });
                 setProducts(response.data.content);
             } catch (error) {

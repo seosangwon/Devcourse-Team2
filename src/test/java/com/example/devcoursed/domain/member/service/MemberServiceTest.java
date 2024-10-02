@@ -3,7 +3,6 @@ package com.example.devcoursed.domain.member.service;
 import com.example.devcoursed.domain.member.member.exception.MemberTaskException;
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
-import com.example.devcoursed.domain.member.member.exception.MemberTaskException;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.domain.member.member.service.MemberService;
 import org.assertj.core.api.Assertions;

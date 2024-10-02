@@ -14,12 +14,19 @@
   height: 60vh;
   position: relative;
 }
-.App {
+.AppLogBef {
   text-align: left;
   padding: 20px;
   background-color: #69a0d6;
   color: #ffffff;
 }
+
+.AppLogAf {
+  text-align: left;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
 
 .inputform{
   color: black;
@@ -85,12 +92,6 @@ input:focus::placeholder {
 
 .color3 {
   background-color: #f5a623; /* 세 번째 색상 */
-}
-
-.insert-order-container {
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px; /* Adjust as needed */
 }
 
 .back-button {
