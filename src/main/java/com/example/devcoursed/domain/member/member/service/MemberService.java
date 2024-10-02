@@ -4,10 +4,13 @@ import com.example.devcoursed.domain.member.member.exception.MemberException;
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
+import com.example.devcoursed.domain.member.member.repository.MemberRepositoryImpl;
 import com.example.devcoursed.global.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,12 +99,10 @@ public class MemberService {
         }
     }
 
-    public List<MemberDTO.Response> allRead() {
-        List<Member> all = memberRepository.findAll();
+    public Page<MemberDTO.Response> readAll(Pageable pageable) {
+        Page<Member> members = memberRepository.searchMembers(pageable);
 
-        return all.stream()
-                .map(MemberDTO.Response::new)
-                .toList();
+        return members.map(MemberDTO.Response::new);
 
 
     }
