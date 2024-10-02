@@ -1,21 +1,19 @@
 package com.example.devcoursed.domain.product.product.controller;
 
-import com.example.devcoursed.domain.product.product.dto.PageRequestDTO;
 import com.example.devcoursed.domain.product.product.dto.ProductDTO;
+import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.service.ProductService;
 import com.example.devcoursed.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/products")
+@RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 @Log4j2
 public class ProductController {
@@ -39,18 +37,24 @@ public class ProductController {
     }
 
     // 평균 로스율 조회
-    @GetMapping("/{name}")
-    public ResponseEntity<Double> readLoss(@AuthenticationPrincipal SecurityUser user,
-                                               @PathVariable("name") String name) {
-        Double averageLoss = productService.getAverageLossByName(name);
+    @GetMapping("/loss/{name}")
+    public ResponseEntity<Double> readLoss(@PathVariable("name") String name) {
+        return ResponseEntity.ok(productService.getAverageLossByName(name));
+    }
 
-        return ResponseEntity.ok(averageLoss);
+    // 상품 단건 조회
+    @GetMapping("/{name}")
+    public ResponseEntity<ProductDTO> read(@AuthenticationPrincipal SecurityUser user, @PathVariable("name") String name){
+        Long memberId = user.getId();
+        return ResponseEntity.ok(productService.read(name, memberId));
     }
 
     // 상품 목록 조회
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> getList(PageRequestDTO pageRequestDTO) {
-        return ResponseEntity.ok(productService.getList(pageRequestDTO));
+    public ResponseEntity<Page<ProductDTO>> getList(@AuthenticationPrincipal SecurityUser user, ProductDTO.PageRequestDTO pageRequestDTO) {
+        Long memberId = user.getId();
+        Page<ProductDTO> productDTOPage = productService.getList(pageRequestDTO, memberId);
+        return ResponseEntity.ok(productDTOPage);
     }
 
 }

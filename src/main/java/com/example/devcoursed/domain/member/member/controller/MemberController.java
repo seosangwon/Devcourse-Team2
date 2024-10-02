@@ -2,6 +2,9 @@ package com.example.devcoursed.domain.member.member.controller;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -92,6 +95,7 @@ public class MemberController {
     public ResponseEntity<MemberDTO.Response> read(@PathVariable Long id) {
         return ResponseEntity.ok(memberService.read(id));
     }
+
 
 
     //내 정보 수정하기
