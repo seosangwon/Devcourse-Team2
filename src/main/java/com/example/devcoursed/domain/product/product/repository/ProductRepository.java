@@ -24,7 +24,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
     // 사용자에게 식재료 name을 받아 평균 로스율 반환
-    @Query("SELECT AVG(p.loss) FROM Product p WHERE p.name = :name")
+    @Query("SELECT AVG(p.loss) FROM Product p WHERE p.name = :name AND p.loss BETWEEN 0 AND 100")
     Double findAverageLossByName(@Param("name") String name);
 
 }
