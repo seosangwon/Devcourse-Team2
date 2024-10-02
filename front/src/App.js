@@ -8,6 +8,9 @@ import Register from './components/Register';
 import InsertOrder from "./components/InsertOrder";
 import OrderListPage from "./components/OrderListPage";
 import Logout from "./components/Logout";
+import AddProduct from "./components/AddProduct"
+import UpdateProduct from "./components/UpdateProduct"
+import ProductList from "./components/ProductList"
 
 
 function App() {
@@ -136,6 +139,9 @@ function App() {
                     {activeComponent === 'userDelete' && <UserDelete userId={userId} onDelete={handleUserDelete} />}
                     {activeComponent === 'insertOrder' && <InsertOrder memberId={userId} />}
                     {activeComponent === 'orderListPage' && <OrderListPage />}
+                    {activeComponent === 'addProduct' && <AddProduct />}
+                    {activeComponent === 'updateProduct' && <UpdateProduct />}
+                    {activeComponent === 'productList' && <ProductList />}
                     <button className="back-button" onClick={handleBack}>뒤로가기</button>
                 </div>
             ) : (
@@ -159,9 +165,9 @@ function App() {
                             {showSubMenuP ? (
                                 <div className="submenu">
                                     <ul>
-                                        <li onClick={() => showComponent('pro1')}>▶ 상품 추가</li>
-                                        <li onClick={() => showComponent('pro2')}>▶ 로스율 관리</li>
-                                        <li onClick={() => showComponent('pro2')}>▶ 상품 목록</li>
+                                        <li onClick={() => showComponent('addProduct')}>▶ 상품 추가</li>
+                                        <li onClick={() => showComponent('updateProduct')}>▶ 로스율 관리</li>
+                                        <li onClick={() => showComponent('productList')}>▶ 상품 목록</li>
                                     </ul>
                                 </div>
                             ) : (
