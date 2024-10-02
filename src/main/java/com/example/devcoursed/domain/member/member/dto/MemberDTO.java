@@ -93,12 +93,25 @@ public class MemberDTO {
     @Data
     @AllArgsConstructor
     public static class Response {
+        private long id;
         private String loginId;
         private String pw;
         private String name;
         private String mImage;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+
+        public Response(Member member) {
+            this.id = member.getId();
+            this.loginId = member.getLoginId();
+            this.pw = member.getPw();
+            this.name = member.getName();
+            this.mImage = member.getMImage();
+            this.createdAt = member.getCreatedAt();
+            this.modifiedAt = member.getModifiedAt();
+        }
+
+
     }
 
     @Data
