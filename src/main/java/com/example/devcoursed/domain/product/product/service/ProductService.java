@@ -23,7 +23,7 @@ public class ProductService {
     private final MemberService memberService;
 
     // 식재료 등록
-    public ProductDTO insert(ProductDTO productDTO, Long id){
+    public ProductDTO insert(ProductDTO productDTO, Long id) {
         Member member = memberService.getMemberById(id);
 
         productRepository.findByMakerAndName(member, productDTO.getName())
