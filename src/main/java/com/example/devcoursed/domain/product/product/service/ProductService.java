@@ -45,10 +45,16 @@ public class ProductService {
 
         // 로스율 null인 경우 default value로 변경
         long loss = (productDTO.getLoss() == null) ? 222L : productDTO.getLoss();
-        foundProduct.changeLoss(loss);
-        productRepository.save(foundProduct);
 
-        return new ProductDTO(foundProduct);
+        Product changeLossProduct = Product.builder()
+                                    .name(foundProduct.getName())
+                                    .loss(loss)
+                                    .maker(member)
+                                    .build();
+
+        productRepository.save(changeLossProduct);
+
+        return new ProductDTO(changeLossProduct);
     }
 
 

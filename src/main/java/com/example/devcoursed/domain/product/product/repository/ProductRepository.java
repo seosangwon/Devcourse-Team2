@@ -14,7 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByMakerAndName(Member maker, String name);
 
     // 목록 전체 불러오기
-    @Query("SELECT p FROM Product p JOIN FETCH p.maker WHERE p.maker.id = :memberId ORDER BY p.id")
+    @Query("SELECT p FROM Product p JOIN FETCH p.maker WHERE p.maker.id = :memberId AND p.createdAt = (SELECT MAX(p2.createdAt) FROM Product p2 WHERE p2.name = p.name ) ORDER BY p.createdAt DESC")
     Page<Product> listAll(Long memberId, Pageable pageable);
 
 
