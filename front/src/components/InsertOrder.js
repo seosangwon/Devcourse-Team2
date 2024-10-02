@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from "../axiosInstance";
 
 function InsertOrder({ memberId }) {
     const [items, setItems] = useState([]);
@@ -12,7 +12,7 @@ function InsertOrder({ memberId }) {
         e.preventDefault();
         const dataToSend = {
             items: items.map(item => ({
-                productId: item.productId, // ID 사용
+                productId: item.productId,
                 quantity: item.quantity,
                 price: item.price,
             })),
@@ -20,13 +20,10 @@ function InsertOrder({ memberId }) {
             totalPrice,
         };
 
-        const token = localStorage.getItem('token');
         try {
             console.log('Sending data:', JSON.stringify(dataToSend, null, 2));
 
-            const response = await axios.post('/api/v1/orders', dataToSend, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const response = await axiosInstance.post('/api/v1/orders', dataToSend);
             console.log('주문 등록 성공:', response.data);
             alert('주문 등록 성공');
         } catch (error) {
@@ -39,7 +36,7 @@ function InsertOrder({ memberId }) {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('/api/v1/products');
+                const response = await axiosInstance.get('/api/v1/products');
                 setProducts(response.data.content);
             } catch (error) {
                 console.error('상품 목록 조회 실패:', error);

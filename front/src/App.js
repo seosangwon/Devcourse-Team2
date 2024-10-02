@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import UserInfo from './components/UserInfo';
 import Login from './components/Login';
@@ -8,6 +8,10 @@ import Register from './components/Register';
 import InsertOrder from "./components/InsertOrder";
 import OrderListPage from "./components/OrderListPage";
 import Logout from "./components/Logout";
+import AddProduct from "./components/AddProduct"
+import UpdateProduct from "./components/UpdateProduct"
+import ProductList from "./components/ProductList"
+import UserControl from "./components/UserControl";
 
 
 function App() {
@@ -18,17 +22,14 @@ function App() {
     const [showSubMenuO, setShowSubMenuO] = useState(false);
     const [showSubMenuP, setShowSubMenuP] = useState(false);
     const [showSubMenuE, setShowSubMenuE] = useState(false);
-    const [profileImage, setProfileImage] = useState(''); // 프로필 이미지 상태 추가
+    const [profileImage, setProfileImage] = useState('');
 
 
     const handleLogin = (name, mImage) => {
         setUserName(name);
         setProfileImage(mImage ? `/api/v1/members/upload/${mImage}` : '/api/v1/members/upload/defaultImageUrl.jpg'); // mImage가 없으면 기본 이미지 사용
-
         setActiveComponent('');
     };
-
-
 
     const handleLogout = () => {
         setUserName('');
@@ -93,13 +94,14 @@ function App() {
         setProfileImage(newImage); // 프로필 이미지 업데이트
     };
 
+
     return (
         <div className={userName ? 'AppLogAf' : 'AppLogBef'}>
             <h1>발주 관리 통합 솔루션</h1>
             <h2 className="index-info">
                 {userName ? (
                     <>
-                        <img
+                        <img onChange={handleProfileImageChange}
                             src={profileImage}
                             alt="Profile"
                             style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px' }}
@@ -132,10 +134,18 @@ function App() {
                 <div className="component-container">
                     {activeComponent === 'userInfo' && <UserInfo userId={userId} onUpdate={setUserName} />}
                     {activeComponent === 'profileImageChange' &&
-                        <ProfileImageChange userId={userId} onProfileImageChange={handleProfileImageChange} />}
+                        <ProfileImageChange
+                            userId={userId}
+                            onProfileImageChange={handleProfileImageChange}
+                            />}
                     {activeComponent === 'userDelete' && <UserDelete userId={userId} onDelete={handleUserDelete} />}
                     {activeComponent === 'insertOrder' && <InsertOrder memberId={userId} />}
                     {activeComponent === 'orderListPage' && <OrderListPage />}
+                    {activeComponent === 'addProduct' && <AddProduct />}
+                    {activeComponent === 'updateProduct' && <UpdateProduct />}
+                    {activeComponent === 'productList' && <ProductList />}
+                    {activeComponent === 'userControl' && <UserControl />}
+                    {activeComponent === 'lossControl' && <ProductList />}
                     <button className="back-button" onClick={handleBack}>뒤로가기</button>
                 </div>
             ) : (
@@ -159,9 +169,9 @@ function App() {
                             {showSubMenuP ? (
                                 <div className="submenu">
                                     <ul>
-                                        <li onClick={() => showComponent('pro1')}>▶ 상품 추가</li>
-                                        <li onClick={() => showComponent('pro2')}>▶ 로스율 관리</li>
-                                        <li onClick={() => showComponent('pro2')}>▶ 상품 목록</li>
+                                        <li onClick={() => showComponent('addProduct')}>▶ 상품 추가</li>
+                                        <li onClick={() => showComponent('updateProduct')}>▶ 로스율 관리</li>
+                                        <li onClick={() => showComponent('productList')}>▶ 상품 목록</li>
                                     </ul>
                                 </div>
                             ) : (
@@ -171,6 +181,14 @@ function App() {
                         <button className="box color3" onMouseEnter={handleMouseEnterM}
                                 onMouseLeave={handleMouseLeaveM}>
                             {showSubMenuM ? (
+                                userName === 'admin' ? (
+                                <div className="submenu">
+                                    <ul>
+                                        <li onClick={() => showComponent('userControl')}>▶ 회원 정보 조회</li>
+                                        <li onClick={() => showComponent('lossControl')}>▶ 식재료 조회</li>
+                                    </ul>
+                                </div>
+                            ) : (
                                 <div className="submenu">
                                     <ul>
                                         <li onClick={() => showComponent('userInfo')}>▶ 회원 정보 수정</li>
@@ -178,6 +196,9 @@ function App() {
                                         <li onClick={() => showComponent('userDelete')}>▶ 회원 탈퇴</li>
                                     </ul>
                                 </div>
+                                )
+                            ) : userName === 'admin' ? (
+                                "관리자 정보 관리"
                             ) : (
                                 "정보 관리"
                             )}
