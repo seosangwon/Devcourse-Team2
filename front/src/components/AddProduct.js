@@ -9,7 +9,7 @@ function AddProduct() {
         e.preventDefault();
 
         const dataToSend = {
-            name: productName,
+            name: productName.trim(),
             loss: productLoss ? parseInt(productLoss) : null,
         };
 

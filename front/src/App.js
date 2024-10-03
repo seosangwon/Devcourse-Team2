@@ -9,7 +9,6 @@ import InsertOrder from "./components/InsertOrder";
 import OrderListPage from "./components/OrderListPage";
 import Logout from "./components/Logout";
 import AddProduct from "./components/AddProduct"
-import UpdateProduct from "./components/UpdateProduct"
 import ProductList from "./components/ProductList"
 
 
@@ -131,7 +130,6 @@ function App() {
                     {activeComponent === 'insertOrder' && <InsertOrder memberId={userId} />}
                     {activeComponent === 'orderListPage' && <OrderListPage />}
                     {activeComponent === 'addProduct' && <AddProduct />}
-                    {activeComponent === 'updateProduct' && <UpdateProduct />}
                     {activeComponent === 'productList' && <ProductList />}
                     <button className="back-button" onClick={handleBack}>뒤로가기</button>
                 </div>
@@ -157,7 +155,6 @@ function App() {
                                 <div className="submenu">
                                     <ul>
                                         <li onClick={() => showComponent('addProduct')}>▶ 상품 추가</li>
-                                        <li onClick={() => showComponent('updateProduct')}>▶ 로스율 관리</li>
                                         <li onClick={() => showComponent('productList')}>▶ 상품 목록</li>
                                     </ul>
                                 </div>
