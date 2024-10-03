@@ -28,6 +28,8 @@ public class ProductDTO {
         this.loss = product.getLoss();
     }
 
+
+
     public Product toEntity(Member member) {
         return Product.builder()
                 .name(name)

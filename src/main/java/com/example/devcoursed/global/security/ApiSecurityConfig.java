@@ -27,7 +27,7 @@ public class ApiSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
 
-                        .requestMatchers("api/adm/**")
+                        .requestMatchers("/api/adm/**")
                         .hasRole("ADMIN")
 
                         // 인증 없이 접근 가능한 엔드포인트
