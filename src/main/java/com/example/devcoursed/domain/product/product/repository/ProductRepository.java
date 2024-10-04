@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -24,7 +26,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
     // 사용자에게 식재료 name을 받아 평균 로스율 반환
-    @Query("SELECT AVG(p.loss) FROM Product p WHERE p.name = :name AND p.loss BETWEEN 0 AND 100")
-    Double findAverageLossByName(@Param("name") String name);
+    @Query("SELECT AVG(p.loss) FROM Product p WHERE p.name = :name AND p.createdAt BETWEEN :startDate AND :endDate AND p.loss BETWEEN 0 AND 100")
+    Double findAverageLossByName(@Param("name") String name, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
 
 }

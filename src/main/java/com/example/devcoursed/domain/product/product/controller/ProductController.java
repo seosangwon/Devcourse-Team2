@@ -7,10 +7,15 @@ import com.example.devcoursed.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -38,8 +43,16 @@ public class ProductController {
 
     // 평균 로스율 조회
     @GetMapping("/loss/{name}")
-    public ResponseEntity<Double> readLoss(@PathVariable("name") String name) {
-        return ResponseEntity.ok(productService.getAverageLossByName(name));
+    public ResponseEntity<Double> readLoss(@PathVariable("name") String name,
+                                           @RequestParam("startDate") LocalDate startDate,
+                                           @RequestParam("endDate") LocalDate endDate) {
+
+        // LocalDate를 LocalDateTime으로 변환
+        LocalDateTime startDateTime = startDate.atStartOfDay(); // 시작 날짜의 자정
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX); // 종료 날짜의 마지막 순간 (23:59:59)
+
+        Double averageLoss = productService.getAverageLossByName(name, startDateTime, endDateTime);
+        return ResponseEntity.ok(averageLoss);
     }
 
     // 상품 단건 조회

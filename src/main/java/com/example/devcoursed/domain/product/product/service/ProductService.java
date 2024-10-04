@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -59,11 +61,11 @@ public class ProductService {
 
 
     // 상품의 평균 로스율 조회
-    public Double getAverageLossByName(String name){
-        return productRepository.findAverageLossByName(name);
+    public Double getAverageLossByName(String name, LocalDateTime startDate, LocalDateTime endDate){
+        return productRepository.findAverageLossByName(name, startDate, endDate);
     }
 
-    // 상품(식재료) 단건 조회
+    // 상품(식재료) 단건 조회 : 누적된 모든 로스율의 변화를 보여줌
     public ProductDTO read(String name, Long memberId){
         Product product = productRepository.findByName(name, memberId).orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);;
 
