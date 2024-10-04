@@ -52,7 +52,15 @@ public class NotProd {
         MemberDTO.Create requestDto = new MemberDTO.Create();
         requestDto.setLoginId("admin");
         requestDto.setPw("1234");
+        requestDto.setEmail("admin@naver.com");
         requestDto.setName("운영자");
+        memberService.create(requestDto);
+
+        MemberDTO.Create requestDto2 = new MemberDTO.Create();
+        requestDto.setLoginId("test123");
+        requestDto.setPw("1234");
+        requestDto.setEmail("zmdk1205@naver.com");
+        requestDto.setName("서상원");
         memberService.create(requestDto);
 
         //member 50명 생성
@@ -60,6 +68,7 @@ public class NotProd {
             MemberDTO.Create createDto = new MemberDTO.Create();
             createDto.setLoginId("abc" + i);
             createDto.setPw("1234");
+            createDto.setEmail("abc"+i+"@naver.com");
             createDto.setName("회원" + i);
 
             memberService.create(createDto);

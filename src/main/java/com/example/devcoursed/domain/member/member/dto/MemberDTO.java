@@ -13,6 +13,7 @@ public class MemberDTO {
     @Data
     public static class Create {
         private String loginId;
+        private String email;
         private String pw;
         private String name;
         @JsonProperty("mImage")
@@ -22,6 +23,7 @@ public class MemberDTO {
             return Member.builder()
                     .loginId(loginId)
                     .pw(pw)
+                    .email(email)
                     .name(name)
                     .mImage(mImage)
                     .build();
@@ -95,6 +97,7 @@ public class MemberDTO {
     public static class Response {
         private long id;
         private String loginId;
+        private String email;
         private String pw;
         private String name;
         private String mImage;
@@ -109,6 +112,7 @@ public class MemberDTO {
             this.mImage = member.getMImage();
             this.createdAt = member.getCreatedAt();
             this.modifiedAt = member.getModifiedAt();
+            this.email = member.getEmail();
         }
 
 
@@ -129,6 +133,13 @@ public class MemberDTO {
         public logoutResponseDto(String message) {
             this.message = message;
         }
+    }
+
+    @Data
+    public static class FindPWRequestDto {
+
+        private String loginId;
+        private String email;
     }
 
 //    @Data

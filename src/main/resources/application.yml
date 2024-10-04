@@ -3,10 +3,11 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: seodo1e1205@gmail.com
-    password: endlfdl156@
+    password: nnjd usla bvhe crsd
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+      debug : true
 
   profiles:
     active: dev
@@ -30,7 +31,7 @@ spring:
 
 logging:
   level:
-    com.example.com.example.devcoursed: DEBUG
+    com.example.devcoursed: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
