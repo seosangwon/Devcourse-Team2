@@ -91,7 +91,7 @@ public class ProductService {
     // 상품 목록 전체 조회
     public Page<ProductDTO> getProducts(ProductDTO.PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable();
-        Page<Product> productPage = productRepository.findAll(pageable);
+        Page<Product> productPage = productRepository.findAllProducts(pageable);
         return productPage.map(ProductDTO::new);
     }
 
