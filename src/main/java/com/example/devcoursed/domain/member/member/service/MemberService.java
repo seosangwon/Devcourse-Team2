@@ -61,7 +61,7 @@ public class MemberService {
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
             member.changeLoginId(dto.getLoginId());
-            member.changePw(dto.getPw());
+            member.changePw(passwordEncoder.encode(dto.getPw()));
             member.changeName(dto.getName());
             member.changeMImage(dto.getMImage());
             memberRepository.save(member);

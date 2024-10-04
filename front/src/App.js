@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import UserInfo from './components/UserInfo';
 import Login from './components/Login';
@@ -9,27 +9,24 @@ import InsertOrder from "./components/InsertOrder";
 import OrderListPage from "./components/OrderListPage";
 import Logout from "./components/Logout";
 import AddProduct from "./components/AddProduct"
+import UpdateProduct from "./components/UpdateProduct"
 import ProductList from "./components/ProductList"
+import UserControl from "./components/UserControl";
+
 
 
 function App() {
     const [userName, setUserName] = useState('');
     const [userId, setUserId] = useState(null);
-    const [activeComponent, setActiveComponent] = useState('');
-    const [showSubMenuM, setShowSubMenuM] = useState(false);
-    const [showSubMenuO, setShowSubMenuO] = useState(false);
-    const [showSubMenuP, setShowSubMenuP] = useState(false);
-    const [profileImage, setProfileImage] = useState(''); // 프로필 이미지 상태 추가
+    const [activeComponent, setActiveComponent] = useState('login');
+    const [profileImage, setProfileImage] = useState('');
 
 
     const handleLogin = (name, mImage) => {
         setUserName(name);
         setProfileImage(mImage ? `/api/v1/members/upload/${mImage}` : '/api/v1/members/upload/defaultImageUrl.jpg'); // mImage가 없으면 기본 이미지 사용
-
         setActiveComponent('');
     };
-
-
 
     const handleLogout = () => {
         setUserName('');
@@ -54,29 +51,6 @@ function App() {
         setActiveComponent(component);
     };
 
-    const handleMouseEnterM = () => {
-        setShowSubMenuM(true);
-    };
-
-    const handleMouseLeaveM = () => {
-        setShowSubMenuM(false);
-    };
-
-    const handleMouseEnterP = () => {
-        setShowSubMenuP(true);
-    };
-
-    const handleMouseLeaveP = () => {
-        setShowSubMenuP(false);
-    };
-
-    const handleMouseEnterO = () => {
-        setShowSubMenuO(true);
-    };
-
-    const handleMouseLeaveO = () => {
-        setShowSubMenuO(false);
-    };
 
     const handleBack = () => {
         setActiveComponent('');
@@ -85,6 +59,7 @@ function App() {
     const handleProfileImageChange = (newImage) => {
         setProfileImage(newImage); // 프로필 이미지 업데이트
     };
+
 
     return (
         <div className={userName ? 'AppLogAf' : 'AppLogBef'}>
@@ -130,51 +105,66 @@ function App() {
                     {activeComponent === 'insertOrder' && <InsertOrder memberId={userId} />}
                     {activeComponent === 'orderListPage' && <OrderListPage />}
                     {activeComponent === 'addProduct' && <AddProduct />}
+                    {activeComponent === 'updateProduct' && <UpdateProduct />}
                     {activeComponent === 'productList' && <ProductList />}
+                    {activeComponent === 'userControl' && <UserControl />}
+                    {activeComponent === 'lossControl' && <ProductList />}
                     <button className="back-button" onClick={handleBack}>뒤로가기</button>
                 </div>
             ) : (
                 <div>
                     <div className="container">
-                        <button className="box color1" onMouseEnter={handleMouseEnterO}
-                                onMouseLeave={handleMouseLeaveO}>
-                            {showSubMenuO ? (
-                                <div className="submenu">
-                                    <ul>
-                                        <li onClick={() => showComponent('insertOrder')}>▶ 발주 신청</li>
-                                        <li onClick={() => showComponent('orderListPage')}>▶ 발주 목록 확인</li>
-                                    </ul>
-                                </div>
-                            ) : (
-                                "발주 관리"
-                            )}
+                        <button className="box color1">
+                            <div className="subname">발주 관리</div>
+                            <div className="submenu">
+                                <ul>
+                                    <li onClick={() => showComponent('insertOrder')}>▶ 발주 신청</li>
+                                    <li onClick={() => showComponent('orderListPage')}>▶ 발주 목록 확인</li>
+                                </ul>
+                            </div>
                         </button>
-                        <button className="box color2" onMouseEnter={handleMouseEnterP}
-                                onMouseLeave={handleMouseLeaveP}>
-                            {showSubMenuP ? (
-                                <div className="submenu">
-                                    <ul>
-                                        <li onClick={() => showComponent('addProduct')}>▶ 상품 추가</li>
-                                        <li onClick={() => showComponent('productList')}>▶ 상품 목록</li>
-                                    </ul>
-                                </div>
-                            ) : (
-                                "상품 관리"
-                            )}
+                        <button className="box color2">
+                            <div className="subname">상품 관리</div>
+                            <div className="submenu">
+                                <ul>
+                                    <li onClick={() => showComponent('addProduct')}>▶ 상품 추가</li>
+                                    <li onClick={() => showComponent('updateProduct')}>▶ 로스율 관리</li>
+                                    <li onClick={() => showComponent('productList')}>▶ 상품 목록</li>
+                                </ul>
+                            </div>
                         </button>
-                        <button className="box color3" onMouseEnter={handleMouseEnterM}
-                                onMouseLeave={handleMouseLeaveM}>
-                            {showSubMenuM ? (
-                                <div className="submenu">
-                                    <ul>
-                                        <li onClick={() => showComponent('userInfo')}>▶ 회원 정보 수정</li>
-                                        <li onClick={() => showComponent('profileImageChange')}>▶ 프로필 사진 수정</li>
-                                        <li onClick={() => showComponent('userDelete')}>▶ 회원 탈퇴</li>
-                                    </ul>
-                                </div>
+                        <button className="box color3" >
+                            {userName === '운영자' ? (
+                                <div className="subname">회원 관리</div>
                             ) : (
-                                "정보 관리"
+                                <div className="subname">정보 관리</div>
                             )}
+                            {userName === '운영자' ? (
+                                    <div className="submenu">
+                                        <ul>
+                                            <li onClick={() => showComponent('userControl')}>▶ 회원 정보 조회</li>
+                                            <li onClick={() => showComponent('lossControl')}>▶ 식재료 조회</li>
+                                        </ul>
+                                    </div>
+                                ) : (
+                                    <div className="submenu">
+                                        <ul>
+                                            <li onClick={() => showComponent('userInfo')}>▶ 회원 정보 수정</li>
+                                            <li onClick={() => showComponent('profileImageChange')}>▶ 프로필</li>
+                                            <li onClick={() => showComponent('userDelete')}>▶ 회원 탈퇴</li>
+                                        </ul>
+                                    </div>
+                                )}
+                        </button>
+                        <button className="box color4">
+                            <div className="subname">추가 기능</div>
+                            <div className="submenu">
+                                <ul>
+                                    <li onClick={() => showComponent('ect1')}>▶ 추가 기능</li>
+                                    <li onClick={() => showComponent('ect2')}>▶ 추가 기능</li>
+                                    <li onClick={() => showComponent('ect3')}>▶ 추가 기능</li>
+                                </ul>
+                            </div>
                         </button>
                     </div>
                 </div>
