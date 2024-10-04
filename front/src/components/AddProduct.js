@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from "../axiosInstance";
 
 function AddProduct() {
     const [productName, setProductName] = useState('');
@@ -13,13 +13,10 @@ function AddProduct() {
             loss: productLoss ? parseInt(productLoss) : null,
         };
 
-        const token = localStorage.getItem('accessToken');
         try {
             console.log('Add product:', JSON.stringify(dataToSend));
 
-            const response = await axios.post('/api/v1/products/', dataToSend, {
-                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-            });
+            await axiosInstance.post('/api/v1/products/', dataToSend, {});
 
             alert('식재료가 등록되었습니다!');
             setProductName(''); // 등록창 상태 초기화

@@ -6,6 +6,7 @@ import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.domain.orders.exception.OrderException;
 import com.example.devcoursed.domain.orders.orders.dto.OrderDTO;
 
+import com.example.devcoursed.domain.orders.orders.dto.OrderSummaryDTO;
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import com.example.devcoursed.domain.orders.orders.repository.OrderRepository;
 import com.example.devcoursed.domain.product.product.repository.ProductRepository;
@@ -16,6 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @Log4j2
@@ -26,7 +30,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void createOrder(OrderDTO orderDTO, Long memberId) {
+    public Orders createOrder(OrderDTO orderDTO, Long memberId) {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberException.MEMBER_NOT_FOUND::getMemberTaskException);
@@ -35,6 +39,7 @@ public class OrderService {
         Orders orders = orderDTO.toEntity(member, productRepository); // DTO에서 엔티티로 변환
         orderRepository.save(orders);
 
+        return orders;
     }
     public OrderDTO read(Long orderId) {
         Orders orders = orderRepository.findById(orderId).
@@ -66,4 +71,10 @@ public class OrderService {
         }
 
     }
+    public List<OrderSummaryDTO> getMonthlyOrderSummary(long memberId) {
+
+        return orderRepository.findMonthlyOrderSummary();
+    }
+
+
 }

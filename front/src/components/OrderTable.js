@@ -1,7 +1,7 @@
-import React, { useState } from 'react'; // React와 useState를 불러옵니다
+import React, { useState } from 'react';
 
 const OrderTable = ({ orders, products }) => {
-    const [openOrderId, setOpenOrderId] = useState(null);
+    const [openOrderId, setOpenOrderId] = useState(null); // 상태 추가
 
     const getProductNameById = (productId) => {
         const product = products.find(product => product.id === productId);
@@ -9,7 +9,7 @@ const OrderTable = ({ orders, products }) => {
     };
 
     const toggleOrderDetails = (orderId) => {
-        setOpenOrderId(openOrderId === orderId ? null : orderId);
+        setOpenOrderId(openOrderId === orderId ? null : orderId); // 클릭한 주문 ID 토글
     };
 
     return (
@@ -28,15 +28,9 @@ const OrderTable = ({ orders, products }) => {
                     <td colSpan="5">주문 항목이 없습니다.</td>
                 </tr>
             ) : (
-                orders.map((order, index) => (
+                orders.map(order => (
                     <React.Fragment key={order.id}>
-                        <tr
-                            onClick={() => toggleOrderDetails(order.id)}
-                            style={{
-                                cursor: 'pointer',
-                                backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#e0e0e0'  // 홀수/짝수 배경색
-                            }}
-                        >
+                        <tr onClick={() => toggleOrderDetails(order.id)} style={{ cursor: 'pointer' }}>
                             <td>{order.id}</td>
                             <td>
                                 {new Date(order.createdAt).toLocaleString('ko-KR', {
@@ -96,7 +90,7 @@ const nestedTableStyle = {
     width: '100%',
     borderCollapse: 'collapse',
     marginTop: '10px',
-    backgroundColor: '#fff1f1', // 배경색 추가
+    backgroundColor: '#f9f9f9', // 배경색 추가
 };
 
 const detailButtonStyle = {

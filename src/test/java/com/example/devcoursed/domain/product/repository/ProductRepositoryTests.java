@@ -5,9 +5,7 @@ import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.repository.ProductRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -30,8 +28,14 @@ public class ProductRepositoryTests {
     @Autowired
     private ProductRepository productRepository;
 
+
     @Autowired
     private MemberRepository memberRepository;
+    @AfterEach
+    void clean(){
+        productRepository.deleteAll();
+        memberRepository.deleteAll();
+    }
 
     @Test
     @Transactional

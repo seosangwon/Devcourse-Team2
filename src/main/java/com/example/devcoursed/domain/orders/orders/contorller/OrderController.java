@@ -1,6 +1,7 @@
 package com.example.devcoursed.domain.orders.orders.contorller;
 
 import com.example.devcoursed.domain.orders.orders.dto.OrderDTO;
+import com.example.devcoursed.domain.orders.orders.dto.OrderSummaryDTO;
 import com.example.devcoursed.domain.orders.orders.service.OrderService;
 import com.example.devcoursed.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -46,4 +48,10 @@ public class OrderController {
         orderService.delete(orderId);
         return Map.of("success", "delete");
     }
+
+    //주문 월별 그래프 조회
+    @GetMapping("/monthly-summary")
+    public ResponseEntity<List<OrderSummaryDTO>> getMonthlyOrderSummary(@AuthenticationPrincipal SecurityUser user) {
+        long memberId = user.getId();
+        return ResponseEntity.ok(orderService.getMonthlyOrderSummary(memberId));}
 }

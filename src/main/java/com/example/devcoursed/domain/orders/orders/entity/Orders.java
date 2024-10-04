@@ -29,9 +29,13 @@ public class Orders {
     private Long totalPrice;
 
     @CreatedDate
+    @Column(name = "created_at", updatable = false) // 생성일은 업데이트하지 않음
     private LocalDateTime createdAt;
+
     @LastModifiedDate
+    @Column(name = "modified_at") // 수정일
     private LocalDateTime modifiedAt;
+
 
     @ManyToOne  // Member와 관계를 설정
     @JoinColumn(name = "member_id")  // 외래키 설정
