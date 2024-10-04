@@ -95,8 +95,7 @@ input:focus::placeholder {
 }
 
 .back-button {
-  position: absolute;
-  display: block; /* 블록 요소로 설정 */
+  position: fixed; /* 위치 고정 */
   padding: 10px; /* 여백 추가 */
   background-color: #007bff; /* 배경색 */
   color: white; /* 글자색 */
@@ -104,9 +103,11 @@ input:focus::placeholder {
   border-radius: 5px; /* 모서리 둥글게 */
   cursor: pointer; /* 커서 포인터로 변경 */
   font-size: 16px; /* 글자 크기 */
-  margin-top: 10px; /* 위쪽 여백 추가 */
-  bottom: 1%;
+  margin-top: auto; /* 여백 초기화 */
+  top: 18%; /* 아래쪽 여백 */
+  left: 1%; /* 왼쪽 여백 (필요에 따라 조정) */
 }
+
 
 /* 버튼 hover 효과 */
 .back-button:hover {
