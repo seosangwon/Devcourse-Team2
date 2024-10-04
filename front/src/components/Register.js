@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 function Register({ onRegister }) {
     const [loginId, setLoginId] = useState('');
     const [pw, setPassword] = useState('');
-    const [confirmPw, setConfirmPassword] = useState(''); // 비밀번호 확인 상태 추가
     const [name, setName] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -46,7 +45,6 @@ function Register({ onRegister }) {
             // 입력 필드 초기화
             setLoginId('');
             setPassword('');
-            setConfirmPassword('');
             setName('');
 
         } catch (error) {
@@ -60,8 +58,9 @@ function Register({ onRegister }) {
         <form onSubmit={handleRegister}>
             <div className="inputform">
                 <div>
-                    <label htmlFor="name">이름:</label>
+                    <span className="input-info">이름:</span>
                     <input
+                        className="auth-input"
                         type="text"
                         id="name"
                         value={name}
@@ -72,34 +71,25 @@ function Register({ onRegister }) {
                 </div>
 
                 <div>
-                    <label>ID:</label>
+                    <span className="input-info">아이디:</span>
                     <input
+                        className="auth-input"
                         type="text"
                         value={loginId}
                         onChange={(e) => setLoginId(e.target.value)}
-                        placeholder="ID를 입력하세요"
+                        placeholder="아이디를 입력하세요"
                         required
                     />
                 </div>
 
                 <div>
-                    <label>비밀번호:</label>
+                    <span className="input-info">비밀번호:</span>
                     <input
+                        className="auth-input"
                         type="password"
                         value={pw}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="비밀번호를 입력하세요"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label>비밀번호 확인:</label>
-                    <input
-                        type="password"
-                        value={confirmPw}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="비밀번호를 다시 입력하세요"
                         required
                     />
                 </div>

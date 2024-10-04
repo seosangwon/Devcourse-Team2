@@ -24,7 +24,7 @@
 .AppLogAf {
   text-align: left;
   padding: 20px;
-  background-color: #ffffff;
+  background-color: #bfc3ca;
 }
 
 
@@ -62,9 +62,10 @@ input:focus::placeholder {
 
 .box {
   display: flex;
-  align-items: center;
+  /*align-items: center;*/
+  padding: 20px;
   justify-content: center;
-  font-size: 24px;
+  font-size: 36px;
   color: white;
   border: none;
   border-radius: 8px;
@@ -83,19 +84,19 @@ input:focus::placeholder {
 
 /* 각 버튼 색상 */
 .color1 {
-  background-color: #4a90e2; /* 기본 색상 */
+  background-color: #80a580; /* 기본 색상 */
 }
 
 .color2 {
-  background-color: #e94e77; /* 두 번째 색상 */
+  background-color: #a39171; /* 두 번째 색상 */
 }
 
 .color3 {
-  background-color: #f5a623; /* 세 번째 색상 */
+  background-color: #6d4c3d; /* 세 번째 색상 */
 }
 
 .color4 {
-  background-color: #339e17; /* 세 번째 색상 */
+  background-color: #727d71; /* 세 번째 색상 */
 }
 
 .back-button {
@@ -119,17 +120,24 @@ input:focus::placeholder {
 
 .submenu {
   position: absolute; /* 부모 버튼에 상대적인 절대 위치 설정 */
-  top: 10%; /* 버튼 아래에 위치하도록 설정 */
+  top: 15%; /* 버튼 아래에 위치하도록 설정 */
   left: 0; /* 버튼의 좌측에 위치하도록 설정 */
   background-color: rgba(0, 0, 0, 0); /* 배경색 흰색 */
   border-radius: 5px; /* 모서리 둥글게 */
   z-index: 1; /* 다른 요소들 위에 표시 */
-  display: none; /* 기본적으로 숨김 */
+  font-size: 30px;
 }
 
-.box:hover .submenu {
-  display: block; /* 버튼에 마우스 호버 시 보이도록 설정 */
+.subname{
+  position: absolute;
+  left: 380px;
+  top: 5%;
+  width: 180px;
+  font-size: 40px;
+  color: black;
+  font-weight: bold;
 }
+
 
 .submenu ul {
   list-style-type: none; /* 기본 리스트 스타일 제거 */
@@ -171,7 +179,8 @@ label {
 }
 
 input {
-  width: 90%; /* 입력 필드 전체 너비 */
+  display: inline;
+  width: 20%; /* 입력 필드 전체 너비 */
   padding: 10px; /* 내부 여백 */
   border: 1px solid #ccc; /* 테두리 */
   border-radius: 5px; /* 모서리 둥글게 */
@@ -206,25 +215,45 @@ button[type="submit"]:hover {
   align-items: center; /* 수평 중앙 정렬 */
   justify-content: center; /* 수직 중앙 정렬 */
   height: 60%; /* 높이 조정 */
-  width: 50%;
-  left:25%;
-  background-color: rgba(0, 0, 0, 0);
+  width: 30%;
+  left: 35%;
+  top: 20%;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  background-color: #ececec
 }
 
 .auth-button {
   margin: 3px; /* 버튼 사이의 간격 */
-  padding: 10px 20px; /* 버튼 여백 */
+  padding: 10px; /* 버튼 여백 */
   background-color: #007bff; /* 버튼 색상 */
   color: white; /* 글자색 */
   border: none; /* 테두리 제거 */
   border-radius: 5px; /* 모서리 둥글게 */
   cursor: pointer; /* 커서 포인터로 변경 */
-  font-size: 16px; /* 글자 크기 */
+  font-size: 20px; /* 글자 크기 */
   transition: background-color 0.3s; /* 배경색 전환 효과 */
+  width: 100px;
 }
 
 .auth-button:hover {
   background-color: #0056b3; /* 호버 시 색상 변경 */
+}
+
+.input-info{
+  display: inline-block;
+  width: 15%;
+  /*border: 1px solid #ccc; !* 확인을 위한 테두리 *!*/
+}
+
+.auth-input{
+  display: inline;
+  width: 65%; /* 입력 필드 전체 너비 */
+  padding: 10px; /* 내부 여백 */
+  border: 1px solid #ccc; /* 테두리 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  margin-bottom: 15px; /* 아래 여백 */
+  /*margin-left: 5%;*/
+  font-size: 16px; /* 글자 크기 */
 }
 
 /*UserDelete*/

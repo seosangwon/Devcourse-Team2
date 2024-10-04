@@ -97,7 +97,7 @@ function InsertOrder({ memberId }) {
                     <select
                         value={item.productId}
                         onChange={(e) => handleItemChange(index, 'productId', e.target.value)} // ID 사용
-                        style={{ display: 'block' }}
+                        style={{display: 'block'}}
                     >
                         <option value="">Select a product</option>
                         {products.map((product) => (
@@ -106,6 +106,7 @@ function InsertOrder({ memberId }) {
                             </option>
                         ))}
                     </select>
+                    <label>개수 </label>
                     <input
                         type="number"
                         value={item.quantity || ''}
@@ -113,6 +114,7 @@ function InsertOrder({ memberId }) {
                         placeholder="개수를 입력하세요"
                         required
                     />
+                    <label>가격 </label>
                     <input
                         type="number"
                         value={item.price || ''}
