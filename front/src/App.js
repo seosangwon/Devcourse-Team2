@@ -62,9 +62,10 @@ function App() {
         setActiveMenu(null);
     };
 
-    const handleProfileImageChange = (newImage) => {
-        setProfileImage(newImage); // 새로운 프로필 이미지로 상태 업데이트
+    const handleProfileImageChange = async (newImageUrl) => {
+        setProfileImage(newImageUrl);
     };
+
 
     const renderSubMenu = () => {
         if (activeMenu === 'orderManagement') {
@@ -96,7 +97,7 @@ function App() {
                 return (
                     <ul className="sub-menu">
                         <li onClick={() => showComponent('userInfo')}> 회원 정보 수정</li>
-                        <li onClick={() => showComponent('profileImageChange')}> 프로필</li>
+                        <li onClick={() => showComponent('profileImageChange')}> 프로필 사진 수정</li>
                         <li onClick={() => showComponent('userDelete')}> 회원 탈퇴</li>
                     </ul>
                 );

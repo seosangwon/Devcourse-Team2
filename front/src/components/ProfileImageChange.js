@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import axiosInstance from "../axiosInstance";
 
 function ProfileImageChange({ userId, onProfileImageChange, onSuccess, onError }) {
@@ -24,8 +24,8 @@ function ProfileImageChange({ userId, onProfileImageChange, onSuccess, onError }
 
             if (response.status === 200) {
                 const updatedImageUrl = `/api/v1/members/upload/${file.name}`;
-                onProfileImageChange(updatedImageUrl);
-                onSuccess('프로필 이미지가 업데이트 되었습니다.')
+                onProfileImageChange(updatedImageUrl); // 프로필 이미지 URL을 부모에게 전달
+                onSuccess('프로필 이미지가 업데이트 되었습니다.');
             } else {
                 onError('프로필 이미지 업데이트에 실패했습니다.');
             }
