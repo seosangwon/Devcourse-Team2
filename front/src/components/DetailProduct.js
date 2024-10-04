@@ -24,7 +24,7 @@ function DetailProduct({ product }) {
         try {
             console.log('Update product data:', JSON.stringify(dataToUpdate));
 
-            await axios.put(`/api/v1/products/`, dataToUpdate, {
+            await axios.post(`/api/v1/products/loss`, dataToUpdate, {
                 headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
             });
 
