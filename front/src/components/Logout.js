@@ -32,7 +32,6 @@ function Logout({ onLogout }) {
         <button
             className="delete-button"
             onClick={handleLogout}
-            style={{ marginLeft: '10px', background: 'red' }}
         >
             로그아웃
         </button>

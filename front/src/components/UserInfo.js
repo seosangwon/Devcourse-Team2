@@ -1,8 +1,8 @@
-// src/components/UserProfile.js
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../axiosInstance'; // 커스텀 Axios 인스턴스 사용
+import './UserInfo.css';
 
-function UserProfile() {
+function UserProfile( {onUpdate} ) {
     const [userInfo, setUserInfo] = useState(null);
     const [name, setName] = useState('');
     const [loginId, setLoginId] = useState('');
@@ -35,6 +35,7 @@ function UserProfile() {
         try {
             const response = await axiosInstance.put('/api/v1/members/', { name, loginId, pw });
             setUserInfo(response.data);
+            onUpdate(response.data.name);
             setIsEditing(false); // 수정 모드 종료
         } catch (error) {
             setErrorMessage('정보 수정 실패: ' + (error.response?.data?.message || '알 수 없는 오류'));
