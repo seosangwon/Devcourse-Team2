@@ -2,11 +2,11 @@ package com.example.devcoursed.domain.member.member.controller;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,17 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.service.MemberService;
 import com.example.devcoursed.global.security.SecurityUser;
-import com.example.devcoursed.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,13 +30,32 @@ public class MemberController {
 
     //회원가입
     @PostMapping("/register")
-    public ResponseEntity<MemberDTO.Create> register(@Validated @RequestBody MemberDTO.Create dto) {
-        return ResponseEntity.ok(memberService.create(dto));
+    public ResponseEntity<MemberDTO.CreateResponseDto> register(@Validated @RequestBody MemberDTO.CreateRequestDto request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getAllErrors().stream()
+                    .map(error -> {
+                        if (error instanceof FieldError) {
+                            return (error.getDefaultMessage());
+                        } else {
+                            return error.getDefaultMessage();
+                        }
+                    })
+                    .collect(Collectors.joining(", "));
+
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MemberDTO.CreateResponseDto(errorMessage));
+        }
+
+        MemberDTO.CreateResponseDto createResponseDto = memberService.create(request);
+
+
+        return ResponseEntity.ok(createResponseDto);
     }
+
 
     //로그인
     @PostMapping("/login")
-    public ResponseEntity<MemberDTO.LoginResponseDto> login(@Validated @RequestBody MemberDTO.LoginRequestDto request) {
+    public ResponseEntity<MemberDTO.LoginResponseDto> login(@Validated @RequestBody MemberDTO.LoginRequestDto request ) {
         //인증 성공
         MemberDTO.LoginResponseDto responseDto = memberService.checkLoginIdAndPassword(request.getLoginId(), request.getPw());
 
@@ -63,9 +76,9 @@ public class MemberController {
     }
 
     @PostMapping("/refreshAccessToken")
-    public ResponseEntity<MemberDTO.RefreshAccessTokenResponseDto> login (@RequestBody MemberDTO.RefreshAccessTokenRequestDto request) {
+    public ResponseEntity<MemberDTO.RefreshAccessTokenResponseDto> login(@RequestBody MemberDTO.RefreshAccessTokenRequestDto request) {
         String accessToken = memberService.refreshAccessToken(request.getRefreshToken());
-        MemberDTO.RefreshAccessTokenResponseDto responseDto = new MemberDTO.RefreshAccessTokenResponseDto(accessToken , "새로운 AccessToken 발급");
+        MemberDTO.RefreshAccessTokenResponseDto responseDto = new MemberDTO.RefreshAccessTokenResponseDto(accessToken, "새로운 AccessToken 발급");
 
         return ResponseEntity.ok(responseDto);
     }
@@ -73,14 +86,11 @@ public class MemberController {
 
     @PostMapping("/logout")
     public ResponseEntity<MemberDTO.logoutResponseDto> logout(@AuthenticationPrincipal SecurityUser user) {
-        memberService.setRefreshToken(user.getId(),"null");
+        memberService.setRefreshToken(user.getId(), "null");
 
         return ResponseEntity.ok(new MemberDTO.logoutResponseDto("로그아웃 되었습니다"));
 
     }
-
-
-
 
 
     // 나의 회원 정보 조회화기
@@ -95,7 +105,6 @@ public class MemberController {
     public ResponseEntity<MemberDTO.Response> read(@PathVariable Long id) {
         return ResponseEntity.ok(memberService.read(id));
     }
-
 
 
     //내 정보 수정하기

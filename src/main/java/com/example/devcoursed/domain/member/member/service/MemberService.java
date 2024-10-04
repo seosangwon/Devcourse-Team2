@@ -4,7 +4,6 @@ import com.example.devcoursed.domain.member.member.exception.MemberException;
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
-import com.example.devcoursed.domain.member.member.repository.MemberRepositoryImpl;
 import com.example.devcoursed.global.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -20,8 +19,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +32,7 @@ public class MemberService {
 
 
     @Transactional
-    public MemberDTO.Create create(MemberDTO.Create dto) {
+    public MemberDTO.CreateResponseDto create(MemberDTO.CreateRequestDto dto) {
         try {
             //기존의 회원이 있는지 검사
             Optional<Member> member = memberRepository.findByLoginId(dto.getLoginId());
@@ -46,8 +43,8 @@ public class MemberService {
             String password = dto.getPw();
             dto.setPw(passwordEncoder.encode(password));
 
-            memberRepository.save(dto.toEntity());
-            return dto;
+            Member savedMember = memberRepository.save(dto.toEntity());
+            return new MemberDTO.CreateResponseDto("회원가입이 완료되었습니다");
         } catch (Exception e) {
             throw MemberException.MEMBER_NOT_REGISTERED.getMemberTaskException();
         }
