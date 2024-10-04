@@ -24,10 +24,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.name = :name AND p.maker.id = :memberId")
     Optional<Product> findByName(@Param("name") String name, @Param("memberId") Long memberId);
 
+    // 단건 조회 : 그래프 기능
+    @Query("SELECT p FROM Product p WHERE p.name = :name AND p.maker.id = :memberId AND p.createdAt BETWEEN :startDate AND :endDate")
+    Optional<Product> findGraphByName(@Param("name") String name, @Param("memberId") Long memberId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate );
+
 
     // 사용자에게 식재료 name을 받아 평균 로스율 반환
     @Query("SELECT AVG(p.loss) FROM Product p WHERE p.name = :name AND p.createdAt BETWEEN :startDate AND :endDate AND p.loss BETWEEN 0 AND 100")
     Double findAverageLossByName(@Param("name") String name, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
+
+    // 최신 로스율 조회
+    @Query(value = "SELECT p FROM Product p WHERE p.member_id = :memberId AND p.name = :name ORDER BY p.created_at DESC LIMIT 1", nativeQuery = true)
+    Optional<Product> findLatestProductByMakerAndName(@Param("memberId") Long memberId, @Param("name") String name);
 
 }

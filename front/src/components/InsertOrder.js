@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from "../axiosInstance";
 
 function InsertOrder({ memberId }) {
     const [items, setItems] = useState([]);
     const [products, setProducts] = useState([]);
     const [totalPrice, setTotalPrice] = useState('');
 
-    // 주문 등록 핸들러
     const id = localStorage.getItem('id');
+
     const handleRegister = async (e) => {
         e.preventDefault();
         const dataToSend = {
             items: items.map(item => ({
-                productId: item.productId, // ID 사용
+                productId: item.productId,
                 quantity: item.quantity,
                 price: item.price,
             })),
@@ -20,13 +20,10 @@ function InsertOrder({ memberId }) {
             totalPrice,
         };
 
-        const token = localStorage.getItem('token');
         try {
             console.log('Sending data:', JSON.stringify(dataToSend, null, 2));
 
-            const response = await axios.post('/api/v1/orders', dataToSend, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const response = await axiosInstance.post('/api/v1/orders', dataToSend);
             console.log('주문 등록 성공:', response.data);
             alert('주문 등록 성공');
         } catch (error) {
@@ -39,7 +36,7 @@ function InsertOrder({ memberId }) {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('/api/v1/products');
+                const response = await axiosInstance.get('/api/v1/products');
                 setProducts(response.data.content);
             } catch (error) {
                 console.error('상품 목록 조회 실패:', error);
@@ -58,18 +55,25 @@ function InsertOrder({ memberId }) {
     // 아이템 변경 시
     const handleItemChange = (index, field, value) => {
         const newItems = [...items];
-        if (field === 'productId') {
-            const selectedProduct = products.find(product => product.id === Number(value));
-            if (selectedProduct) {
+        const selectedProduct = products.find(product => product.id === Number(value));
+
+        if (field === 'productId' && selectedProduct) {
+            const existingItemIndex = newItems.findIndex(item => item.productId === selectedProduct.id);
+            if (existingItemIndex > -1) {
+                newItems[existingItemIndex].quantity += 1; // 수량 증가
+            } else {
+                // 새로운 상품인 경우
                 newItems[index] = {
-                    productId: selectedProduct.id,  // ID 사용
-                    quantity: newItems[index]?.quantity,
-                    price: selectedProduct.price,   // 선택한 상품의 가격
+                    productId: selectedProduct.id,
+                    quantity: 1,
+                    price: selectedProduct.price,
+                    productName: selectedProduct.name,
                 };
             }
         } else {
             newItems[index][field] = value;
         }
+
         setItems(newItems);
         calculateTotalPrice(); // 총 가격 재계산
     };
@@ -93,7 +97,7 @@ function InsertOrder({ memberId }) {
                     <select
                         value={item.productId}
                         onChange={(e) => handleItemChange(index, 'productId', e.target.value)} // ID 사용
-                        style={{ display: 'block' }}
+                        style={{display: 'block'}}
                     >
                         <option value="">Select a product</option>
                         {products.map((product) => (
@@ -102,6 +106,7 @@ function InsertOrder({ memberId }) {
                             </option>
                         ))}
                     </select>
+                    <label>개수 </label>
                     <input
                         type="number"
                         value={item.quantity || ''}
@@ -109,6 +114,7 @@ function InsertOrder({ memberId }) {
                         placeholder="개수를 입력하세요"
                         required
                     />
+                    <label>가격 </label>
                     <input
                         type="number"
                         value={item.price || ''}
