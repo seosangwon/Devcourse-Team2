@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // React와 useState를 불러옵니다
 
 const OrderTable = ({ orders, products }) => {
-    const [openOrderId, setOpenOrderId] = useState(null); // 상태 추가
+    const [openOrderId, setOpenOrderId] = useState(null);
 
     const getProductNameById = (productId) => {
         const product = products.find(product => product.id === productId);
@@ -9,17 +9,16 @@ const OrderTable = ({ orders, products }) => {
     };
 
     const toggleOrderDetails = (orderId) => {
-        setOpenOrderId(openOrderId === orderId ? null : orderId); // 클릭한 주문 ID 토글
+        setOpenOrderId(openOrderId === orderId ? null : orderId);
     };
 
     return (
         <table style={tableStyle}>
             <thead>
             <tr>
-                <th>주문 ID</th>
+                <th>주문 번호</th>
+                <th>주문일</th>
                 <th>총 가격</th>
-                <th>생성일</th>
-                <th>수정일</th>
                 <th>상세보기</th>
             </tr>
             </thead>
@@ -29,13 +28,28 @@ const OrderTable = ({ orders, products }) => {
                     <td colSpan="5">주문 항목이 없습니다.</td>
                 </tr>
             ) : (
-                orders.map(order => (
+                orders.map((order, index) => (
                     <React.Fragment key={order.id}>
-                        <tr onClick={() => toggleOrderDetails(order.id)} style={{ cursor: 'pointer' }}>
+                        <tr
+                            onClick={() => toggleOrderDetails(order.id)}
+                            style={{
+                                cursor: 'pointer',
+                                backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#e0e0e0'  // 홀수/짝수 배경색
+                            }}
+                        >
                             <td>{order.id}</td>
+                            <td>
+                                {new Date(order.createdAt).toLocaleString('ko-KR', {
+                                    year: 'numeric',
+                                    month: '2-digit',
+                                    day: '2-digit',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    second: undefined // 초 단위를 제거
+                                })}
+                            </td>
+
                             <td>{order.totalPrice}</td>
-                            <td>{new Date(order.createdAt).toLocaleString()}</td>
-                            <td>{new Date(order.modifiedAt).toLocaleString()}</td>
                             <td>
                                 <button style={detailButtonStyle}>상세보기</button>
                             </td>
@@ -82,7 +96,7 @@ const nestedTableStyle = {
     width: '100%',
     borderCollapse: 'collapse',
     marginTop: '10px',
-    backgroundColor: '#f9f9f9', // 배경색 추가
+    backgroundColor: '#fff1f1', // 배경색 추가
 };
 
 const detailButtonStyle = {
