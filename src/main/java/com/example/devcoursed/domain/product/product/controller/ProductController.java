@@ -32,12 +32,12 @@ public class ProductController {
         return ResponseEntity.ok(productService.insert(productDTO, id));
     }
 
-    // 로스율 수정
-    @PutMapping("/")
-    public ResponseEntity<ProductDTO> modifyLoss(@AuthenticationPrincipal SecurityUser user,
-                                                 @Validated @RequestBody ProductDTO productDTO) {
+    // 로스율 추가 등록 >> 기존의 수정 대체
+    @PostMapping("/loss")
+    public ResponseEntity<ProductDTO> addLoss(@AuthenticationPrincipal SecurityUser user,
+                                              @Validated @RequestBody ProductDTO productDTO) {
         long id = user.getId();
-        return ResponseEntity.ok(productService.modify(productDTO, id));
+        return ResponseEntity.ok(productService.addLoss(productDTO, id));
     }
 
 

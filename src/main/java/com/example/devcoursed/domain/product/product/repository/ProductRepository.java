@@ -33,9 +33,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT AVG(p.loss) FROM Product p WHERE p.name = :name AND p.createdAt BETWEEN :startDate AND :endDate AND p.loss BETWEEN 0 AND 100")
     Double findAverageLossByName(@Param("name") String name, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
-
     // 최신 로스율 조회
-    @Query(value = "SELECT p FROM Product p WHERE p.member_id = :memberId AND p.name = :name ORDER BY p.created_at DESC LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM Product p WHERE p.member_id = :memberId AND p.name = :name ORDER BY p.created_at DESC LIMIT 1", nativeQuery = true)
     Optional<Product> findLatestProductByMakerAndName(@Param("memberId") Long memberId, @Param("name") String name);
-
 }

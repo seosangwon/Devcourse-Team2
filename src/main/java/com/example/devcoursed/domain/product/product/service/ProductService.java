@@ -38,21 +38,21 @@ public class ProductService {
         return new ProductDTO(savedProduct);
     }
 
-    // 로스율 수정
-    public ProductDTO modify(ProductDTO productDTO, long id) {
-        Member member = memberService.getMemberById(id);
+    // 로스율 추가 등록
+    public ProductDTO addLoss(ProductDTO productDTO, long memberId) {
+        Member member = memberService.getMemberById(memberId);
 
-        Product foundProduct = productRepository.findByMakerAndName(member, productDTO.getName())
+        Product foundProduct = productRepository.findLatestProductByMakerAndName(memberId, productDTO.getName())
                 .orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);
 
         // 로스율 null인 경우 default value로 변경
         long loss = (productDTO.getLoss() == null) ? 222L : productDTO.getLoss();
 
         Product changeLossProduct = Product.builder()
-                                    .name(foundProduct.getName())
-                                    .loss(loss)
-                                    .maker(member)
-                                    .build();
+                .name(foundProduct.getName())
+                .loss(loss)
+                .maker(member)
+                .build();
 
         productRepository.save(changeLossProduct);
 
@@ -88,28 +88,13 @@ public class ProductService {
         return productPage.map(ProductDTO::new);
     }
 
-
-
-
-    // 로스율 추가 등록
-    public ProductDTO addLoss(ProductDTO productDTO, long memberId) {
-        Member member = memberService.getMemberById(memberId);
-
-        Product foundProduct = productRepository.findLatestProductByMakerAndName(memberId, productDTO.getName())
-                .orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);
-
-        // 로스율 null인 경우 default value로 변경
-        long loss = (productDTO.getLoss() == null) ? 222L : productDTO.getLoss();
-
-        Product changeLossProduct = Product.builder()
-                .name(foundProduct.getName())
-                .loss(loss)
-                .maker(member)
-                .build();
-
-        productRepository.save(changeLossProduct);
-
-        return new ProductDTO(changeLossProduct);
+    // 상품 목록 전체 조회
+    public Page<ProductDTO> getProducts(ProductDTO.PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable();
+        Page<Product> productPage = productRepository.findAll(pageable);
+        return productPage.map(ProductDTO::new);
     }
+
+
 
 }
