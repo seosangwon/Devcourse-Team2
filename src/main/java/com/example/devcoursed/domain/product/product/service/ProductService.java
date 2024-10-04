@@ -72,4 +72,11 @@ public class ProductService {
         return productPage.map(ProductDTO::new);
     }
 
+    // 상품 목록 전체 조회
+    public Page<ProductDTO> getProducts(ProductDTO.PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable();
+        Page<Product> productPage = productRepository.findAll(pageable);
+        return productPage.map(ProductDTO::new);
+    }
+
 }
