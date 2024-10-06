@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Register({ onRegister }) {
+function Register({ onRegister, handleBack }) {
     const [loginId, setLoginId] = useState('');
     const [pw, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -57,6 +57,7 @@ function Register({ onRegister }) {
     return (
         <form onSubmit={handleRegister}>
             <div className="inputform">
+                <div className='formInfo'>회원가입</div>
                 <div>
                     <span className="input-info">이름:</span>
                     <input
@@ -95,13 +96,16 @@ function Register({ onRegister }) {
                 </div>
             </div>
 
-            {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-            {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
-            <button type="submit" disabled={loading}>
-                {loading ? '로딩 중...' : '회원가입'}
-            </button>
+            {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
+            {successMessage && <div style={{color: 'green'}}>{successMessage}</div>}
+            <div className="button-container">
+                <button type="submit" disabled={loading}>
+                    {loading ? '로딩 중...' : '회원가입'}
+                </button>
+                <button type="button" onClick={handleBack}>뒤로가기</button>
+            </div>
         </form>
-    );
+);
 }
 
 export default Register;
