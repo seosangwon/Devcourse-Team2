@@ -16,9 +16,10 @@ const OrderTable = ({ orders, products }) => {
         <table style={tableStyle}>
             <thead>
             <tr>
-                <th>주문 번호</th>
-                <th>주문일</th>
+                <th>주문 ID</th>
                 <th>총 가격</th>
+                <th>생성일</th>
+                <th>수정일</th>
                 <th>상세보기</th>
             </tr>
             </thead>
@@ -32,18 +33,9 @@ const OrderTable = ({ orders, products }) => {
                     <React.Fragment key={order.id}>
                         <tr onClick={() => toggleOrderDetails(order.id)} style={{ cursor: 'pointer' }}>
                             <td>{order.id}</td>
-                            <td>
-                                {new Date(order.createdAt).toLocaleString('ko-KR', {
-                                    year: 'numeric',
-                                    month: '2-digit',
-                                    day: '2-digit',
-                                    hour: '2-digit',
-                                    minute: '2-digit',
-                                    second: undefined // 초 단위를 제거
-                                })}
-                            </td>
-
                             <td>{order.totalPrice}</td>
+                            <td>{new Date(order.createdAt).toLocaleString()}</td>
+                            <td>{new Date(order.modifiedAt).toLocaleString()}</td>
                             <td>
                                 <button style={detailButtonStyle}>상세보기</button>
                             </td>
