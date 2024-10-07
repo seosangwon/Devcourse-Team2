@@ -1,9 +1,13 @@
 package com.example.devcoursed.domain.member.member.controller;
 
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -27,6 +31,7 @@ import java.util.stream.Collectors;
 public class MemberController {
     private final MemberService memberService;
     private final ResourceLoader resourceLoader;
+    private final JavaMailSender mailSender;
 
     //회원가입
     @PostMapping("/register")
@@ -140,4 +145,52 @@ public class MemberController {
         Resource file = resourceLoader.getResource("file:upload/" + filename);
         return ResponseEntity.ok(file);
     }
+
+    //아이디 찾기
+    @GetMapping("/findId")
+    public ResponseEntity<String> findId(@RequestParam String email) {
+        String loginId = memberService.findByEmail(email);
+
+        return ResponseEntity.ok(loginId);
+    }
+
+    //비밀번호 찾기
+    @PostMapping("/findPW")
+    public ResponseEntity<String> findPw(@RequestBody MemberDTO.FindPWRequestDto request) {
+        String templatePassword = memberService.setTemplatePassword(request.getLoginId(), request.getEmail());
+
+        String title = "데브코스 팀2 아이디/비밀번호 찾기 인증 이메일 입니다.";
+        String from= "seodo1e1205@gmail.com";
+        String to = request.getEmail();
+        String content =
+                System.getProperty("line.separator")+
+                        System.getProperty("line.separator")+
+                        "임시 비밀번호로 로그인 후 꼭 새로운 비밀번호로 설정해주시기 바랍니다."
+                        +System.getProperty("line.separator")+
+                        System.getProperty("line.separator")+
+                        "임시비밀번호는 " +templatePassword+ " 입니다. "
+                        +System.getProperty("line.separator");
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+
+            messageHelper.setFrom(from);
+            messageHelper.setTo(to);
+            messageHelper.setSubject(title);
+            messageHelper.setText(content);
+
+            mailSender.send(message);
+
+        } catch (Exception e) {
+            log.debug(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("임시 비밀번호 전송을 실패하였습니다");
+        }
+        return ResponseEntity.ok("임시 비밀번호를 이메일로 전송했습니다");
+
+
+    }
+
+
+
 }
