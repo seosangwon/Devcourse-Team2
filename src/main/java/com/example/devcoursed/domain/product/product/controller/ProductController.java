@@ -76,11 +76,10 @@ public class ProductController {
         return ResponseEntity.ok(productDTOPage);
     }
 
-    @PostMapping("/search")
-    public ResponseEntity<Page<ProductDTO>> searchProducts(
-            @RequestParam("keyword") String keyword,
-            @AuthenticationPrincipal SecurityUser user,
-            ProductDTO.PageRequestDTO pageRequestDTO) {
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductDTO>> searchProducts(@RequestParam("keyword") String keyword,
+                                                           @AuthenticationPrincipal SecurityUser user,
+                                                           ProductDTO.PageRequestDTO pageRequestDTO) {
 
         Long memberId = user.getId();
 
