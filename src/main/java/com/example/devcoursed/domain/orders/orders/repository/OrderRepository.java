@@ -1,11 +1,7 @@
 package com.example.devcoursed.domain.orders.orders.repository;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
-import com.example.devcoursed.domain.orders.orders.dto.OrderSummaryDTO;
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

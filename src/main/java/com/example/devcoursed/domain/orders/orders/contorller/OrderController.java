@@ -1,7 +1,6 @@
 package com.example.devcoursed.domain.orders.orders.contorller;
 
 import com.example.devcoursed.domain.orders.orders.dto.OrderDTO;
-import com.example.devcoursed.domain.orders.orders.dto.OrderSummaryDTO;
 import com.example.devcoursed.domain.orders.orders.service.OrderService;
 import com.example.devcoursed.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;

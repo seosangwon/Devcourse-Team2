@@ -1,12 +1,10 @@
 package com.example.devcoursed.domain.orders.orders.service;
 
-import com.example.devcoursed.domain.member.member.exception.MemberException;
 import com.example.devcoursed.domain.member.member.entity.Member;
+import com.example.devcoursed.domain.member.member.exception.MemberException;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.domain.orders.exception.OrderException;
 import com.example.devcoursed.domain.orders.orders.dto.OrderDTO;
-
-import com.example.devcoursed.domain.orders.orders.dto.OrderSummaryDTO;
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import com.example.devcoursed.domain.orders.orders.repository.OrderRepository;
 import com.example.devcoursed.domain.product.product.repository.ProductRepository;
@@ -18,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
