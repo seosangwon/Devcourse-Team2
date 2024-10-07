@@ -40,7 +40,7 @@ function DetailProduct({ product }) {
             product.loss = productLoss; // 입력받은 로스율로 변경
             setIsUpdating(false); // 수정 모드 종료
         } catch (error) {
-            alert('로스율 등록 실패: ' + (error.response?.data?.message || '알 수 없는 오류'));
+            alert('로스율 등록 실패: ' + (error.response.data || '알 수 없는 오류'));
         }
     };
 
