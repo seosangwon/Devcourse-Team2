@@ -33,7 +33,7 @@ function UserDelete({ onDelete }) {
     return (
         <div className="user-delete-container">
             <h2>회원 탈퇴</h2>
-            <button className="delete-button" onClick={handleDelete} disabled={loading}>
+            <button className="user-delete-button" onClick={handleDelete} disabled={loading}>
                 {loading ? '탈퇴 중...' : '탈퇴하기'}
             </button>
         </div>
