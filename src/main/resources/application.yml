@@ -1,16 +1,7 @@
 spring:
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: seodo1e1205@gmail.com
-    password: nnjd usla bvhe crsd
-    properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
-      debug : true
-
   profiles:
     active: dev
+    include : secret
   threads:
     virtual:
       enabled: true

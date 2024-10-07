@@ -39,3 +39,6 @@ out/
 ## db ##
 nbe2_2_dev.mv.db
 nbe2_2_dev.trace.db
+
+## secret ##
+application-secret.yml

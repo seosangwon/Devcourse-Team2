@@ -53,7 +53,7 @@ public class NotProd {
         requestDto.setName("운영자");
         memberService.create(requestDto);
 
-        MemberDTO.Create requestDto2 = new MemberDTO.Create();
+        MemberDTO.CreateRequestDto requestDto2 = new MemberDTO.CreateRequestDto();
         requestDto.setLoginId("test123");
         requestDto.setPw("1234");
         requestDto.setEmail("zmdk1205@naver.com");
