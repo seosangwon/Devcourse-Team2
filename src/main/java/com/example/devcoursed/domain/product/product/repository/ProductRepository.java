@@ -71,5 +71,23 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT AVG(p.loss) FROM Product p WHERE p.name = :name AND p.createdAt BETWEEN :startDate AND :endDate AND p.loss BETWEEN 0 AND 100")
     Double findLossListByName(@Param("name") String name, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
+    // 일치하는 상품명에 대한 전체 평균 로스율 조회
+    @Query("SELECT FORMATDATETIME(p.createdAt, 'yyyy-MM-dd') as format, AVG(p.loss) " +
+            "FROM Product p " +
+            "WHERE p.name = :name AND p.createdAt BETWEEN :startDate AND :endDate AND p.loss BETWEEN 0 AND 100 " +
+            "GROUP BY format")
+    List<Object[]> findAverageStatisticsByName(@Param("name") String name, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
+
+    // 일치하는 상품명에 대한 개인의 평균 로스율 조회
+    @Query(value = "SELECT FORMATDATETIME(p.created_at, 'yyyy-MM-dd') as format, AVG(p.loss) " +
+            "FROM Product p " +
+            "WHERE p.name = :name AND p.member_id = :memberId AND p.created_at BETWEEN :startDate AND :endDate AND p.loss BETWEEN 0 AND 100 " +
+            "GROUP BY format ",
+            nativeQuery = true)
+    List<Object[]> findAverageStatisticsByMakerAndName(@Param("memberId") Long memberId, @Param("name") String name, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+    // 관리자 통합 목록 전체 조회
+    @Query("SELECT p FROM Product p JOIN FETCH p.maker WHERE p.createdAt = (SELECT MAX(p2.createdAt) FROM Product p2 WHERE p2.name = p.name) ORDER BY p.createdAt DESC")
+    Page<Product> findAllProducts(Pageable pageable);
 }

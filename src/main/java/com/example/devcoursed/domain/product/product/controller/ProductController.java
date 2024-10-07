@@ -6,6 +6,7 @@ import com.example.devcoursed.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -42,7 +43,7 @@ public class ProductController {
     }
 
     // 통합 예정 A - 테스트 완료 : name 와 Date를 받아서 전체 사용자의 상품의 평균 로스율 조회
-    @GetMapping("/loss/{name}")
+    @GetMapping("/loss/{name}/2")
     public ResponseEntity<Double> readLoss(@PathVariable("name") String name,
                                            @RequestParam("startDate") String startDate,
                                            @RequestParam("endDate") String endDate) {
@@ -114,4 +115,17 @@ public class ProductController {
         return ResponseEntity.ok(lossRates);
     }
 
+    // 테스트 진행 중 : 그래프를 위한 리스트
+    // 통계용 평균 로스율
+    @GetMapping("/loss/{name}")
+    public ResponseEntity<List<ProductDTO.AverageResponseDTO>> getAverageLossStatistics(@AuthenticationPrincipal SecurityUser user,
+                                                                                        @PathVariable String name,
+                                                                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                                                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+
+        log.info("프론트에서 받은 날짜 데이터: {}, {}", startDate, endDate);
+        Long memberId = user.getId();
+        List<ProductDTO.AverageResponseDTO> statistics = productService.getAverageStatistics(memberId, name, startDate, endDate);
+        return ResponseEntity.ok(statistics);
+    }
 }

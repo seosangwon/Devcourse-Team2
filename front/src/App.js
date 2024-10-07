@@ -9,9 +9,9 @@ import InsertOrder from './components/InsertOrder';
 import OrderListPage from './components/OrderListPage';
 import Logout from './components/Logout';
 import AddProduct from './components/AddProduct';
-import UpdateProduct from './components/UpdateProduct';
 import ProductList from './components/ProductList';
 import UserControl from './components/UserControl';
+import LossControl from './components/LossControl';
 
 function App() {
     const [userName, setUserName] = useState('');
@@ -80,7 +80,6 @@ function App() {
             return (
                 <ul className="sub-menu">
                     <li onClick={() => showComponent('addProduct')}> 상품 추가</li>
-                    <li onClick={() => showComponent('updateProduct')}> 로스율 관리</li>
                     <li onClick={() => showComponent('productList')}> 상품 목록</li>
                 </ul>
             );
@@ -172,7 +171,6 @@ function App() {
                             {activeComponent === 'insertOrder' && <InsertOrder memberId={userId} />}
                             {activeComponent === 'orderListPage' && <OrderListPage />}
                             {activeComponent === 'addProduct' && <AddProduct />}
-                            {activeComponent === 'updateProduct' && <UpdateProduct />}
                             {activeComponent === 'productList' && <ProductList />}
                             {activeComponent === 'userControl' && <UserControl />}
                             {activeComponent === 'lossControl' && <ProductList />}

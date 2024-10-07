@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -77,6 +79,15 @@ public class ProductDTO {
     public static class LossRateResponseDTO {
         private String title;
         private List<LossRateDTO> data;
+
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class AverageResponseDTO {
+        private List<LocalDate> dates;
+        private List<BigDecimal> personalAverage;
+        private List<BigDecimal> allUsersAverage;
 
     }
 

@@ -13,9 +13,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -113,7 +117,7 @@ public class ProductService {
     // 상품 목록 전체 조회 (member 로직)
     public Page<ProductDTO> getProducts(ProductDTO.PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable();
-        Page<Product> productPage = productRepository.findAll(pageable);
+        Page<Product> productPage = productRepository.findAllProducts(pageable);
         return productPage.map(ProductDTO::new);
     }
 
@@ -136,6 +140,40 @@ public class ProductService {
         return Arrays.asList(userLossRateResponse, totalLossRateResponse);
     }
 
-    // ----------------------
+    // 통계 테스트 서비스
+    // 상품의 기간별 평균 로스율
+    public List<ProductDTO.AverageResponseDTO> getAverageStatistics(Long memberId, String name, LocalDateTime startDate, LocalDateTime endDate){
+        // 기간별 개인의 평균 로스율
+        List<Object[]> personalAverages = productRepository.findAverageStatisticsByMakerAndName(memberId, name, startDate, endDate);
+
+        // 기간별 전체 사용자의 평균 로스율
+        List<Object[]> allUsersAverages = productRepository.findAverageStatisticsByName(name, startDate, endDate);
+
+        Map<LocalDate, Double> allUserAverages = allUsersAverages.stream()
+                .collect(Collectors.toMap(
+                        data -> LocalDate.parse((String) data[0]),
+                        data -> (Double) data[1]
+                ));
+
+        List<LocalDate> dates = new ArrayList<>();
+        List<BigDecimal> personalAverageList = new ArrayList<>();
+        List<BigDecimal> allUserAverageList = new ArrayList<>();
+
+        // 결과 DTO 리스트 생성
+        for (Object[] data : personalAverages) {
+            LocalDate date = LocalDate.parse((String) data[0]); // 날짜 파싱
+            BigDecimal personalAverage = (BigDecimal) data[1]; // 개인 평균 로스율
+            BigDecimal allUserAverage = BigDecimal.valueOf(allUserAverages.getOrDefault(date, null)); // 전체 평균 로스율
+
+            // 리스트에 추가
+            dates.add(date);
+            personalAverageList.add(personalAverage);
+            allUserAverageList.add(allUserAverage);
+        }
+
+        // 결과 DTO 생성
+        ProductDTO.AverageResponseDTO responseDTO = new ProductDTO.AverageResponseDTO(dates, personalAverageList, allUserAverageList);
+        return List.of(responseDTO); // 결과를 리스트 형태로 반환
+    }
 
 }

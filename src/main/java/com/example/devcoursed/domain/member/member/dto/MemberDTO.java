@@ -2,6 +2,7 @@ package com.example.devcoursed.domain.member.member.dto;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
