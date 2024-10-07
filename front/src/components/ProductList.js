@@ -10,10 +10,14 @@ function ProductList() {
     const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태
     const [selectedProduct, setSelectedProduct] = useState(null); // 선택된 상품
 
-    // 제품 목록을 가져오는 함수
+    // 관리자용
+
+
+    // 사용자용 제품 목록을 가져오는 함수
     const fetchProducts = async (page) => {
         const token = localStorage.getItem('accessToken');
         try {
+//            const response = await axios.get(`/api/adm/products/all`, {
             const response = await axios.get(`/api/v1/products`, {
                 headers: { Authorization: `Bearer ${token}` },
                 params: { page, size: pageSize },

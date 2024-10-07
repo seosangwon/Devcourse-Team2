@@ -6,6 +6,7 @@ import com.example.devcoursed.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -41,16 +43,8 @@ public class ProductController {
     }
 
 
-    // 로스율 추가 등록
-    @PostMapping("/loss")
-    public ResponseEntity<ProductDTO> modifyLoss2(@AuthenticationPrincipal SecurityUser user,
-                                                 @Validated @RequestBody ProductDTO productDTO) {
-        long id = user.getId();
-        return ResponseEntity.ok(productService.addLoss(productDTO, id));
-    }
-
     // 평균 로스율 조회
-    @GetMapping("/loss/{name}")
+    @GetMapping("/loss/{name}/2")
     public ResponseEntity<Double> readLoss(@PathVariable("name") String name,
                                            @RequestParam("startDate") String startDate,
                                            @RequestParam("endDate") String endDate) {
@@ -66,6 +60,16 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAverageLossByName(name, startDateTime.toLocalDateTime(), endDateTime.toLocalDateTime()));
     }
 
+    // 통계용 평균 로스율
+    @GetMapping("/loss/{name}")
+    public ResponseEntity<List<ProductDTO.AverageResponseDTO>> getAverageLossStatistics(@AuthenticationPrincipal SecurityUser user,
+                                                                                        @PathVariable String name,
+                                                                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                                                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        Long memberId = user.getId();
+        List<ProductDTO.AverageResponseDTO> statistics = productService.getAverageStatistics(memberId, name, startDate, endDate);
+        return ResponseEntity.ok(statistics);
+    }
 
 //    // 통합
 //    @GetMapping("/graph/{name}")

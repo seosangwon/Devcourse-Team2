@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -20,23 +20,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> listAll(Long memberId, Pageable pageable);
 
     // 관리자용 목록 전체 불러오기
-    @Query("""
-        SELECT p
-        FROM Product p
-        WHERE p.id IN (
-            SELECT MAX(p2.id)
-            FROM Product p2
-            GROUP BY p2.name, p2.maker.id
-        )
-        OR (p.name IN (
-            SELECT p3.name
-            FROM Product p3
-            GROUP BY p3.name
-            HAVING COUNT(DISTINCT p3.maker.id) > 1
-        )
-    )
-    ORDER BY p.createdAt DESC
-    """)
+    @Query("SELECT p FROM Product p WHERE p.id IN ( " +
+            "SELECT MAX(p2.id) FROM Product p2 GROUP BY p2.name, p2.maker.id ) " +
+            "OR (p.name IN ( " +
+            "SELECT p3.name FROM Product p3 GROUP BY p3.name HAVING COUNT(DISTINCT p3.maker.id) > 1)) ORDER BY p.createdAt DESC")
     Page<Product> findAllProducts(Pageable pageable);
 
     // 단건 조회
@@ -55,4 +42,20 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // 최신 로스율 조회
     @Query(value = "SELECT * FROM Product p WHERE p.member_id = :memberId AND p.name = :name ORDER BY p.created_at DESC LIMIT 1", nativeQuery = true)
     Optional<Product> findLatestProductByMakerAndName(@Param("memberId") Long memberId, @Param("name") String name);
+
+    // 일치하는 상품명에 대한 전체 평균 로스율 조회
+    @Query("SELECT FORMATDATETIME(p.createdAt, 'yyyy-MM-dd') as format, AVG(p.loss) " +
+            "FROM Product p " +
+            "WHERE p.name = :name AND p.createdAt BETWEEN :startDate AND :endDate AND p.loss BETWEEN 0 AND 100 " +
+            "GROUP BY format")
+    List<Object[]> findAverageStatisticsByName(@Param("name") String name, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+
+    // 일치하는 상품명에 대한 개인의 평균 로스율 조회
+    @Query(value = "SELECT FORMATDATETIME(p.created_at, 'yyyy-MM-dd') as format, AVG(p.loss) " +
+            "FROM Product p " +
+            "WHERE p.name = :name AND p.member_id = :memberId AND p.created_at BETWEEN :startDate AND :endDate AND p.loss BETWEEN 0 AND 100 " +
+            "GROUP BY format ",
+            nativeQuery = true)
+    List<Object[]> findAverageStatisticsByMakerAndName(@Param("memberId") Long memberId, @Param("name") String name, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }

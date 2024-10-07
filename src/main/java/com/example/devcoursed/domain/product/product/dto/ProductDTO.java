@@ -10,6 +10,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 @Builder
@@ -58,5 +62,14 @@ public class ProductDTO {
             Sort sort = Sort.by(Sort.Direction.fromString(this.sortDirection), this.sortField);
             return PageRequest.of(this.page, this.size, sort);
         }
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class AverageResponseDTO {
+        private List<LocalDate> dates;
+        private List<BigDecimal> personalAverage;
+        private List<BigDecimal> allUsersAverage;
+
     }
 }
