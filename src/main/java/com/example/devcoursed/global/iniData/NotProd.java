@@ -4,7 +4,6 @@ import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.domain.member.member.service.MemberService;
-import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import com.example.devcoursed.domain.product.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +15,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 @Configuration
@@ -49,7 +46,7 @@ public class NotProd {
 
 
         //운영자 생성
-        MemberDTO.Create requestDto = new MemberDTO.Create();
+        MemberDTO.CreateRequestDto requestDto = new MemberDTO.CreateRequestDto();
         requestDto.setLoginId("admin");
         requestDto.setPw("1234");
         requestDto.setName("운영자");
@@ -57,7 +54,7 @@ public class NotProd {
 
         //member 50명 생성
         for (int i = 1; i < 51; i++) {
-            MemberDTO.Create createDto = new MemberDTO.Create();
+            MemberDTO.CreateRequestDto createDto = new MemberDTO.CreateRequestDto();
             createDto.setLoginId("abc" + i);
             createDto.setPw("1234");
             createDto.setName("회원" + i);

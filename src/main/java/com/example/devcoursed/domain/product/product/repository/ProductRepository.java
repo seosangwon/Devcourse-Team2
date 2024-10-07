@@ -16,6 +16,12 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByMakerAndName(Member maker, String name);
 
+    // 관리자용 목록 전체 불러오기
+    @Query("SELECT p FROM Product p WHERE p.id IN ( " +
+            "SELECT MAX(p2.id) FROM Product p2 GROUP BY p2.name, p2.maker.id ) " +
+            "OR (p.name IN ( " +
+            "SELECT p3.name FROM Product p3 GROUP BY p3.name HAVING COUNT(DISTINCT p3.maker.id) > 1)) ORDER BY p.createdAt DESC")
+    Page<Product> findAllProducts(Pageable pageable);
 
     // 통합 예정 A - 테스트 완료 : name 와 Date를 받아서 전체 사용자의 상품의 평균 로스율 조회 ( 반환값 : Double 형태 avg 1개 )
     @Query("SELECT AVG(p.loss) FROM Product p WHERE p.name = :name AND p.createdAt BETWEEN :startDate AND :endDate AND p.loss BETWEEN 0 AND 100")
