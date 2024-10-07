@@ -16,11 +16,8 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByMakerAndName(Member maker, String name);
 
-    // 관리자용 목록 전체 불러오기
-    @Query("SELECT p FROM Product p WHERE p.id IN ( " +
-            "SELECT MAX(p2.id) FROM Product p2 GROUP BY p2.name, p2.maker.id ) " +
-            "OR (p.name IN ( " +
-            "SELECT p3.name FROM Product p3 GROUP BY p3.name HAVING COUNT(DISTINCT p3.maker.id) > 1)) ORDER BY p.createdAt DESC")
+    // 관리자 통합 목록 전체 조회
+    @Query("SELECT p FROM Product p JOIN FETCH p.maker WHERE p.createdAt = (SELECT MAX(p2.createdAt) FROM Product p2 WHERE p2.name = p.name) ORDER BY p.createdAt DESC")
     Page<Product> findAllProducts(Pageable pageable);
 
     // ---------- 그래프 처리 --------------

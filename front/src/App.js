@@ -11,6 +11,7 @@ import Logout from './components/Logout';
 import AddProduct from './components/AddProduct';
 import ProductList from './components/ProductList';
 import UserControl from './components/UserControl';
+import LossControl from './components/LossControl';
 
 function App() {
     const [userName, setUserName] = useState('');

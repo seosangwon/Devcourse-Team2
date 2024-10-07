@@ -5,13 +5,13 @@ import com.example.devcoursed.domain.product.product.entity.Product;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,8 +34,6 @@ public class ProductDTO {
         this.name = product.getName();
         this.loss = product.getLoss();
     }
-
-
 
     public Product toEntity(Member member) {
         return Product.builder()

@@ -33,7 +33,7 @@ public class ProductService {
     private final MemberService memberService;
 
 
-    // 식재료 등록 : 테스트 완료
+    // 식재료 등록
     public ProductDTO insert(ProductDTO productDTO, Long id) {
         Member member = memberService.getMemberById(id);
 
@@ -47,7 +47,7 @@ public class ProductService {
         return new ProductDTO(savedProduct);
     }
 
-    // 로스율 추가 등록 : 테스트 완료
+    // 로스율 추가 등록
     public ProductDTO addLoss(ProductDTO productDTO, long memberId) {
         Member member = memberService.getMemberById(memberId);
 
