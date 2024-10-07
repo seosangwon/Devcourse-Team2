@@ -21,18 +21,13 @@ function InsertOrder({ memberId }) {
         };
 
         try {
-            console.log('Sending data:', JSON.stringify(dataToSend, null, 2));
-
-            const response = await axiosInstance.post('/api/v1/orders', dataToSend);
-            console.log('주문 등록 성공:', response.data);
+            await axiosInstance.post('/api/v1/orders', dataToSend);
             alert('주문 등록 성공');
         } catch (error) {
-            console.error('주문 등록 실패:', error.response ? error.response.data : error.message);
             alert('주문 등록 실패');
         }
     };
 
-    // 상품 목록 가져오기
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -46,13 +41,11 @@ function InsertOrder({ memberId }) {
         fetchProducts();
     }, []);
 
-    // 총 가격 계산
     const calculateTotalPrice = () => {
         const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
         setTotalPrice(total);
     };
 
-    // 아이템 변경 시
     const handleItemChange = (index, field, value) => {
         const newItems = [...items];
         const selectedProduct = products.find(product => product.id === Number(value));
@@ -60,9 +53,8 @@ function InsertOrder({ memberId }) {
         if (field === 'productId' && selectedProduct) {
             const existingItemIndex = newItems.findIndex(item => item.productId === selectedProduct.id);
             if (existingItemIndex > -1) {
-                newItems[existingItemIndex].quantity += 1; // 수량 증가
+                newItems[existingItemIndex].quantity += 1;
             } else {
-                // 새로운 상품인 경우
                 newItems[index] = {
                     productId: selectedProduct.id,
                     quantity: 1,
@@ -75,60 +67,78 @@ function InsertOrder({ memberId }) {
         }
 
         setItems(newItems);
-        calculateTotalPrice(); // 총 가격 재계산
+        calculateTotalPrice();
     };
 
-    // 항목 추가
     const addItem = () => {
         setItems([...items, { productId: '', quantity: '', price: '' }]);
     };
 
-    // 항목 제거
     const removeItem = (index) => {
         const newItems = items.filter((_, i) => i !== index);
         setItems(newItems);
-        calculateTotalPrice(); // 총 가격 재계산
+        calculateTotalPrice();
     };
 
     return (
-        <form onSubmit={handleRegister} >
-            {items.map((item, index) => (
-                <div key={index}>
-                    <select
-                        value={item.productId}
-                        onChange={(e) => handleItemChange(index, 'productId', e.target.value)} // ID 사용
-                        style={{display: 'block'}}
-                    >
-                        <option value="">Select a product</option>
-                        {products.map((product) => (
-                            <option key={product.id} value={product.id}> {/* ID로 바인딩 */}
-                                {product.name}
-                            </option>
-                        ))}
-                    </select>
-                    <label>개수 </label>
-                    <input
-                        type="number"
-                        value={item.quantity || ''}
-                        onChange={(e) => handleItemChange(index, 'quantity', Number(e.target.value))} // 수량 업데이트
-                        placeholder="개수를 입력하세요"
-                        required
-                    />
-                    <label>가격 </label>
-                    <input
-                        type="number"
-                        value={item.price || ''}
-                        onChange={(e) => handleItemChange(index, 'price', Number(e.target.value))} // 가격 업데이트
-                        placeholder="가격을 입력하세요"
-                        required
-                    />
-                    <button type="button" onClick={() => removeItem(index)}>Remove</button>
-                </div>
-            ))}
-            <button type="button" onClick={addItem}>Add Item</button>
-            <h3>Total Price: {totalPrice}</h3>
-            <button type="submit">Register Order</button>
-        </form>
+        <div className="insert-order-container">
+            <h2 className="insert-order-header">주문 등록</h2>
+            <form onSubmit={handleRegister}>
+                <table className="insert-order-table">
+                    <thead>
+                    <tr>
+                        <th>상품명</th>
+                        <th>개수</th>
+                        <th>가격</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {items.map((item, index) => (
+                        <tr key={index} className="insert-order-item">
+                            <td>
+                                <select
+                                    value={item.productId}
+                                    onChange={(e) => handleItemChange(index, 'productId', e.target.value)}
+                                >
+                                    <option value="">상품 선택</option>
+                                    {products.map((product) => (
+                                        <option key={product.id} value={product.id}>
+                                            {product.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    value={item.quantity || ''}
+                                    onChange={(e) => handleItemChange(index, 'quantity', Number(e.target.value))}
+                                    placeholder="개수"
+                                    required
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    value={item.price || ''}
+                                    onChange={(e) => handleItemChange(index, 'price', Number(e.target.value))}
+                                    placeholder="가격"
+                                    required
+                                />
+                            </td>
+                            <td>
+                                <button type="button" onClick={() => removeItem(index)}>제거</button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+                <button type="button" onClick={addItem}>발주 물품 추가</button>
+                <h3 className="total-price">총 가격: {totalPrice}</h3>
+                <button type="submit" className="insert-order-button">발주 등록</button>
+            </form>
+        </div>
     );
 }
 
