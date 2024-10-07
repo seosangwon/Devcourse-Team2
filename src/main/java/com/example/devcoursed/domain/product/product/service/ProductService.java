@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -23,7 +25,7 @@ public class ProductService {
     private final MemberService memberService;
 
     // 식재료 등록
-    public ProductDTO insert(ProductDTO productDTO, Long id){
+    public ProductDTO insert(ProductDTO productDTO, Long id) {
         Member member = memberService.getMemberById(id);
 
         productRepository.findByMakerAndName(member, productDTO.getName())
@@ -36,30 +38,44 @@ public class ProductService {
         return new ProductDTO(savedProduct);
     }
 
-    // 로스율 수정
-    public ProductDTO modify(ProductDTO productDTO, long id) {
-        Member member = memberService.getMemberById(id);
+    // 로스율 추가 등록
+    public ProductDTO addLoss(ProductDTO productDTO, long memberId) {
+        Member member = memberService.getMemberById(memberId);
 
-        Product foundProduct = productRepository.findByMakerAndName(member, productDTO.getName())
+        Product foundProduct = productRepository.findLatestProductByMakerAndName(memberId, productDTO.getName())
                 .orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);
 
         // 로스율 null인 경우 default value로 변경
         long loss = (productDTO.getLoss() == null) ? 222L : productDTO.getLoss();
-        foundProduct.changeLoss(loss);
-        productRepository.save(foundProduct);
 
-        return new ProductDTO(foundProduct);
+        Product changeLossProduct = Product.builder()
+                .name(foundProduct.getName())
+                .loss(loss)
+                .maker(member)
+                .build();
+
+        productRepository.save(changeLossProduct);
+
+        return new ProductDTO(changeLossProduct);
     }
 
 
     // 상품의 평균 로스율 조회
-    public Double getAverageLossByName(String name){
-        return productRepository.findAverageLossByName(name);
+    public Double getAverageLossByName(String name, LocalDateTime startDate, LocalDateTime endDate){
+        return productRepository.findAverageLossByName(name, startDate, endDate);
     }
 
     // 상품(식재료) 단건 조회
     public ProductDTO read(String name, Long memberId){
         Product product = productRepository.findByName(name, memberId).orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);;
+
+        return new ProductDTO(product);
+
+    }
+
+    // 상품(식재료) 단건 조회 : 누적된 모든 로스율의 변화를 보여줌
+    public ProductDTO readGraph(String name, Long memberId, LocalDateTime startDate, LocalDateTime endDate){
+        Product product = productRepository.findGraphByName(name, memberId, startDate, endDate).orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);;
 
         return new ProductDTO(product);
 
@@ -71,5 +87,14 @@ public class ProductService {
         Page<Product> productPage = productRepository.listAll(memberId, pageable);
         return productPage.map(ProductDTO::new);
     }
+
+    // 상품 목록 전체 조회
+    public Page<ProductDTO> getProducts(ProductDTO.PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable();
+        Page<Product> productPage = productRepository.findAll(pageable);
+        return productPage.map(ProductDTO::new);
+    }
+
+
 
 }
