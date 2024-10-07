@@ -1,10 +1,9 @@
 package com.example.devcoursed.domain.member.member.service;
 
-import com.example.devcoursed.domain.member.member.exception.MemberException;
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
+import com.example.devcoursed.domain.member.member.exception.MemberException;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
-import com.example.devcoursed.domain.member.member.repository.MemberRepositoryImpl;
 import com.example.devcoursed.global.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -20,8 +19,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

@@ -5,6 +5,8 @@ function InsertOrder({ memberId }) {
     const [items, setItems] = useState([]);
     const [products, setProducts] = useState([]);
     const [totalPrice, setTotalPrice] = useState('');
+    const [averagePrices, setAveragePrices] = useState({});
+    const [error, setError] = useState(null);
 
     const id = localStorage.getItem('id');
 
@@ -80,6 +82,18 @@ function InsertOrder({ memberId }) {
         calculateTotalPrice();
     };
 
+    // 평균 단가 조회 함수
+    const fetchAveragePrices = async () => {
+        try {
+            const response = await axiosInstance.get('/api/v1/orders/average-prices');
+            setAveragePrices(response.data);
+            setError(null); // 에러 초기화
+        } catch (error) {
+            setError('평균 단가 조회 실패');
+            console.error(error);
+        }
+    };
+
     return (
         <div className="insert-order-container">
             <h2 className="insert-order-header">주문 등록</h2>
@@ -138,6 +152,27 @@ function InsertOrder({ memberId }) {
                 <h3 className="total-price">총 가격: {totalPrice}</h3>
                 <button type="submit" className="insert-order-button">발주 등록</button>
             </form>
+
+            {/* 평균 단가 조회 버튼 */}
+            <button onClick={fetchAveragePrices} className="average-prices-button">평균 단가 조회</button>
+
+            {/* 평균 단가 결과 표시 */}
+            {error && <div className="error-message">{error}</div>}
+            <div className="average-prices">
+                <h3>월별 상품 평균 단가:</h3>
+                {Object.entries(averagePrices).map(([month, products]) => (
+                    <div key={month}>
+                        <h4>{month}</h4>
+                        <ul>
+                            {Object.entries(products).map(([productName, average]) => (
+                                <li key={productName}>
+                                    {productName}: {average.toFixed(2)} 원
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }

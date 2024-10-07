@@ -12,6 +12,7 @@ import AddProduct from './components/AddProduct';
 import UpdateProduct from './components/UpdateProduct';
 import ProductList from './components/ProductList';
 import UserControl from './components/UserControl';
+import OrderSummary from "./components/OrderSummary";
 
 function App() {
     const [userName, setUserName] = useState('');
@@ -70,6 +71,7 @@ function App() {
                 <ul className="sub-menu">
                     <li onClick={() => showComponent('insertOrder')}> 발주 신청</li>
                     <li onClick={() => showComponent('orderListPage')}> 발주 목록 확인</li>
+                    <li onClick={() => showComponent('orderSummary')}> 주문 요약</li>
                 </ul>
             );
         }
@@ -164,6 +166,7 @@ function App() {
                             {activeComponent === 'userDelete' && <UserDelete userId={userId} onDelete={handleUserDelete} />}
                             {activeComponent === 'insertOrder' && <InsertOrder memberId={userId} />}
                             {activeComponent === 'orderListPage' && <OrderListPage />}
+                            {activeComponent === 'orderSummary' && <OrderSummary />}
                             {activeComponent === 'addProduct' && <AddProduct />}
                             {activeComponent === 'updateProduct' && <UpdateProduct />}
                             {activeComponent === 'productList' && <ProductList />}
