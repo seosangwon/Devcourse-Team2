@@ -160,7 +160,7 @@ public class MemberController {
         String templatePassword = memberService.setTemplatePassword(request.getLoginId(), request.getEmail());
 
         String title = "데브코스 팀2 아이디/비밀번호 찾기 인증 이메일 입니다.";
-        String from= "seodo1e1205@gmail.com";
+        String from= "jyjy0372@naver.com";
         String to = request.getEmail();
         String content =
                 System.getProperty("line.separator")+
