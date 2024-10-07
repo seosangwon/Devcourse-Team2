@@ -10,6 +10,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 @Builder
@@ -59,4 +62,22 @@ public class ProductDTO {
             return PageRequest.of(this.page, this.size, sort);
         }
     }
+
+    // 내부 클래스 - LossRateDTO
+    @Data
+    @AllArgsConstructor
+    public static class LossRateDTO {
+        private LocalDateTime createdAt;
+        private Double loss;
+
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class LossRateResponseDTO {
+        private String title;
+        private List<LossRateDTO> data;
+
+    }
+
 }
