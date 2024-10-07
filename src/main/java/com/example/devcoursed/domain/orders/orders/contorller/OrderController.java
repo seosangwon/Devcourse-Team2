@@ -56,4 +56,10 @@ public class OrderController {
         return ResponseEntity.ok(monthlySummary);
     }
 
+    //주문 average-prices
+    @GetMapping("/average-prices")
+    public Map<String, Map<String, Double>> getMonthlyAveragePrices() {
+        return orderService.getMonthlyAveragePrices();
+    }
+
 }

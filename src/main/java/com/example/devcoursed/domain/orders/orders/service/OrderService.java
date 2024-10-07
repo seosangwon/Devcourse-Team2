@@ -4,6 +4,8 @@ import com.example.devcoursed.domain.member.member.entity.Member;
 import com.example.devcoursed.domain.member.member.exception.MemberException;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.domain.orders.exception.OrderException;
+import com.example.devcoursed.domain.orders.orderItem.entity.OrderItem;
+import com.example.devcoursed.domain.orders.orderItem.repository.OrderItemRepository;
 import com.example.devcoursed.domain.orders.orders.dto.OrderDTO;
 import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import com.example.devcoursed.domain.orders.orders.repository.OrderRepository;
@@ -29,6 +31,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Transactional
     public Orders createOrder(OrderDTO orderDTO, Long memberId) {
@@ -89,7 +92,19 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    public Map<String, Map<String, Double>> getMonthlyAveragePrices() {
+        List<OrderItem> orderItems = orderItemRepository.findAll();
 
+        // 월별 및 상품별 평균 단가 계산
+        return orderItems.stream()
+                .collect(Collectors.groupingBy(
+                        item -> item.getOrders().getCreatedAt().getMonth().name(), // 월 이름
+                        Collectors.groupingBy(
+                                item -> item.getProduct().getName(), // 상품 이름
+                                Collectors.averagingDouble(item -> (double) item.getPrice() / item.getQuantity()) // 평균 단가 계산
+                        )
+                ));
+    }
 
 //    public List<OrderSummaryDTO> getMonthlyOrderSummary(long memberId, String month) {
 //

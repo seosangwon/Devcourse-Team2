@@ -7,10 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaAuditing
-@EnableJpaRepositories(basePackages = {
-        "com.example.devcoursed.domain.orders.orders.repository",
-        "com.example.devcoursed.domain.member.member.repository",
-        "com.example.devcoursed.domain.product.product.repository"})
+@EnableJpaRepositories
 public class DevcoursedApplication {
 
     public static void main(String[] args) {
