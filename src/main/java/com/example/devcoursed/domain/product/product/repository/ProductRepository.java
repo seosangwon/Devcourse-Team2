@@ -67,7 +67,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
 
-    // 통합예정 F - 테스트 진행중 : 매일매일의 전체 사용자의 평균 로스율을 반환하는 "리스트" ( 반환값 : List 형태 n 개 )
+    // 통합예정 F - 테스트 진행중 :  매일매일의 전체 사용자의 평균 로스율을 반환하는 "리스트" ( 반환값 : List 형태 n 개 )
     @Query("SELECT AVG(p.loss) FROM Product p WHERE p.name = :name AND p.createdAt BETWEEN :startDate AND :endDate AND p.loss BETWEEN 0 AND 100")
     Double findLossListByName(@Param("name") String name, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
