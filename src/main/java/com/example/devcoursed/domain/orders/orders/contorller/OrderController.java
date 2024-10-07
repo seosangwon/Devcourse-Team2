@@ -51,8 +51,10 @@ public class OrderController {
 
     //주문 월별 그래프 조회
     @GetMapping("/monthly-summary")
-    public ResponseEntity<List<OrderDTO.OrderListDTO>> getMonthlyOrderSummary(@AuthenticationPrincipal SecurityUser user) {
+    public ResponseEntity<List<Map<String, Object>>> getMonthlyOrderSummary(@AuthenticationPrincipal SecurityUser user) {
         long memberId = user.getId();
-        return ResponseEntity.ok(orderService.getpList(memberId));
+        List<Map<String, Object>> monthlySummary = orderService.getMonthlyOrderSummary(memberId);
+        return ResponseEntity.ok(monthlySummary);
     }
+
 }

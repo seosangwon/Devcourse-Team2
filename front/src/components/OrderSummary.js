@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
-import ChartComponent from './ChartComponent'; // ChartComponent를 별도로 분리할 수 있음
 import axiosInstance from "../axiosInstance";
+import ChartComponent from './ChartComponent';
+
 
 const OrderSummary = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [month, setMonth] = useState("10")
+    const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7)); // 현재 월로 기본값 설정
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axiosInstance.get(`/api/v1/orders/monthly-summary`);
+                const response = await axiosInstance.get('/api/v1/orders/monthly-summary', {
+                    params: {
+                        month: selectedMonth // 선택한 월을 전달
+                    }
+                });
                 setData(response.data);
             } catch (error) {
                 console.error('Error fetching monthly summary:', error);
@@ -22,7 +27,7 @@ const OrderSummary = () => {
         };
 
         fetchData();
-    }, []);
+    },[]);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
@@ -30,8 +35,8 @@ const OrderSummary = () => {
 
     return (
         <div>
-            <h2>Monthly Order Price</h2>
-            <ChartComponent data={data} /> {/* 데이터를 ChartComponent에 전달 */}
+            <h2>Monthly Order Summary</h2>
+            <ChartComponent data={data} />
         </div>
     );
 };

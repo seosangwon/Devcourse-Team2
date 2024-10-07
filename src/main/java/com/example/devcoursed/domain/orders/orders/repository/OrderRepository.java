@@ -19,15 +19,14 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Orders, Long> {
     Page<Orders> findByMember(Member member, Pageable pageable);
 
-//    @Query("SELECT new com.example.devcoursed.domain.orders.orders.dto.OrderSummaryDTO("
-//            + "FORMATDATETIME(oi.orders.createdAt, 'yyyy-MM') || ' - ' || p.name, SUM(oi.price)) "
-//            + "FROM OrderItem oi "
-//            + "JOIN oi.product p "
-//            + "WHERE FORMATDATETIME(oi.orders.createdAt, 'yyyy-MM') = :month " // 특정 월 필터링
-//            + "GROUP BY FORMATDATETIME(oi.orders.createdAt, 'yyyy-MM'), p.name, oi.orders.createdAt "
-//            + "ORDER BY FORMATDATETIME(oi.orders.createdAt, 'yyyy-MM'), p.name")
-//    List<OrderSummaryDTO> getOrdersSummary(@Param("month") String month);
-
-    @Query("SELECT o FROM Orders o WHERE o.member = :member")
-    List<Orders> findAll(@Param("member") Member member);
+    @Query("SELECT FORMATDATETIME(o.createdAt, 'yyyy-MM') AS orderMonth, SUM(o.totalPrice) AS totalPrice "
+            + "FROM Orders o "
+            + "WHERE o.member = :member " // 특정 회원 필터링
+            + "GROUP BY FORMATDATETIME(o.createdAt, 'yyyy-MM') "
+            + "ORDER BY FORMATDATETIME(o.createdAt, 'yyyy-MM')")
+    List<Object[]> getMonthlyTotalPrice(@Param("member") Member member);
 }
+
+
+//    @Query("SELECT o FROM Orders o WHERE o.member = :member")
+//    List<Orders> findAll(@Param("member") Member member);

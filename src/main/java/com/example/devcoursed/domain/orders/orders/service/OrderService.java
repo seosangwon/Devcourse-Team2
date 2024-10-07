@@ -19,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -72,6 +75,22 @@ public class OrderService {
         }
 
     }
+    public List<Map<String, Object>> getMonthlyOrderSummary(long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("Member not found")); // 예외 처리
+
+        List<Object[]> results = orderRepository.getMonthlyTotalPrice(member);
+
+        // 결과를 Map 형태로 변환
+        return results.stream()
+                .map(result -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("orderMonth", result[0]); // 월
+                    map.put("totalPrice", result[1]); // 총 금액
+                    return map;
+                })
+                .collect(Collectors.toList());
+    }
 
 
 
@@ -80,12 +99,12 @@ public class OrderService {
 //        return orderRepository.getOrdersSummary(month);
 //    }
 
-    public List<OrderDTO.OrderListDTO> getpList(long memberId) {
-        List<Orders> ordersList = orderRepository.findAll(orderRepository.findById(memberId).get().getMember());
-        List<OrderDTO.OrderListDTO> orderDTOS = new ArrayList<>();
-        for (Orders order : ordersList) {
-            orderDTOS.add(new OrderDTO.OrderListDTO(order));
-        }
-        return orderDTOS;
-    }
+//    public List<OrderDTO.OrderListDTO> getpList(long memberId) {
+//        List<Orders> ordersList = orderRepository.findAll(orderRepository.findById(memberId).get().getMember());
+//        List<OrderDTO.OrderListDTO> orderDTOS = new ArrayList<>();
+//        for (Orders order : ordersList) {
+//            orderDTOS.add(new OrderDTO.OrderListDTO(order));
+//        }
+//        return orderDTOS;
+//    }
 }
