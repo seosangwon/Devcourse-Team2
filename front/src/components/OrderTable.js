@@ -88,7 +88,7 @@ const nestedTableStyle = {
     border: '1px solid #ddd',
 };
 const nestedTableHeaderStyle = {
-    backgroundColor: '#f1f1f1', // 헤더 배경색
+    backgroundColor: '#e0e0e0', // 헤더 배경색
     fontWeight: 'bold',
 };
 const nestedTableCellStyle = {
