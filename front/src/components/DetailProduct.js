@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import axiosInstance from "../axiosInstance";
 import { ResponsiveLine } from '@nivo/line';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -31,10 +31,9 @@ function DetailProduct({ product }) {
             loss: productLoss ? parseInt(productLoss) : null,
         };
 
-        const token = localStorage.getItem('accessToken');
         try {
-            await axios.post(`/api/v1/products/loss`, dataToUpdate, {
-                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+            await axiosInstance.post(`/api/v1/products/loss`, dataToUpdate, {
+                headers: { 'Content-Type': 'application/json' },
             });
 
             alert('로스율이 등록되었습니다!');
@@ -47,12 +46,10 @@ function DetailProduct({ product }) {
 
     // 통계 데이터 가져오는 함수 >> 매 랜더링 시 useEffect 재실행
     const fetchStatistics = useCallback(async (selectedStartDate, selectedEndDate) => {
-        const token = localStorage.getItem('accessToken');
         try {
             const adjustedEndDate = new Date(selectedEndDate);
             adjustedEndDate.setHours(23, 59, 59, 999); // 종료일을 23:59:59.999로 설정
-            const response = await axios.get(`/api/v1/products/loss/${product.name}`, {
-                headers: { Authorization: `Bearer ${token}` },
+            const response = await axiosInstance.get(`/api/v1/products/loss/${product.name}`, {
                 params: {
                     startDate: selectedStartDate.toISOString(),
                     endDate: adjustedEndDate.toISOString(),
