@@ -76,5 +76,19 @@ public class ProductController {
         return ResponseEntity.ok(productDTOPage);
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<Page<ProductDTO>> searchProducts(
+            @RequestParam("keyword") String keyword,
+            @AuthenticationPrincipal SecurityUser user,
+            ProductDTO.PageRequestDTO pageRequestDTO) {
+
+        Long memberId = user.getId();
+
+        // '사과' 키워드로 검색된 결과를 가져옴
+        Page<ProductDTO> productDTOPage = productService.searchProducts(keyword, pageRequestDTO, memberId);
+
+        return ResponseEntity.ok(productDTOPage);
+    }
+
 
 }

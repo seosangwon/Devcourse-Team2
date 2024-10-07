@@ -9,6 +9,8 @@ import com.example.devcoursed.domain.product.product.repository.ProductRepositor
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -130,6 +132,16 @@ public class ProductService {
     public Page<ProductDTO> getList(ProductDTO.PageRequestDTO pageRequestDTO, Long memberId) {
         Pageable pageable = pageRequestDTO.getPageable();
         Page<Product> productPage = productRepository.listAll(memberId, pageable);
+        return productPage.map(ProductDTO::new);}
+
+    // F - 테스트 진행중 : 검색 기능
+    public Page<ProductDTO> searchProducts(String keyword, ProductDTO.PageRequestDTO pageRequestDTO, Long memberId) {
+        Pageable pageable = pageRequestDTO.getPageable();
+
+        // '사과' 키워드로 검색된 상품 목록을 페이징 처리
+        Page<Product> productPage = productRepository.searchByKeywordAndMemberId(keyword, memberId, pageable);
+
+        // 검색된 결과를 ProductDTO로 변환하여 반환
         return productPage.map(ProductDTO::new);
     }
 

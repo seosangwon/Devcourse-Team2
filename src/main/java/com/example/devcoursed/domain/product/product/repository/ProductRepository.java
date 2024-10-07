@@ -54,5 +54,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product  p JOIN FETCH p.maker WHERE p.maker.id = :memberId AND p.createdAt = (SELECT MAX(p2.createdAt) FROM Product p2 WHERE p2.name = p.name ) ORDER BY p.createdAt DESC")
     Page<Product> listAll(Long memberId, Pageable pageable);
 
+    // F - 테스트 진행중 : 검색 기능
+    @Query("SELECT p FROM Product p JOIN FETCH p.maker WHERE p.maker.id = :memberId AND p.name LIKE %:keyword% ORDER BY p.createdAt DESC")
+    Page<Product> searchByKeywordAndMemberId(@Param("keyword") String keyword, @Param("memberId") Long memberId, Pageable pageable);
+
+
 
 }
