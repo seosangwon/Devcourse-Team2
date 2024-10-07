@@ -23,7 +23,7 @@ function App() {
 
     const handleLogin = (name, mImage) => {
         setUserName(name);
-        setProfileImage(mImage ? `/api/v1/members/upload/${mImage}` : '/api/v1/members/upload/defaultImageUrl.jpg');
+        setProfileImage(mImage)
         setActiveComponent('');
         setActiveMenu(null); // 로그인 시 메뉴 초기화
     };
@@ -63,9 +63,6 @@ function App() {
         setActiveMenu(null);
     };
 
-    const handleProfileImageChange = async (newImageUrl) => {
-            setProfileImage(newImageUrl); // 이미지를 즉시 업데이트
-    };
 
     const renderSubMenu = () => {
         if (activeMenu === 'orderManagement') {
@@ -114,7 +111,7 @@ function App() {
                     {userName ? (
                         <>
                             <img
-                                src={profileImage}
+                                src={profileImage ? `/api/v1/members/upload/${profileImage}` : '/api/v1/members/upload/defaultImageUrl.jpg'}
                                 alt="Profile"
                                 style={{ width: '50px', height: '50px', borderRadius: '50%', marginRight: '10px' }}
                             />
@@ -160,7 +157,7 @@ function App() {
                             {activeComponent === 'profileImageChange' &&
                                 <ProfileImageChange
                                     userId={userId}
-                                    onProfileImageChange={handleProfileImageChange}
+                                    onProfileImageChange={setProfileImage}
                                 />
                             }
 

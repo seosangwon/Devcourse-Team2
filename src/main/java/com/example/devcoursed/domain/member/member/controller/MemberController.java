@@ -131,4 +131,11 @@ public class MemberController {
         Resource file = resourceLoader.getResource("file:upload/" + filename);
         return ResponseEntity.ok(file);
     }
+
+    @GetMapping("/profile-image")
+    public ResponseEntity<MemberDTO.Response> getProfileImage(@AuthenticationPrincipal SecurityUser user) {
+        long userId = user.getId();
+        return ResponseEntity.ok(memberService.read(userId));
+    }
+
 }

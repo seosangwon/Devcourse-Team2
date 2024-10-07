@@ -15,7 +15,6 @@ function Login({ onLogin, handleBack }) {
         try {
             const response = await axios.post('/api/v1/members/login', dataToSend);
             const { id, refreshToken, accessToken, name, mimage } = response.data; // mImage 추가
-
             localStorage.setItem('accessToken', accessToken); // JWT 저장
             localStorage.setItem('refreshToken', refreshToken); // JWT 저장
             localStorage.setItem('id', id); // id 저장
