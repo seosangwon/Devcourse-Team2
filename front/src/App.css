@@ -288,3 +288,22 @@ input {
 .insert-order-container .insert-order-button:hover{
   background-color: #5680b5;
 }
+.pagination {
+  display: flex;
+  justify-content: center; /* 중앙 정렬 */
+  margin-top: 20px; /* 필요에 따라 여백 추가 */
+}
+.pagination button {
+  margin: 0 5px;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ddd; /* 테두리 추가 (옵션) */
+  border-radius: 4px; /* 모서리 둥글게 (옵션) */
+  padding: 5px 10px; /* 패딩 추가 (옵션) */
+  cursor: pointer; /* 커서 모양 변경 (옵션) */
+}
+
+.pagination button.active {
+  background-color: #5680b5; /* 활성화된 버튼 색상 */
+  color: #fff; /* 활성화된 버튼 글자 색상 */
+}

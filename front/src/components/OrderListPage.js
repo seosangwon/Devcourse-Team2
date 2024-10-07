@@ -47,7 +47,7 @@ const OrderListPage = () => {
                         onClick={() => setCurrentPage(index + 1)}
                         style={{
                             margin: '0 5px',
-                            backgroundColor: currentPage === index + 1 ? '#007bff' : '#fff',
+                            backgroundColor: currentPage === index + 1 ? '#5680b5' : '#fff',
                             color: currentPage === index + 1 ? '#fff' : '#000',
                         }}
                     >

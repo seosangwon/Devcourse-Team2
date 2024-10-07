@@ -20,7 +20,8 @@ function App() {
     const [activeMenu, setActiveMenu] = useState(null);
     const [profileImage, setProfileImage] = useState('');
 
-    const handleLogin = ( name, mImage) => {
+
+    const handleLogin = (name, mImage) => {
         setUserName(name);
         setProfileImage(mImage ? `/api/v1/members/upload/${mImage}` : '/api/v1/members/upload/defaultImageUrl.jpg');
         setActiveComponent('');
@@ -63,9 +64,8 @@ function App() {
     };
 
     const handleProfileImageChange = async (newImageUrl) => {
-        setProfileImage(newImageUrl);
+            setProfileImage(newImageUrl); // 이미지를 즉시 업데이트
     };
-
 
     const renderSubMenu = () => {
         if (activeMenu === 'orderManagement') {
@@ -106,7 +106,6 @@ function App() {
         return null;
     };
 
-
     return (
         <div className={userName ? 'AppLogAf' : 'AppLogBef'}>
             <div className={userName ? 'index-header' : 'login-header'}>
@@ -133,7 +132,6 @@ function App() {
                                 <button
                                     className="auth-header"
                                     onClick={() => {
-                                        // 모든 메뉴와 서브 메뉴 초기화
                                         setActiveMenu(null);
                                         setActiveComponent(''); // 필요한 경우 활성 컴포넌트도 초기화
                                     }}
@@ -163,8 +161,6 @@ function App() {
                                 <ProfileImageChange
                                     userId={userId}
                                     onProfileImageChange={handleProfileImageChange}
-                                    onSuccess={(msg) => alert(msg)} // 성공 메시지 처리
-                                    onError={(msg) => alert(msg)} // 에러 메시지 처리
                                 />
                             }
 
@@ -190,8 +186,8 @@ function App() {
                                 회원가입
                             </button>
                         )}
-                        {activeComponent === 'login' && <Login onLogin={handleLogin} handleBack={handleBack}/>}
-                        {activeComponent === 'register' && <Register onRegister={handleRegister} handleBack={handleBack}/>}
+                        {activeComponent === 'login' && <Login onLogin={handleLogin} handleBack={handleBack} />}
+                        {activeComponent === 'register' && <Register onRegister={handleRegister} handleBack={handleBack} />}
                     </div>
                 )}
             </div>
