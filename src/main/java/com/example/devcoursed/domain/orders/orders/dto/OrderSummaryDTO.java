@@ -7,12 +7,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderSummaryDTO {
     private String orderMonth;
-    private int totalQuantity;
+    private String productName;
+    private long totalQuantity;
 
-    public OrderSummaryDTO(String orderMonth, int totalQuantity) {
+    public OrderSummaryDTO(String orderMonth, long totalQuantity) {
         this.orderMonth = orderMonth;
         this.totalQuantity = totalQuantity;
     }
-
-    // getters and setters
 }

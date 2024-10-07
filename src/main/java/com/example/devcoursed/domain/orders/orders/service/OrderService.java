@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -71,10 +72,20 @@ public class OrderService {
         }
 
     }
-    public List<OrderSummaryDTO> getMonthlyOrderSummary(long memberId) {
 
-        return orderRepository.findMonthlyOrderSummary();
+
+
+//    public List<OrderSummaryDTO> getMonthlyOrderSummary(long memberId, String month) {
+//
+//        return orderRepository.getOrdersSummary(month);
+//    }
+
+    public List<OrderDTO.OrderListDTO> getpList(long memberId) {
+        List<Orders> ordersList = orderRepository.findAll(orderRepository.findById(memberId).get().getMember());
+        List<OrderDTO.OrderListDTO> orderDTOS = new ArrayList<>();
+        for (Orders order : ordersList) {
+            orderDTOS.add(new OrderDTO.OrderListDTO(order));
+        }
+        return orderDTOS;
     }
-
-
 }

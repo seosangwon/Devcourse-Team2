@@ -24,9 +24,10 @@ import java.util.List;
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;  //주문코드 orders_id, 자바권장인 ordersId로 변경
+    private Long id;
 
     private Long totalPrice;
+
 
     @CreatedDate
     @Column(name = "created_at", updatable = false) // 생성일은 업데이트하지 않음
@@ -42,7 +43,6 @@ public class Orders {
     private Member member;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
-
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @Builder

@@ -2,6 +2,7 @@ package com.example.devcoursed.domain.product.product.entity;
 
 
 import com.example.devcoursed.domain.member.member.entity.Member;
+import com.example.devcoursed.domain.orders.orderItem.entity.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -38,6 +40,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name="member_id")
     private Member maker;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
 
     @Builder
     public Product(String name,  Long loss, Member maker) {
