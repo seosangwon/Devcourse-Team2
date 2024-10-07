@@ -70,17 +70,10 @@ public class ProductDTO {
     // 내부 클래스 - LossRateDTO
     @Data
     @AllArgsConstructor
-    public static class LossRateDTO {
-        private LocalDateTime createdAt;
-        private Double loss;
-
-    }
-
-    @Data
-    @AllArgsConstructor
-    public static class LossRateResponseDTO {
-        private String title;
-        private List<LossRateDTO> data;
+    public static class AverageResponseDTO {
+        private List<LocalDate> dates;
+        private List<BigDecimal> personalAverage;
+        private List<BigDecimal> allUsersAverage;
 
     }
 
