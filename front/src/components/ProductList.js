@@ -139,7 +139,13 @@ function ProductList() {
                         </tbody>
                     </table>
 
-                    <div style={{ marginTop: '16px' }}>
+                     <div style={{
+                        marginTop: '16px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '8px' // 버튼 사이의 간격을 추가 (선택 사항)
+                    }}>
                         <button
                             onClick={() => setCurrentPage(currentPage - 1)}
                             disabled={currentPage <= 0}
