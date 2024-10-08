@@ -16,6 +16,8 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -133,7 +135,7 @@ public class ProductRepositoryTests {
         // Given: 테스트 데이터 준비
         Product product1 = Product.builder()
                 .name("sub")
-                .loss(5L)
+                .loss(8L)
                 .build();
         product1.setMaker(member);
 
@@ -153,10 +155,16 @@ public class ProductRepositoryTests {
         productRepository.save(product2);
         productRepository.save(product3);
 
-        Double averageLoss = productRepository.findAverageLossByName("sub");
+        Double averageLoss = productRepository.findAverageLossByName("sub",
+                                                                    LocalDateTime.of(2024, 10, 3, 0, 0),
+                                                                    LocalDateTime.of(2024, 10, 5, 0 ,0));
+
+        if (averageLoss == null) {
+            averageLoss = 0.0;
+        }
 
         // 평균 로스율이 예상과 동일한지 검증
-        assertEquals(10L, averageLoss);
+        assertEquals(11L, averageLoss, 0.01);
 
     }
 

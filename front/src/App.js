@@ -9,10 +9,10 @@ import InsertOrder from './components/InsertOrder';
 import OrderListPage from './components/OrderListPage';
 import Logout from './components/Logout';
 import AddProduct from './components/AddProduct';
-import UpdateProduct from './components/UpdateProduct';
 import ProductList from './components/ProductList';
 import UserControl from './components/UserControl';
 import OrderSummary from "./components/OrderSummary";
+import LossControl from './components/LossControl';
 
 function App() {
     const [userName, setUserName] = useState('');
@@ -74,7 +74,6 @@ function App() {
                 <ul className="sub-menu">
                     <li onClick={() => showComponent('insertOrder')}> 발주 신청</li>
                     <li onClick={() => showComponent('orderListPage')}> 발주 목록 확인</li>
-                    <li onClick={() => showComponent('orderSummary')}> 주문 요약</li>
                 </ul>
             );
         }
@@ -82,7 +81,6 @@ function App() {
             return (
                 <ul className="sub-menu">
                     <li onClick={() => showComponent('addProduct')}> 상품 추가</li>
-                    <li onClick={() => showComponent('updateProduct')}> 로스율 관리</li>
                     <li onClick={() => showComponent('productList')}> 상품 목록</li>
                 </ul>
             );
@@ -175,7 +173,6 @@ function App() {
                             {activeComponent === 'orderListPage' && <OrderListPage />}
                             {activeComponent === 'orderSummary' && <OrderSummary />}
                             {activeComponent === 'addProduct' && <AddProduct />}
-                            {activeComponent === 'updateProduct' && <UpdateProduct />}
                             {activeComponent === 'productList' && <ProductList />}
                             {activeComponent === 'userControl' && <UserControl />}
                             {activeComponent === 'lossControl' && <ProductList />}
