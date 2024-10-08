@@ -5,6 +5,7 @@ import './UserInfo.css';
 
 function UserProfile( {onUpdate} ) {
     const [userInfo, setUserInfo] = useState(null);
+    const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [loginId, setLoginId] = useState('');
     const [pw, setPassword] = useState('');
@@ -16,6 +17,7 @@ function UserProfile( {onUpdate} ) {
             try {
                 const response = await axiosInstance.get('/api/v1/members/');
                 setUserInfo(response.data);
+                setEmail(response.data.email);
                 setName(response.data.name);
                 setLoginId(response.data.loginId);
             } catch (error) {
@@ -34,7 +36,7 @@ function UserProfile( {onUpdate} ) {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const response = await axiosInstance.put('/api/v1/members/', { name, loginId, pw });
+            const response = await axiosInstance.put('/api/v1/members/', {email, name, loginId, pw });
             setUserInfo(response.data);
             onUpdate(response.data.name);
             setIsEditing(false); // 수정 모드 종료
@@ -46,10 +48,19 @@ function UserProfile( {onUpdate} ) {
     if (!userInfo) return <div>로딩 중...</div>;
 
     return (
-        <div>
+        <div className="info-container"> {/* 컨테이너 추가 */}
             <h2>사용자 정보</h2>
             {isEditing ? (
                 <form onSubmit={handleUpdate}>
+                    <div>
+                        <label>이메일:</label>
+                        <input
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
                     <div>
                         <label>이름:</label>
                         <input
@@ -79,15 +90,16 @@ function UserProfile( {onUpdate} ) {
                             required
                         />
                     </div>
+
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
-                    <button type="submit" className="button">수정하기</button>
-                    <button type="button" className="button" onClick={handleEditToggle}>취소</button>
+                    <button type="submit" className="user-info-button">수정하기</button>
+                    <button type="button" className="user-info-button" onClick={handleEditToggle}>취소</button>
                 </form>
             ) : (
                 <div>
                     <p>이름: {userInfo.name}</p>
                     <p>로그인 ID: {userInfo.loginId}</p>
-                    <button type="button" className="button" onClick={handleEditToggle}>수정하기</button>
+                    <button type="button" className="user-info-button" onClick={handleEditToggle}>수정하기</button>
                 </div>
             )}
         </div>

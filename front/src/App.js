@@ -39,7 +39,7 @@ function App() {
 
     const handleRegister = (name) => {
         setUserName(name);
-        setActiveComponent('');
+        setActiveComponent('login');
     };
 
     const handleFind = () => {
@@ -179,7 +179,7 @@ function App() {
                             {activeComponent === 'orderListPage' && <OrderListPage />}
                             {activeComponent === 'orderSummary' && <OrderSummary />}
                             {activeComponent === 'addProduct' && <AddProduct />}
-                            {activeComponent === 'productList' && <LossControl />}
+                            {activeComponent === 'productList' && <ProductList />}
                             {activeComponent === 'userControl' && <UserControl />}
                             {activeComponent === 'lossControl' && <LossControl />}
                         </div>
