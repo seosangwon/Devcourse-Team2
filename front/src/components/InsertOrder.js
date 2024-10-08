@@ -160,18 +160,26 @@ function InsertOrder({ memberId }) {
             {error && <div className="error-message">{error}</div>}
             <div className="average-prices">
                 <h3>월별 상품 평균 단가:</h3>
-                {Object.entries(averagePrices).map(([month, products]) => (
-                    <div key={month}>
-                        <h4>{month}</h4>
-                        <ul>
-                            {Object.entries(products).map(([productName, average]) => (
-                                <li key={productName}>
-                                    {productName}: {average.toFixed(2)} 원
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
+                <table className="average-prices-table">
+                    <thead>
+                    <tr>
+                        <th>월</th>
+                        <th>상품명</th>
+                        <th>평균 단가 (원)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {Object.entries(averagePrices).map(([month, products]) =>
+                        Object.entries(products).map(([productName, average]) => (
+                            <tr key={`${month}-${productName}`}>
+                                <td>{month}</td>
+                                <td>{productName}</td>
+                                <td>{average.toFixed(2)}</td>
+                            </tr>
+                        ))
+                    )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );
