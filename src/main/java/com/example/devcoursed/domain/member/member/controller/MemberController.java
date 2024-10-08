@@ -184,7 +184,7 @@ public class MemberController {
 
         } catch (Exception e) {
             log.debug(e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("임시 비밀번호 전송을 실패하였습니다");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("임시 비밀번호 전송을 실패하였습니다" );
         }
         return ResponseEntity.ok("임시 비밀번호를 이메일로 전송했습니다");
 
