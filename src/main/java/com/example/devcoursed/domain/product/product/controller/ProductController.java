@@ -52,14 +52,6 @@ public class ProductController {
     }
 
 
-    // C - 테스트 완료 : user와 name을 받아서 가장 최신에 수정된 데이터만 반환
-    @GetMapping("/losslatest/{name}")
-    public ResponseEntity<ProductDTO> findLatestProduct(@AuthenticationPrincipal SecurityUser user, @PathVariable("name") String name) {
-
-        Long memberId = user.getId();
-        return ResponseEntity.ok(productService.findLatestProduct(memberId, name));
-    }
-
     // D - 테스트 완료 : user와 name를 받아서 가장 최신의 로스율을 가진 데이터만 반환 (1번 로직)
     @GetMapping("/read/{name}")
     public ResponseEntity<ProductDTO> read(@AuthenticationPrincipal SecurityUser user, @PathVariable("name") String name){
@@ -68,7 +60,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.read(name, memberId));
     }
 
-    //  E - 테스트 완료 : 목록 전체 불러오기 (같은 이름이 있다면 createdAt이 가장 최신인 것들을 골라서 ) (2번 로직)
+    // 사용자용 상품 목록 전체 조회 (같은 이름이 있다면 createdAt이 가장 최신인 것들을 골라서 ) (2번 로직)
     @GetMapping
     public ResponseEntity<Page<ProductDTO>> getList(@AuthenticationPrincipal SecurityUser user, ProductDTO.PageRequestDTO pageRequestDTO) {
         Long memberId = user.getId();
@@ -76,6 +68,7 @@ public class ProductController {
         return ResponseEntity.ok(productDTOPage);
     }
 
+    // 상품 이름 검색
     @GetMapping("/search")
     public ResponseEntity<Page<ProductDTO>> searchProducts(@RequestParam("keyword") String keyword,
                                                            @AuthenticationPrincipal SecurityUser user,

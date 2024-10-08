@@ -113,13 +113,6 @@ public class ProductService {
     // ------------------------------------
 
 
-    // C - 테스트 완료 : user와 name을 받아서 가장 최신에 수정된 데이터만 반환 (1번 로직)
-    public ProductDTO findLatestProduct(Long memberId, String name){
-        Product product = productRepository.findLatestProductByMakerAndName(memberId, name).orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);
-
-        return new ProductDTO(product);
-    }
-
     // D - 테스트 완료 : user와 name를 받아서 가장 최신의 로스율을 가진 데이터만 반환 (1번 로직)
     public ProductDTO read(String name, Long memberId){
         Product product = productRepository.findByName(name, memberId).orElseThrow(ProductException.PRODUCT_NOT_FOUND::getProductException);;
@@ -128,13 +121,13 @@ public class ProductService {
 
     }
 
-    // E - 테스트 완료 : 목록 전체 불러오기 (같은 이름이 있다면 createdAt이 가장 최신인 것들을 골라서 ) (2번 로직)
+    // 사용자용 상품 목록 전체 조회 (같은 이름이 있다면 createdAt이 가장 최신인 것들을 골라서 ) (2번 로직)
     public Page<ProductDTO> getList(ProductDTO.PageRequestDTO pageRequestDTO, Long memberId) {
         Pageable pageable = pageRequestDTO.getPageable();
         Page<Product> productPage = productRepository.listAll(memberId, pageable);
         return productPage.map(ProductDTO::new);}
 
-    // F - 테스트 진행중 : 검색 기능
+    // 사용자 상품 이름 검색 기능
     public Page<ProductDTO> searchProducts(String keyword, ProductDTO.PageRequestDTO pageRequestDTO, Long memberId) {
         Pageable pageable = pageRequestDTO.getPageable();
 
@@ -145,5 +138,14 @@ public class ProductService {
         return productPage.map(ProductDTO::new);
     }
 
+    // 관리자 상품 이름 검색 기능
+    public Page<ProductDTO> searchProducts(String keyword, ProductDTO.PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable();
 
+        // '사과' 키워드로 검색된 상품 목록을 페이징 처리
+        Page<Product> productPage = productRepository.searchByKeywordAndMemberId(keyword, pageable);
+
+        // 검색된 결과를 ProductDTO로 변환하여 반환
+        return productPage.map(ProductDTO::new);
+    }
 }

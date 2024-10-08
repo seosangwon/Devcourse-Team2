@@ -1,7 +1,6 @@
 package com.example.devcoursed.domain.product.product.repository;
 
 import com.example.devcoursed.domain.member.member.entity.Member;
-import com.example.devcoursed.domain.product.product.dto.ProductDTO;
 import com.example.devcoursed.domain.product.product.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +38,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // ------------------------------------
 
 
-    // C - 테스트 완료 : user와 name을 받아서 가장 최신의 로스율을 가진 데이터만 반환 (1번 로직)
+    // user와 name을 받아서 가장 최신의 로스율을 가진 데이터만 반환 (로스율 추가 등록)
     @Query(value = "SELECT * FROM Product p WHERE p.member_id = :memberId AND p.name = :name ORDER BY p.created_at DESC LIMIT 1", nativeQuery = true)
     Optional<Product> findLatestProductByMakerAndName(@Param("memberId") Long memberId, @Param("name") String name);
 
@@ -47,14 +46,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.name = :name AND p.maker.id = :memberId AND p.createdAt = (SELECT MAX(p2.createdAt) FROM Product p2 WHERE p2.name = p.name)")
     Optional<Product> findByName(@Param("name") String name, @Param("memberId") Long memberId);
 
-    // E - 테스트 완료 : 목록 전체 불러오기 (같은 이름이 있다면 createdAt이 가장 최신인 것들을 골라서 ) (2번 로직)
+    // 사용자용 상품 목록 전체 조회 (같은 이름이 있다면 createdAt이 가장 최신인 것들을 골라서 ) (2번 로직)
     @Query("SELECT p FROM Product  p JOIN FETCH p.maker WHERE p.maker.id = :memberId AND p.createdAt = (SELECT MAX(p2.createdAt) FROM Product p2 WHERE p2.name = p.name ) ORDER BY p.createdAt DESC")
     Page<Product> listAll(Long memberId, Pageable pageable);
 
-    // F - 테스트 진행중 : 검색 기능
+    // 사용자용 상품 이름 검색
     @Query("SELECT p FROM Product p JOIN FETCH p.maker WHERE p.maker.id = :memberId AND p.name LIKE %:keyword% AND p.createdAt = (SELECT MAX(p2.createdAt) FROM Product p2 WHERE p2.name = p.name ) ORDER BY p.createdAt DESC")
     Page<Product> searchByKeywordAndMemberId(@Param("keyword") String keyword, @Param("memberId") Long memberId, Pageable pageable);
 
-
+    // 관리자용 상품 이름 검색
+    @Query("SELECT p FROM Product p JOIN FETCH p.maker WHERE p.name LIKE %:keyword% AND p.createdAt = (SELECT MAX(p2.createdAt) FROM Product p2 WHERE p2.name = p.name ) ORDER BY p.createdAt DESC")
+    Page<Product> searchByKeywordAndMemberId(@Param("keyword") String keyword, Pageable pageable);
 
 }
