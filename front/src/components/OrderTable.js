@@ -13,14 +13,12 @@ const OrderTable = ({ orders, products }) => {
     };
 
     return (
-        <table style={tableStyle}>
-            <thead>
+        <table className="tableStyle">
+            <thead className="tableheader">
             <tr>
-                <th>주문 ID</th>
+                <th>주문 번호</th>
                 <th>총 가격</th>
-                <th>생성일</th>
-                <th>수정일</th>
-                <th>상세보기</th>
+                <th>주문일</th>
             </tr>
             </thead>
             <tbody>
@@ -31,27 +29,24 @@ const OrderTable = ({ orders, products }) => {
             ) : (
                 orders.map(order => (
                     <React.Fragment key={order.id}>
-                        <tr onClick={() => toggleOrderDetails(order.id)} style={{ cursor: 'pointer' }}>
-                            <td>{order.id}</td>
-                            <td>{order.totalPrice}</td>
-                            <td>{new Date(order.createdAt).toLocaleString()}</td>
-                            <td>{new Date(order.modifiedAt).toLocaleString()}</td>
-                            <td>
-                                <button style={detailButtonStyle}>상세보기</button>
-                            </td>
+                        <tr onClick={() => toggleOrderDetails(order.id)} style={{cursor: 'pointer'}}>
+                            <td className="nestedordertable">{order.id}</td>
+                            <td className="nestedordertable">{order.totalPrice}</td>
+                            <td className="nestedordertable">{new Date(order.createdAt).toLocaleString()}</td>
                         </tr>
                         {openOrderId === order.id && order.orderItems && order.orderItems.length > 0 && (
                             <tr>
                                 <td colSpan="5">
-                                    <table style={nestedTableStyle}>
-                                        <thead>
+                                    <table className="nestedTableStyle">
+
+                                        <thead className="nestedtable-header">
                                         <tr>
                                             <th>상품 이름</th>
                                             <th>수량</th>
                                             <th>가격</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody className="nestedtable-body">
                                         {order.orderItems.map(item => (
                                             <tr key={item.productId}>
                                                 <td>{getProductNameById(item.productId)}</td>
@@ -60,6 +55,7 @@ const OrderTable = ({ orders, products }) => {
                                             </tr>
                                         ))}
                                         </tbody>
+
                                     </table>
                                 </td>
                             </tr>
@@ -72,26 +68,6 @@ const OrderTable = ({ orders, products }) => {
     );
 };
 
-const tableStyle = {
-    width: '100%',
-    borderCollapse: 'collapse',
-    marginTop: '20px',
-};
 
-const nestedTableStyle = {
-    width: '100%',
-    borderCollapse: 'collapse',
-    marginTop: '10px',
-    backgroundColor: '#f9f9f9', // 배경색 추가
-};
-
-const detailButtonStyle = {
-    backgroundColor: '#28a745',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    padding: '5px 10px',
-    cursor: 'pointer',
-};
 
 export default OrderTable;

@@ -134,7 +134,8 @@ function InsertOrder({ memberId }) {
                                 required
                             />
                             </td>
-                            <td>                                <button type="button" onClick={() => removeItem(index)}>제거</button>
+                            <td>
+                                <button type="button" onClick={() => removeItem(index)}>제거</button>
                             </td>
                         </tr>
                     ))}
@@ -162,7 +163,6 @@ function InsertOrder({ memberId }) {
 
             {error && <div className="error-message">{error}</div>}
             <div className="average-prices">
-                <h3>선택한 상품 평균 단가:</h3>
                 <table className="average-prices-table">
                     <thead>
                     <tr>
