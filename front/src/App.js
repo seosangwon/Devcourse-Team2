@@ -11,7 +11,9 @@ import Logout from './components/Logout';
 import AddProduct from './components/AddProduct';
 import ProductList from './components/ProductList';
 import UserControl from './components/UserControl';
+import OrderSummary from "./components/OrderSummary";
 import LossControl from './components/LossControl';
+import FindIdPw from "./components/FindIdPw";
 
 function App() {
     const [userName, setUserName] = useState('');
@@ -39,6 +41,10 @@ function App() {
         setUserName(name);
         setActiveComponent('');
     };
+
+    const handleFind = () => {
+        setActiveComponent('');
+    }
 
     const handleUserDelete = () => {
         setUserName('');
@@ -73,6 +79,7 @@ function App() {
                 <ul className="sub-menu">
                     <li onClick={() => showComponent('insertOrder')}> 발주 신청</li>
                     <li onClick={() => showComponent('orderListPage')}> 발주 목록 확인</li>
+                    <li onClick={() => showComponent('orderSummary')}> 주문 요약</li>
                 </ul>
             );
         }
@@ -170,6 +177,7 @@ function App() {
                             {activeComponent === 'userDelete' && <UserDelete userId={userId} onDelete={handleUserDelete} />}
                             {activeComponent === 'insertOrder' && <InsertOrder memberId={userId} />}
                             {activeComponent === 'orderListPage' && <OrderListPage />}
+                            {activeComponent === 'orderSummary' && <OrderSummary />}
                             {activeComponent === 'addProduct' && <AddProduct />}
                             {activeComponent === 'productList' && <ProductList />}
                             {activeComponent === 'userControl' && <UserControl />}
@@ -188,8 +196,14 @@ function App() {
                                 회원가입
                             </button>
                         )}
+                        {activeComponent === '' && (
+                            <button className="auth-button" onClick={() => setActiveComponent('IdPw')}>
+                                ID/PW 찾기
+                            </button>
+                        )}
                         {activeComponent === 'login' && <Login onLogin={handleLogin} handleBack={handleBack}/>}
                         {activeComponent === 'register' && <Register onRegister={handleRegister} handleBack={handleBack}/>}
+                        {activeComponent === 'IdPw' && <FindIdPw onRegister={handleFind} handleBack={handleBack}/>}
                     </div>
                 )}
             </div>

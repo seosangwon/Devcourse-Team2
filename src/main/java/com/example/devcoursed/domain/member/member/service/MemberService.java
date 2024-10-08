@@ -1,8 +1,8 @@
 package com.example.devcoursed.domain.member.member.service;
 
-import com.example.devcoursed.domain.member.member.exception.MemberException;
 import com.example.devcoursed.domain.member.member.dto.MemberDTO;
 import com.example.devcoursed.domain.member.member.entity.Member;
+import com.example.devcoursed.domain.member.member.exception.MemberException;
 import com.example.devcoursed.domain.member.member.repository.MemberRepository;
 import com.example.devcoursed.global.util.JwtUtil;
 import com.example.devcoursed.global.util.PasswordUtil;
