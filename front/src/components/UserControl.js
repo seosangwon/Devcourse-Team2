@@ -9,7 +9,7 @@ function UserControl() {
     // 제품 목록을 가져오는 함수
     const fetchUserControl = async (page) => {
         try {
-            const response = await axiosInstance.get(`/api/adm/members/all`, {
+            const response = await axiosInstance.get(`/api/v1/members/all`, {
                 params: { page },
             });
 

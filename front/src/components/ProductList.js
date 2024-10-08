@@ -17,7 +17,7 @@ function ProductList() {
             const response = await axiosInstance.get(`/api/v1/products`, {
                 params: { page, size: pageSize },
             });
-
+            console.log(response.data);
             const updatedProducts = response.data.content.map(product => {
                 const updatedLoss = product.loss === null || product.loss === 222 ? "등록된 로스율이 없습니다." : product.loss;
                 return { ...product, loss: updatedLoss };
