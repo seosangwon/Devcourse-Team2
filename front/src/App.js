@@ -179,7 +179,7 @@ function App() {
                             {activeComponent === 'orderListPage' && <OrderListPage />}
                             {activeComponent === 'orderSummary' && <OrderSummary />}
                             {activeComponent === 'addProduct' && <AddProduct />}
-                            {activeComponent === 'productList' && <ProductList />}
+                            {activeComponent === 'productList' && <LossControl />}
                             {activeComponent === 'userControl' && <UserControl />}
                             {activeComponent === 'lossControl' && <LossControl />}
                         </div>

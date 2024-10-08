@@ -53,6 +53,7 @@ function UserProfile( {onUpdate} ) {
                     <div>
                         <label>이름:</label>
                         <input
+                            className="userinfo-input"
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -62,6 +63,7 @@ function UserProfile( {onUpdate} ) {
                     <div>
                         <label>로그인 ID:</label>
                         <input
+                            className="userinfo-input"
                             type="text"
                             value={loginId}
                             onChange={(e) => setLoginId(e.target.value)}

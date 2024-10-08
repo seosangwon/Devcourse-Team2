@@ -25,7 +25,7 @@ label {
     font-weight: bold; /* 레이블 볼드체 */
 }
 
-input[type="text"], input[type="password"] {
+.userinfo-input {
     width: 100%; /* 입력 필드 너비 100% */
     padding: 10px; /* 내부 여백 */
     border: 1px solid #ccc; /* 테두리 색상 */
