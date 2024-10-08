@@ -3,22 +3,27 @@
     border: 1px solid #ccc; /* 테두리 추가 */
     border-radius: 5px; /* 모서리 둥글게 */
     padding: 50px; /* 내부 여백 */
-    margin: 300px; /* 외부 여백 */
+    margin: 10px auto; /* 외부 여백 */
+    width: 500px;
     background-color: #f9f9f9; /* 배경색 */
+    height: 700px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 /* 이름과 로그인 ID 배경색 제거 */
 .info-container p {
     background-color: transparent; /* 배경색을 투명하게 설정 */
     margin: 10px; /* 기본 여백 제거 */
     padding: 10px; /* 내부 여백 제거 */
-    text-align: center; /* 텍스트 중앙 정렬 */
-    border: none; /* 테두리 제거 */
-    display: flex; /* Flexbox 사용 */
-    flex-direction: column; /* 세로 방향 정렬 */
-    align-items: center; /* 중앙 정렬 */
-    font-style: oblique;
-}
 
+}
+.user-info-button{
+    margin: 5px;
+    position: absolute;
+    bottom: 20px;
+    display: block;
+}
 
 .user-profile {
     max-width: 500px; /* 최대 너비 설정 */
