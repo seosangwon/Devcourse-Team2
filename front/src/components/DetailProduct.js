@@ -47,11 +47,14 @@ function DetailProduct({ product }) {
     // 통계 데이터 가져오는 함수 >> 매 랜더링 시 useEffect 재실행
     const fetchStatistics = useCallback(async (selectedStartDate, selectedEndDate) => {
         try {
+            const adjustedStartDate = new Date(selectedStartDate);
+            adjustedStartDate.setHours(0, 0, 0, 0); // 시작일을 00:00:00.000로 설정
+
             const adjustedEndDate = new Date(selectedEndDate);
             adjustedEndDate.setHours(23, 59, 59, 999); // 종료일을 23:59:59.999로 설정
             const response = await axiosInstance.get(`/api/v1/products/loss/${product.name}`, {
                 params: {
-                    startDate: selectedStartDate.toISOString(),
+                    startDate: adjustedStartDate.toISOString(),
                     endDate: adjustedEndDate.toISOString(),
                 },
             });
