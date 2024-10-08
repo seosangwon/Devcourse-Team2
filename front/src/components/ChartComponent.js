@@ -56,7 +56,12 @@ const ChartComponent = ({ data }) => {
         },
     };
 
-    return <Line ref={chartRef} data={chartData} options={chartOptions} />;
+    return (
+        <div className="chart-container">
+            <h2 className="chart-title">월별 총 금액 차트</h2>
+            <Line ref={chartRef} data={chartData} options={chartOptions} />
+        </div>
+    );
 };
 
 export default ChartComponent;

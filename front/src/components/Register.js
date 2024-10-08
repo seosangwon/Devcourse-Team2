@@ -4,6 +4,7 @@ function Register({ onRegister, handleBack }) {
     const [loginId, setLoginId] = useState('');
     const [pw, setPassword] = useState('');
     const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [loading, setLoading] = useState(false); // 로딩 상태 추가
@@ -18,6 +19,7 @@ function Register({ onRegister, handleBack }) {
             loginId,
             pw,
             name,
+            email,
         };
 
         try {
@@ -67,6 +69,19 @@ function Register({ onRegister, handleBack }) {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="이름을 입력하세요"
+                        required
+                    />
+                </div>
+
+                <div>
+                    <span className="input-info">이메일:</span>
+                    <input
+                        className="auth-input"
+                        type="text"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="이메일을 입력하세요"
                         required
                     />
                 </div>

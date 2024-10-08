@@ -35,7 +35,6 @@ const OrderSummary = () => {
 
     return (
         <div>
-            <h2>Monthly Order Summary</h2>
             <ChartComponent data={data} />
         </div>
     );

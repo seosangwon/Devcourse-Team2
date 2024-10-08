@@ -7,6 +7,7 @@ function InsertOrder({ memberId }) {
     const [totalPrice, setTotalPrice] = useState('');
     const [averagePrices, setAveragePrices] = useState({});
     const [error, setError] = useState(null);
+    const [selectedProductName, setSelectedProductName] = useState('');
 
     const id = localStorage.getItem('id');
 
@@ -50,9 +51,9 @@ function InsertOrder({ memberId }) {
 
     const handleItemChange = (index, field, value) => {
         const newItems = [...items];
-        const selectedProduct = products.find(product => product.id === Number(value));
+        const selectedProduct = products.find(product => product.name === value);
 
-        if (field === 'productId' && selectedProduct) {
+        if (field === 'productName' && selectedProduct) {
             const existingItemIndex = newItems.findIndex(item => item.productId === selectedProduct.id);
             if (existingItemIndex > -1) {
                 newItems[existingItemIndex].quantity += 1;
@@ -82,12 +83,11 @@ function InsertOrder({ memberId }) {
         calculateTotalPrice();
     };
 
-    // 평균 단가 조회 함수
     const fetchAveragePrices = async () => {
         try {
             const response = await axiosInstance.get('/api/v1/orders/average-prices');
             setAveragePrices(response.data);
-            setError(null); // 에러 초기화
+            setError(null);
         } catch (error) {
             setError('평균 단가 조회 실패');
             console.error(error);
@@ -104,45 +104,37 @@ function InsertOrder({ memberId }) {
                         <th>상품명</th>
                         <th>개수</th>
                         <th>가격</th>
-                        <th></th>
-                    </tr>
+                        <th></th>                    </tr>
                     </thead>
-                    <tbody>
-                    {items.map((item, index) => (
+                    <tbody>                    {items.map((item, index) => (
                         <tr key={index} className="insert-order-item">
                             <td>
                                 <select
-                                    value={item.productId}
-                                    onChange={(e) => handleItemChange(index, 'productId', e.target.value)}
-                                >
-                                    <option value="">상품 선택</option>
+                                    value={item.productName || ''}
+                                    onChange={(e) => handleItemChange(index, 'productName', e.target.value)}
+                                >                                    <option value="">상품 선택</option>
                                     {products.map((product) => (
-                                        <option key={product.id} value={product.id}>
+                                        <option key={product.id} value={product.name}>
                                             {product.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                        </option>                                    ))}
+                                </select>                            </td>
+                            <td>                                <input
+                                type="number"
+                                value={item.quantity || ''}
+                                onChange={(e) => handleItemChange(index, 'quantity', Number(e.target.value))}
+                                placeholder="개수"
+                                required
+                            />
                             </td>
-                            <td>
-                                <input
-                                    type="number"
-                                    value={item.quantity || ''}
-                                    onChange={(e) => handleItemChange(index, 'quantity', Number(e.target.value))}
-                                    placeholder="개수"
-                                    required
-                                />
+                            <td>                                <input
+                                type="number"
+                                value={item.price || ''}
+                                onChange={(e) => handleItemChange(index, 'price', Number(e.target.value))}
+                                placeholder="가격"
+                                required
+                            />
                             </td>
-                            <td>
-                                <input
-                                    type="number"
-                                    value={item.price || ''}
-                                    onChange={(e) => handleItemChange(index, 'price', Number(e.target.value))}
-                                    placeholder="가격"
-                                    required
-                                />
-                            </td>
-                            <td>
-                                <button type="button" onClick={() => removeItem(index)}>제거</button>
+                            <td>                                <button type="button" onClick={() => removeItem(index)}>제거</button>
                             </td>
                         </tr>
                     ))}
@@ -153,13 +145,24 @@ function InsertOrder({ memberId }) {
                 <button type="submit" className="insert-order-button">발주 등록</button>
             </form>
 
-            {/* 평균 단가 조회 버튼 */}
+            <label htmlFor="product-select">상품명 선택:</label>
+            <select                id="product-select"
+                                   value={selectedProductName}
+                                   onChange={(e) => setSelectedProductName(e.target.value)}
+            >
+                <option value="">상품 선택</option>
+                {products.map((product) => (
+                    <option key={product.id} value={product.name}>
+                        {product.name}
+                    </option>
+                ))}
+            </select>
+
             <button onClick={fetchAveragePrices} className="average-prices-button">평균 단가 조회</button>
 
-            {/* 평균 단가 결과 표시 */}
             {error && <div className="error-message">{error}</div>}
             <div className="average-prices">
-                <h3>월별 상품 평균 단가:</h3>
+                <h3>선택한 상품 평균 단가:</h3>
                 <table className="average-prices-table">
                     <thead>
                     <tr>
@@ -168,16 +171,20 @@ function InsertOrder({ memberId }) {
                         <th>평균 단가 (원)</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    {Object.entries(averagePrices).map(([month, products]) =>
-                        Object.entries(products).map(([productName, average]) => (
-                            <tr key={`${month}-${productName}`}>
-                                <td>{month}</td>
-                                <td>{productName}</td>
-                                <td>{average.toFixed(2)}</td>
-                            </tr>
-                        ))
-                    )}
+                    <tbody>                    {Object.entries(averagePrices).map(([month, products]) => (
+                        Object.entries(products).map(([productName, average]) => {
+                            if (productName === selectedProductName) {
+                                return (
+                                    <tr key={`${month}-${productName}`}>
+                                        <td>{month}</td>
+                                        <td>{productName}</td>
+                                        <td>{average.toFixed(2)}</td>
+                                    </tr>
+                                );
+                            }
+                            return null; // 선택한 상품이 아닐 경우 null 반환
+                        })
+                    ))}
                     </tbody>
                 </table>
             </div>
