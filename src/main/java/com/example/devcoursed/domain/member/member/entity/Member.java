@@ -77,6 +77,12 @@ public class Member {
     }
 
 
+    public void changeEmail(String email) { // 잠시 수정
+        this.email=email;
+
+    }
+
+
     public void changeMImage(String mImage) {
         this.mImage = mImage;
     }

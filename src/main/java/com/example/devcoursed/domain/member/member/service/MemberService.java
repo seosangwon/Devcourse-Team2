@@ -63,6 +63,7 @@ public class MemberService {
             member.changePw(passwordEncoder.encode(dto.getPw()));
             member.changeName(dto.getName());
             member.changeMImage(dto.getMImage());
+            member.changeEmail(dto.getEmail()); // 잠시 수정
             memberRepository.save(member);
 
             return new MemberDTO.Update(
@@ -70,7 +71,8 @@ public class MemberService {
                     member.getLoginId(),
                     member.getPw(),
                     member.getName(),
-                    member.getMImage()
+                    member.getMImage(),
+                    member.getEmail()  // 잠시 수정
             );
         } else {
             throw MemberException.MEMBER_NOT_MODIFIED.getMemberTaskException();
