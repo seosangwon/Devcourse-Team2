@@ -32,8 +32,8 @@ public class Product {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
+//    @LastModifiedDate
+//    private LocalDateTime modifiedAt;
 
     @ManyToOne
     @JoinColumn(name="member_id")
