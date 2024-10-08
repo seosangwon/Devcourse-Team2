@@ -173,7 +173,7 @@ function App() {
                             {activeComponent === 'addProduct' && <AddProduct />}
                             {activeComponent === 'productList' && <ProductList />}
                             {activeComponent === 'userControl' && <UserControl />}
-                            {activeComponent === 'lossControl' && <ProductList />}
+                            {activeComponent === 'lossControl' && <LossControl />}
                         </div>
                     </>
                 ) : (

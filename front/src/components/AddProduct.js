@@ -14,15 +14,13 @@ function AddProduct() {
         };
 
         try {
-            console.log('Add product:', JSON.stringify(dataToSend));
-
             await axiosInstance.post('/api/v1/products/', dataToSend, {});
 
             alert('식재료가 등록되었습니다!');
             setProductName(''); // 등록창 상태 초기화
             setProductLoss('');
         } catch (error) {
-            alert('식재료 등록 실패: ' + (error.response?.data?.message || '알 수 없는 오류'));
+            alert('식재료 등록 실패: ' + (error.response.data || '알 수 없는 오류'));
         }
     };
 
