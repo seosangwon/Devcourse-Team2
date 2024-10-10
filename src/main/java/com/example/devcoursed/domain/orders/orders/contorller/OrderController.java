@@ -1,12 +1,6 @@
 package com.example.devcoursed.domain.orders.orders.contorller;
 
-import com.example.devcoursed.domain.member.member.exception.MemberException;
-import com.example.devcoursed.domain.member.member.dto.MemberDTO;
-import com.example.devcoursed.domain.member.member.entity.Member;
-import com.example.devcoursed.domain.member.member.repository.MemberRepository;
-import com.example.devcoursed.domain.member.member.service.MemberService;
 import com.example.devcoursed.domain.orders.orders.dto.OrderDTO;
-import com.example.devcoursed.domain.orders.orders.entity.Orders;
 import com.example.devcoursed.domain.orders.orders.service.OrderService;
 import com.example.devcoursed.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -54,4 +47,19 @@ public class OrderController {
         orderService.delete(orderId);
         return Map.of("success", "delete");
     }
+
+    //주문 월별 그래프 조회
+    @GetMapping("/monthly-summary")
+    public ResponseEntity<List<Map<String, Object>>> getMonthlyOrderSummary(@AuthenticationPrincipal SecurityUser user) {
+        long memberId = user.getId();
+        List<Map<String, Object>> monthlySummary = orderService.getMonthlyOrderSummary(memberId);
+        return ResponseEntity.ok(monthlySummary);
+    }
+
+    //주문 average-prices
+    @GetMapping("/average-prices")
+    public Map<String, Map<String, Double>> getMonthlyAveragePrices() {
+        return orderService.getMonthlyAveragePrices();
+    }
+
 }

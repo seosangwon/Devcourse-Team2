@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from "../axiosInstance";
 import DetailProduct from './DetailProduct';
 
 function ProductList() {
@@ -9,16 +9,15 @@ function ProductList() {
     const pageSize = 10; // 페이지당 제품 수
     const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태
     const [selectedProduct, setSelectedProduct] = useState(null); // 선택된 상품
+    const [isSearching, setIsSearching] = useState(false); // 검색 중인지 여부
 
-    // 제품 목록을 가져오는 함수
+    // 사용자용 제품 목록을 가져오는 함수
     const fetchProducts = async (page) => {
-        const token = localStorage.getItem('accessToken');
         try {
-            const response = await axios.get(`/api/v1/products`, {
-                headers: { Authorization: `Bearer ${token}` },
+            const response = await axiosInstance.get(`/api/v1/products`, {
                 params: { page, size: pageSize },
             });
-
+            console.log(response.data);
             const updatedProducts = response.data.content.map(product => {
                 const updatedLoss = product.loss === null || product.loss === 222 ? "등록된 로스율이 없습니다." : product.loss;
                 return { ...product, loss: updatedLoss };
@@ -31,9 +30,30 @@ function ProductList() {
         }
     };
 
+    // 검색 함수
+    const searchProducts = async (page, keyword = '') => {
+        try {
+            const response = await axiosInstance.get(`/api/v1/products/search`, {
+                params: { page, size: pageSize, keyword },
+            });
+
+            const updatedProducts = response.data.content.map(product => {
+                const updatedLoss = product.loss === null || product.loss === 222 ? "등록된 로스율이 없습니다." : product.loss;
+                return { ...product, loss: updatedLoss };
+            });
+
+            setProducts(updatedProducts);
+            setTotalPages(response.data.totalPages);
+        } catch (error) {
+            alert('검색 결과를 불러오는 데 실패했습니다: ' + (error.response?.data?.message || '알 수 없는 오류'));
+        }
+    };
+
     useEffect(() => {
-        fetchProducts(currentPage);
-    }, [currentPage]);
+        if (!isSearching) {
+            fetchProducts(currentPage); // 검색하지 않을 때는 기본 제품 목록 가져오기
+        }
+    }, [currentPage, isSearching]);
 
     // 상품 이름을 클릭했을 때 실행되는 함수
     const handleProductClick = (product) => {
@@ -42,14 +62,33 @@ function ProductList() {
 
     // 검색어가 변경될 때 호출되는 함수
     const handleSearch = (e) => {
-        setSearchTerm(e.target.value);
-        setCurrentPage(0);
+        const keyword = e.target.value;
+        setSearchTerm(keyword); // 검색어 상태 업데이트
+
+        if (keyword.trim() === '') {
+            setIsSearching(false); // 검색어가 비어 있으면 검색 모드 해제
+            setCurrentPage(0); // 페이지를 0으로 설정하여 처음부터 목록을 불러옴
+        } // 검색어 상태 업데이트
     };
 
-    // 검색된 제품을 필터링하는 함수
-    const filteredProducts = products.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Enter 키를 누를 때 검색을 실행하는 함수
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSearchSubmit(); // Enter 키 입력 시 검색 실행
+        }
+    };
+
+    // 검색 버튼 클릭 시 호출되는 함수
+    const handleSearchSubmit = () => {
+        if (searchTerm.trim() === '') {
+            setIsSearching(false); // 검색어가 비어 있을 때는 검색 모드를 해제
+            setCurrentPage(0); // 기본 목록으로 돌아갈 때 첫 페이지로 이동
+        } else {
+            setIsSearching(true); // 검색 모드로 전환
+            searchProducts(0, searchTerm); // 검색 API 호출 시 초기 페이지로 설정
+        }
+    };
+
 
     return (
         <div>
@@ -65,10 +104,14 @@ function ProductList() {
                         type="text"
                         value={searchTerm}
                         onChange={handleSearch}
+                        onKeyDown={handleKeyDown}
                         placeholder="조회할 상품명을 입력하세요"
                         style={{ marginBottom: '16px', padding: '8px', width: '300px' }}
                     />
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                     <button onClick={handleSearchSubmit} style={{ marginLeft: '8px' }}>
+                        검색
+                    </button>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '16px' }}>
                         <thead>
                             <tr>
                                 <th style={{ width: '25%', padding: '8px', textAlign: 'left' }}>상품 목록</th>
@@ -76,8 +119,8 @@ function ProductList() {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product, index) => (
+                            {products.length > 0 ? (
+                                products.map((product, index) => (
                                     <tr key={index}>
                                         <td
                                             style={{ padding: '8px', border: '1px solid #ccc', cursor: 'pointer', color: 'blue' }}
@@ -96,7 +139,13 @@ function ProductList() {
                         </tbody>
                     </table>
 
-                    <div style={{ marginTop: '16px' }}>
+                     <div style={{
+                        marginTop: '16px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '8px' // 버튼 사이의 간격을 추가 (선택 사항)
+                    }}>
                         <button
                             onClick={() => setCurrentPage(currentPage - 1)}
                             disabled={currentPage <= 0}

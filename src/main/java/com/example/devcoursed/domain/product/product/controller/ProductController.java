@@ -6,14 +6,15 @@ import com.example.devcoursed.global.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -41,45 +42,23 @@ public class ProductController {
         return ResponseEntity.ok(productService.addLoss(productDTO, id));
     }
 
-    // 통합 예정 A - 테스트 완료 : name 와 Date를 받아서 전체 사용자의 상품의 평균 로스율 조회
+
+    // 통계용 평균 로스율
     @GetMapping("/loss/{name}")
-    public ResponseEntity<Double> readLoss(@PathVariable("name") String name,
-                                           @RequestParam("startDate") String startDate,
-                                           @RequestParam("endDate") String endDate) {
-        // 프론트에서 받는 데이터 확인
-        log.info("로스율 조회하는 상품: {}", name);
-        log.info("시작 날짜: {}", startDate);
-
-        // LocalDate를 LocalDateTime으로 변환
-        ZonedDateTime startDateTime = ZonedDateTime.parse(startDate); // 시작 날짜의 자정 2024-10-04 00:00:00.000000
-        ZonedDateTime endDateTime = ZonedDateTime.parse(endDate).with(LocalTime.MAX); // 종료 날짜의 마지막 순간 (23:59:59)
-        log.info("변환된 DateTime: {}", startDateTime);
-
-        return ResponseEntity.ok(productService.getAverageLossByName(name, startDateTime.toLocalDateTime(), endDateTime.toLocalDateTime()));
-    }
-
-    // B - 테스트 완료 : 식재료 이름과 날짜를 입력받아 사용자가 입력했었던 모든 데이터(리스트) 반환 (4-1로직)
-    @GetMapping("/{name}")
-    public ResponseEntity<List<ProductDTO>> readGraph(@AuthenticationPrincipal SecurityUser user,
-                                                      @PathVariable("name") String name,
-                                                      @RequestParam("startDate") LocalDate startDate,
-                                                      @RequestParam("endDate") LocalDate endDate){
+    public ResponseEntity<List<ProductDTO.AverageResponseDTO>> getAverageLossStatistics(@AuthenticationPrincipal SecurityUser user,
+                                                                                        @PathVariable String name,
+                                                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX") OffsetDateTime startDate,
+                                                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX") OffsetDateTime endDate) {
         Long memberId = user.getId();
 
-        // LocalDate를 LocalDateTime으로 변환
-        LocalDateTime startDateTime = startDate.atStartOfDay(); // 시작 날짜의 자정
-        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX); // 종료 날짜의 마지막 순간 (23:59:59)
+        // 타임존 변경
+        ZonedDateTime kstStartDate = startDate.atZoneSameInstant(ZoneId.of("Asia/Seoul"));
+        ZonedDateTime kstEndDate = endDate.atZoneSameInstant(ZoneId.of("Asia/Seoul"));
 
-        return ResponseEntity.ok(productService.readGraph(name, memberId, startDateTime, endDateTime));
+        List<ProductDTO.AverageResponseDTO> statistics = productService.getAverageStatistics(memberId, name, kstStartDate.toLocalDateTime(), kstEndDate.toLocalDateTime());
+        return ResponseEntity.ok(statistics);
     }
 
-    // C - 테스트 완료 : user와 name을 받아서 가장 최신에 수정된 데이터만 반환
-    @GetMapping("/losslatest/{name}")
-    public ResponseEntity<ProductDTO> findLatestProduct(@AuthenticationPrincipal SecurityUser user, @PathVariable("name") String name) {
-
-        Long memberId = user.getId();
-        return ResponseEntity.ok(productService.findLatestProduct(memberId, name));
-    }
 
     // D - 테스트 완료 : user와 name를 받아서 가장 최신의 로스율을 가진 데이터만 반환 (1번 로직)
     @GetMapping("/read/{name}")
@@ -89,7 +68,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.read(name, memberId));
     }
 
-    //  E - 테스트 완료 : 목록 전체 불러오기 (같은 이름이 있다면 createdAt이 가장 최신인 것들을 골라서 ) (2번 로직)
+    // 사용자용 상품 목록 전체 조회 (같은 이름이 있다면 createdAt이 가장 최신인 것들을 골라서 ) (2번 로직)
     @GetMapping
     public ResponseEntity<Page<ProductDTO>> getList(@AuthenticationPrincipal SecurityUser user, ProductDTO.PageRequestDTO pageRequestDTO) {
         Long memberId = user.getId();
@@ -97,21 +76,19 @@ public class ProductController {
         return ResponseEntity.ok(productDTOPage);
     }
 
-    // G - 테스트 완료 : 그래프를 위한 리스트 2개 불러오기 (4번 로직)
-    @GetMapping("/loss-rates/{name}")
-    public ResponseEntity<List<ProductDTO.LossRateResponseDTO>> getLossRates(@AuthenticationPrincipal SecurityUser user,
-                                                                             @PathVariable("name") String name,
-                                                                             @RequestParam("startDate") LocalDate startDate,
-                                                                             @RequestParam("endDate") LocalDate endDate) {
-        Long userId = user.getId();
+    // 상품 이름 검색
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductDTO>> searchProducts(@RequestParam("keyword") String keyword,
+                                                           @AuthenticationPrincipal SecurityUser user,
+                                                           ProductDTO.PageRequestDTO pageRequestDTO) {
 
-        // LocalDate를 LocalDateTime으로 변환
-        LocalDateTime startDateTime = startDate.atStartOfDay(); // 시작 날짜의 자정
-        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX); // 종료 날짜의 마지막 순간 (23:59:59)
+        Long memberId = user.getId();
 
-        List<ProductDTO.LossRateResponseDTO> lossRates = productService.getDailyLossRates(userId, name, startDateTime, endDateTime);
+        // '사과' 키워드로 검색된 결과를 가져옴
+        Page<ProductDTO> productDTOPage = productService.searchProducts(keyword, pageRequestDTO, memberId);
 
-        return ResponseEntity.ok(lossRates);
+        return ResponseEntity.ok(productDTOPage);
     }
+
 
 }
