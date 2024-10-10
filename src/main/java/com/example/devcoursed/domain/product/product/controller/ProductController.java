@@ -13,6 +13,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -44,10 +47,15 @@ public class ProductController {
     @GetMapping("/loss/{name}")
     public ResponseEntity<List<ProductDTO.AverageResponseDTO>> getAverageLossStatistics(@AuthenticationPrincipal SecurityUser user,
                                                                                         @PathVariable String name,
-                                                                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-                                                                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+                                                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX") OffsetDateTime startDate,
+                                                                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX") OffsetDateTime endDate) {
         Long memberId = user.getId();
-        List<ProductDTO.AverageResponseDTO> statistics = productService.getAverageStatistics(memberId, name, startDate, endDate);
+
+        // 타임존 변경
+        ZonedDateTime kstStartDate = startDate.atZoneSameInstant(ZoneId.of("Asia/Seoul"));
+        ZonedDateTime kstEndDate = endDate.atZoneSameInstant(ZoneId.of("Asia/Seoul"));
+
+        List<ProductDTO.AverageResponseDTO> statistics = productService.getAverageStatistics(memberId, name, kstStartDate.toLocalDateTime(), kstEndDate.toLocalDateTime());
         return ResponseEntity.ok(statistics);
     }
 
