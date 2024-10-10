@@ -7,7 +7,7 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-function DetailProduct({ product }) {
+function DetailProduct({ product, onBack }) {
     const [productLoss, setProductLoss] = useState(product.loss);
     const [isUpdating, setIsUpdating] = useState(false); // 수정 모드 상태
 
@@ -256,7 +256,9 @@ function DetailProduct({ product }) {
                     ) : (
                         <p>누적된 데이터가 부족합니다.</p> // 통계 데이터가 없을 경우 메시지
                     )}
+
                     {console.log('Statistics data:', statistics)}
+                    <button onClick={onBack}>목록으로 돌아가기</button>
                 </div>
             </div>
         </div>

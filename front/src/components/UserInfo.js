@@ -92,18 +92,22 @@ function UserProfile( {onUpdate} ) {
                     </div>
 
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
-                    <button type="submit" className="user-info-button">수정하기</button>
-                    <button type="button" className="user-info-button" onClick={handleEditToggle}>취소</button>
+                    <div className="submit-buttons">
+                        <button type="submit" className="user-info-button">수정하기</button>
+                        <button type="button" className="user-info-button" onClick={handleEditToggle}>취소</button>
+                    </div>
                 </form>
             ) : (
                 <div>
                     <p>이름: {userInfo.name}</p>
                     <p>로그인 ID: {userInfo.loginId}</p>
-                    <button type="button" className="user-info-button" onClick={handleEditToggle}>수정하기</button>
+                    <div className="submit-buttons">
+                        <button type="button" className="user-info-button" onClick={handleEditToggle}>수정하기</button>
+                    </div>
+                    </div>
+                    )}
                 </div>
-            )}
-        </div>
-    );
-}
+            );
+            }
 
 export default UserProfile;
