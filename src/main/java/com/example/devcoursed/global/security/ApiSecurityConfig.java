@@ -31,7 +31,14 @@ public class ApiSecurityConfig {
                         .hasRole("ADMIN")
 
                         // 인증 없이 접근 가능한 엔드포인트
-                        .requestMatchers("/api/v1/members/login", "/api/v1/members/register","api/**","/api/v1/members/refreshAccessToken").permitAll()
+                        .requestMatchers(
+                                "/api/v1/members/login",
+                                "/api/v1/members/register",
+                                "api/**",
+                                "/api/v1/members/refreshAccessToken",
+                                "/api/v1/members/findId",
+                                "/api/v1/members/findPW"
+                        ).permitAll()
                         .anyRequest().authenticated()
 
                 )

@@ -39,7 +39,7 @@ function App() {
 
     const handleRegister = (name) => {
         setUserName(name);
-        setActiveComponent('');
+        setActiveComponent('login');
     };
 
     const handleFind = () => {
