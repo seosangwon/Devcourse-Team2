@@ -89,7 +89,6 @@ function ProductList() {
         }
     };
 
-
     return (
         <div>
             {selectedProduct ? (
@@ -106,40 +105,45 @@ function ProductList() {
                         onChange={handleSearch}
                         onKeyDown={handleKeyDown}
                         placeholder="조회할 상품명을 입력하세요"
-                        style={{ marginBottom: '16px', padding: '8px', width: '300px' }}
+                        style={{marginBottom: '16px', padding: '8px', width: '300px'}}
                     />
-                     <button onClick={handleSearchSubmit} style={{ marginLeft: '8px' }}>
+                    <button onClick={handleSearchSubmit} style={{marginLeft: '8px'}}>
                         검색
                     </button>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '16px' }}>
+                    <table style={{width: '100%', borderCollapse: 'collapse', marginTop: '16px'}}>
                         <thead>
-                            <tr>
-                                <th style={{ width: '25%', padding: '8px', textAlign: 'left' }}>상품 목록</th>
-                                <th style={{ width: '25%', padding: '8px', textAlign: 'left' }}>로스율</th>
-                            </tr>
+                        <tr>
+                            <th style={{width: '25%', padding: '8px', textAlign: 'left'}}>상품 목록</th>
+                            <th style={{width: '25%', padding: '8px', textAlign: 'left'}}>로스율</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {products.length > 0 ? (
-                                products.map((product, index) => (
-                                    <tr key={index}>
-                                        <td
-                                            style={{ padding: '8px', border: '1px solid #ccc', cursor: 'pointer', color: 'blue' }}
-                                            onClick={() => handleProductClick(product)} // 상품 이름 클릭 시 해당 상품을 전달
-                                        >
-                                            {product.name}
-                                        </td>
-                                        <td style={{ padding: '8px', border: '1px solid #ccc' }}>{product.loss}</td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="2" style={{ textAlign: 'center', padding: '8px' }}>등록된 상품이 없습니다</td>
+                        {products.length > 0 ? (
+                            products.map((product, index) => (
+                                <tr key={index}>
+                                    <td
+                                        style={{
+                                            padding: '8px',
+                                            border: '1px solid #ccc',
+                                            cursor: 'pointer',
+                                            color: 'blue'
+                                        }}
+                                        onClick={() => handleProductClick(product)} // 상품 이름 클릭 시 해당 상품을 전달
+                                    >
+                                        {product.name}
+                                    </td>
+                                    <td style={{padding: '8px', border: '1px solid #ccc'}}>{product.loss}</td>
                                 </tr>
-                            )}
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="2" style={{textAlign: 'center', padding: '8px'}}>등록된 상품이 없습니다</td>
+                            </tr>
+                        )}
                         </tbody>
                     </table>
 
-                     <div style={{
+                    <div style={{
                         marginTop: '16px',
                         display: 'flex',
                         justifyContent: 'center',

@@ -18,12 +18,21 @@
     padding: 10px; /* 내부 여백 제거 */
 
 }
-.user-info-button{
+
+.submit-buttons {
+    position: absolute; /* 폼 내에서 위치 설정 */
+    bottom: 20px; /* 아래에서 20px */
+    left: 50%; /* 중앙 정렬 */
+    transform: translateX(-50%); /* 중앙 정렬을 위해 이동 */
+    display: flex; /* 버튼을 가로로 나열 */
+}
+
+.user-info-button {
+    bottom: 20px; /* 아래에서 20px */
     margin: 5px;
-    position: absolute;
-    bottom: 20px;
     display: block;
 }
+
 
 .user-profile {
     max-width: 500px; /* 최대 너비 설정 */
