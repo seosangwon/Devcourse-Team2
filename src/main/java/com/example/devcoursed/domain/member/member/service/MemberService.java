@@ -1,20 +1,29 @@
 package com.example.devcoursed.domain.member.member.service;
 
+import com.example.devcoursed.domain.member.member.dto.MemberDTO;
+import com.example.devcoursed.domain.member.member.entity.Member;
+import com.example.devcoursed.domain.member.member.exception.MemberException;
+import com.example.devcoursed.domain.member.member.repository.MemberRepository;
+import com.example.devcoursed.global.util.JwtUtil;
+import com.example.devcoursed.global.util.PasswordUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import jdk.jshell.execution.Util;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import com.example.devcoursed.domain.member.member.exception.MemberException;
-import com.example.devcoursed.domain.member.member.dto.MemberDTO;
-import com.example.devcoursed.domain.member.member.entity.Member;
-import com.example.devcoursed.domain.member.member.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,7 +34,7 @@ public class MemberService {
 
 
     @Transactional
-    public MemberDTO.Create create(MemberDTO.Create dto) {
+    public MemberDTO.CreateResponseDto create(MemberDTO.CreateRequestDto dto) {
         try {
             //기존의 회원이 있는지 검사
             Optional<Member> member = memberRepository.findByLoginId(dto.getLoginId());
@@ -36,8 +45,8 @@ public class MemberService {
             String password = dto.getPw();
             dto.setPw(passwordEncoder.encode(password));
 
-            memberRepository.save(dto.toEntity());
-            return dto;
+            Member savedMember = memberRepository.save(dto.toEntity());
+            return new MemberDTO.CreateResponseDto("회원가입이 완료되었습니다");
         } catch (Exception e) {
             throw MemberException.MEMBER_NOT_REGISTERED.getMemberTaskException();
         }
@@ -51,11 +60,10 @@ public class MemberService {
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
             member.changeLoginId(dto.getLoginId());
-            String password = dto.getPw();
-            dto.setPw(passwordEncoder.encode(password));
-            member.changePw(dto.getPw());
+            member.changePw(passwordEncoder.encode(dto.getPw()));
             member.changeName(dto.getName());
             member.changeMImage(dto.getMImage());
+            member.changeEmail(dto.getEmail()); // 잠시 수정
             memberRepository.save(member);
 
             return new MemberDTO.Update(
@@ -63,7 +71,8 @@ public class MemberService {
                     member.getLoginId(),
                     member.getPw(),
                     member.getName(),
-                    member.getMImage()
+                    member.getMImage(),
+                    member.getEmail()  // 잠시 수정
             );
         } else {
             throw MemberException.MEMBER_NOT_MODIFIED.getMemberTaskException();
@@ -85,17 +94,18 @@ public class MemberService {
         Optional<Member> memberOptional = memberRepository.findById(id);
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
-            return new MemberDTO.Response(
-                    member.getLoginId(),
-                    member.getPw(),
-                    member.getName(),
-                    member.getMImage(),
-                    member.getCreatedAt(),
-                    member.getModifiedAt()
-            );
+            return new MemberDTO.Response(member);
         } else {
             throw MemberException.MEMBER_NOT_REMOVED.getMemberTaskException();
         }
+    }
+
+    public Page<MemberDTO.Response> readAll(Pageable pageable) {
+        Page<Member> members = memberRepository.searchMembers(pageable);
+
+        return members.map(MemberDTO.Response::new);
+
+
     }
 
     private final String uploadDir = "upload/"; // 현재 디렉토리의 upload 폴더
@@ -107,8 +117,9 @@ public class MemberService {
             Member member = memberOptional.get();
             String fileName = saveImage(imageFile); // MultipartFile로 파일 저장
 
-            member.changeMImage(fileName); // 파일 이름을 저장
+            member.changeMImage(fileName); // URL 저장
             memberRepository.save(member);
+
             return new MemberDTO.ChangeImage(member.getId(), imageFile);
         } else {
             throw MemberException.MEMBER_IMAGE_NOT_MODIFIED.getMemberTaskException();
@@ -152,7 +163,85 @@ public class MemberService {
 
     }
 
+    public Member getMemberById(Long id) {
+        Optional<Member> opMember = memberRepository.findById(id);
+
+        if (opMember.isEmpty()) {
+            throw MemberException.MEMBER_NOT_FOUND.getMemberTaskException();
+        }
+
+        return opMember.get();
+    }
+
     public int count() {
         return memberRepository.findAll().size();
+    }
+
+    @Transactional
+    public void setRefreshToken(Long id, String refreshToken) {
+        Member member = memberRepository.findById(id).get();
+        member.updateRefreshToken(refreshToken);
+
+    }
+
+    public String generateAccessToken(Long id, String loginId) {
+        List<String> authorities;
+        if (loginId.equals("admin")) {
+            authorities = List.of("ROLE_ADMIN");
+        } else {
+            authorities = List.of("ROLE_MEMBER");
+        }
+
+        return JwtUtil.encodeAccessToken(15,
+                Map.of("id", id.toString(),
+                        "loginId", loginId,
+                        "authorities", authorities)
+        );
+
+
+    }
+
+    public String generateRefreshToken(Long id, String loginId) {
+        return JwtUtil.encodeRefreshToken(60 * 24 * 3,
+                Map.of("id", id.toString(),
+                        "loginId", loginId)
+        );
+
+    }
+
+    public String refreshAccessToken(String refreshToken) {
+        //화이트리스트 처리
+        Member member = memberRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> MemberException.MEMBER_LOGIN_DENIED.getMemberTaskException());
+
+        //리프레시 토큰이 만료되었다면 로그아웃
+        try {
+            Claims claims = JwtUtil.decode(refreshToken); // 여기서 에러 처리가 남
+        } catch (ExpiredJwtException e) {
+            // 클라이언트한테 만료되었다고 알려주기
+            throw MemberException.MEMBER_REFRESHTOKEN_EXPIRED.getMemberTaskException();
+
+        }
+
+
+        return generateAccessToken(member.getId(), member.getLoginId());
+    }
+
+
+    public String findByEmail(String email) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> MemberException.MEMBER_NOT_FOUND.getMemberTaskException());
+        return member.getLoginId();
+
+    }
+
+    @Transactional
+    public String setTemplatePassword(String loginId, String email) {
+        Member member = memberRepository.findByLoginIdAndEmail(loginId, email).orElseThrow(() -> MemberException.MEMBER_NOT_FOUND.getMemberTaskException());
+        String templatePassword = PasswordUtil.generateTempPassword();
+        member.changePw(passwordEncoder.encode(templatePassword));
+        memberRepository.save(member);
+
+        return templatePassword;
+
     }
 }

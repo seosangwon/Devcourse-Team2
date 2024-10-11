@@ -1,6 +1,7 @@
 // src/components/UserDelete.js
 
 import React, { useState } from 'react';
+import axiosInstance from "../axiosInstance";
 
 function UserDelete({ onDelete }) {
     const [loading, setLoading] = useState(false);
@@ -9,14 +10,10 @@ function UserDelete({ onDelete }) {
         if (window.confirm("정말로 회원 탈퇴하시겠습니까?")) {
             setLoading(true);
             try {
-                const response = await fetch(`/api/v1/members/`, {
-                    method: 'DELETE',
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
+                const response = await axiosInstance.delete(`/api/v1/members/`, {
                 });
 
-                if (response.ok) {
+                if (response.status === 200) {
                     alert("회원 탈퇴가 완료되었습니다.");
                     localStorage.removeItem('jwt'); // JWT 토큰 삭제
                     onDelete(); // App.js에서 상태 초기화
@@ -36,7 +33,7 @@ function UserDelete({ onDelete }) {
     return (
         <div className="user-delete-container">
             <h2>회원 탈퇴</h2>
-            <button className="delete-button" onClick={handleDelete} disabled={loading}>
+            <button className="user-delete-button" onClick={handleDelete} disabled={loading}>
                 {loading ? '탈퇴 중...' : '탈퇴하기'}
             </button>
         </div>

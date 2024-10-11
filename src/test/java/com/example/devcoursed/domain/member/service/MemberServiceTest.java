@@ -27,14 +27,14 @@ public class MemberServiceTest {
     @DisplayName("비밀번호 인코딩 테스트 ")
     void t1() {
         //given
-        MemberDTO.Create createRequestDto = new MemberDTO.Create();
+        MemberDTO.CreateRequestDto createRequestDto = new MemberDTO.CreateRequestDto();
         createRequestDto.setLoginId("loginId1234");
         createRequestDto.setName("홍길동");
         String password = "1234";
         createRequestDto.setPw(password);
 
         //when
-        MemberDTO.Create responseDto = memberService.create(createRequestDto);
+
         Member member = memberRepository.findByLoginId("loginId1234").get();
 
         //then
@@ -47,13 +47,13 @@ public class MemberServiceTest {
     @DisplayName("중복 회원가입 테스트")
     void t2() {
         //given
-        MemberDTO.Create createRequestDto = new MemberDTO.Create();
+        MemberDTO.CreateRequestDto createRequestDto = new MemberDTO.CreateRequestDto();
         createRequestDto.setLoginId("loginId1234");
         createRequestDto.setName("홍길동");
         String password = "1234";
         createRequestDto.setPw(password);
 
-        MemberDTO.Create newCreateRequestDto = new MemberDTO.Create();
+        MemberDTO.CreateRequestDto newCreateRequestDto = new MemberDTO.CreateRequestDto();
         newCreateRequestDto.setLoginId("loginId1234");
         newCreateRequestDto.setName("홍길순");
         String newPassword = "123456789";

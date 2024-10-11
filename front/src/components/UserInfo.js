@@ -1,8 +1,11 @@
+// src/components/UserProfile.js
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosInstance'; // 커스텀 Axios 인스턴스 사용
+import './UserInfo.css';
 
-function UserProfile() {
+function UserProfile( {onUpdate} ) {
     const [userInfo, setUserInfo] = useState(null);
+    const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [loginId, setLoginId] = useState('');
     const [pw, setPassword] = useState('');
@@ -11,13 +14,10 @@ function UserProfile() {
 
     useEffect(() => {
         const fetchUserInfo = async () => {
-            const token = localStorage.getItem('token');
-
             try {
-                const response = await axios.get('/api/v1/members/', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const response = await axiosInstance.get('/api/v1/members/');
                 setUserInfo(response.data);
+                setEmail(response.data.email);
                 setName(response.data.name);
                 setLoginId(response.data.loginId);
             } catch (error) {
@@ -35,29 +35,36 @@ function UserProfile() {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
-        const token = localStorage.getItem('token');
-
         try {
-            const response = await axios.put('/api/v1/members/', { name, loginId, pw }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await axiosInstance.put('/api/v1/members/', {email, name, loginId, pw });
             setUserInfo(response.data);
+            onUpdate(response.data.name);
             setIsEditing(false); // 수정 모드 종료
         } catch (error) {
-            setErrorMessage('정보 수정 실패: ' + (error.response.data.message || '알 수 없는 오류'));
+            setErrorMessage('정보 수정 실패: ' + (error.response?.data?.message || '알 수 없는 오류'));
         }
     };
 
     if (!userInfo) return <div>로딩 중...</div>;
 
     return (
-        <div>
+        <div className="info-container"> {/* 컨테이너 추가 */}
             <h2>사용자 정보</h2>
             {isEditing ? (
                 <form onSubmit={handleUpdate}>
                     <div>
+                        <label>이메일:</label>
+                        <input
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
                         <label>이름:</label>
                         <input
+                            className="userinfo-input"
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -67,6 +74,7 @@ function UserProfile() {
                     <div>
                         <label>로그인 ID:</label>
                         <input
+                            className="userinfo-input"
                             type="text"
                             value={loginId}
                             onChange={(e) => setLoginId(e.target.value)}
@@ -76,25 +84,30 @@ function UserProfile() {
                     <div>
                         <label>비밀번호:</label>
                         <input
-                            type="text"
+                            type="password"
                             value={pw}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                     </div>
+
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
-                    <button type="submit" className="button">수정하기</button>
-                    <button type="button" className="button" onClick={handleEditToggle}>취소</button>
+                    <div className="submit-buttons">
+                        <button type="submit" className="user-info-button">수정하기</button>
+                        <button type="button" className="user-info-button" onClick={handleEditToggle}>취소</button>
+                    </div>
                 </form>
             ) : (
                 <div>
                     <p>이름: {userInfo.name}</p>
                     <p>로그인 ID: {userInfo.loginId}</p>
-                    <button className="button" onClick={handleEditToggle}>수정하기</button>
+                    <div className="submit-buttons">
+                        <button type="button" className="user-info-button" onClick={handleEditToggle}>수정하기</button>
+                    </div>
+                    </div>
+                    )}
                 </div>
-            )}
-        </div>
-    );
-}
+            );
+            }
 
 export default UserProfile;

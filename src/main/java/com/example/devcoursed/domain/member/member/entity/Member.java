@@ -32,8 +32,11 @@ public class Member {
 
     private String pw;
     private String name;
+    private String email;
 
     private String mImage;
+    @Column(columnDefinition = "TEXT")
+    private String refreshToken;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -51,13 +54,13 @@ public class Member {
 
 
     @Builder
-    public Member(String loginId, String pw, String name, String mImage) {
+    public Member(String loginId, String pw, String name, String mImage , String email) {
         this.loginId = loginId;
         this.pw = pw;
         this.name = name;
         this.mImage = mImage;
+        this.email = email;
     }
-
 
     public void changeLoginId(String loginId) {
         this.loginId = loginId;
@@ -74,7 +77,17 @@ public class Member {
     }
 
 
+    public void changeEmail(String email) { // 잠시 수정
+        this.email=email;
+
+    }
+
+
     public void changeMImage(String mImage) {
         this.mImage = mImage;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
