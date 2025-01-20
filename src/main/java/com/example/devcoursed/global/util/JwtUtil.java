@@ -3,20 +3,30 @@ package com.example.devcoursed.global.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
 
+@Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuvwxyz1234567890";
+    @Value("${spring.jwt.secret_key}")
+    private String SECRET_KEY ;
 
-    private static final SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+    private  SecretKey key;
+
+    @PostConstruct
+    public void init() {
+        key= Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+    }
 
 
-    public static String encodeAccessToken(long minute, Map<String, Object> data) {
+    public  String encodeAccessToken(long minute, Map<String, Object> data) {
 
         Claims claims = Jwts
                 .claims()
@@ -37,7 +47,7 @@ public class JwtUtil {
 
 
     }
-    public static String encodeRefreshToken(long minute,Map<String, Object> data) {
+    public  String encodeRefreshToken(long minute,Map<String, Object> data) {
 
         Claims claims = Jwts
                 .claims()
@@ -59,7 +69,7 @@ public class JwtUtil {
 
     }
 
-    public static Claims decode(String token) {
+    public  Claims decode(String token) {
         return Jwts.parser()
                 .verifyWith(key)
                 .build()

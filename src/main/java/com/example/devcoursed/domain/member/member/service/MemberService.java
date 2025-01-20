@@ -31,6 +31,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
 
     @Transactional
@@ -192,7 +193,7 @@ public class MemberService {
             authorities = List.of("ROLE_MEMBER");
         }
 
-        return JwtUtil.encodeAccessToken(15,
+        return jwtUtil.encodeAccessToken(15,
                 Map.of("id", id.toString(),
                         "loginId", loginId,
                         "authorities", authorities)
@@ -202,7 +203,7 @@ public class MemberService {
     }
 
     public String generateRefreshToken(Long id, String loginId) {
-        return JwtUtil.encodeRefreshToken(60 * 24 * 3,
+        return jwtUtil.encodeRefreshToken(60 * 24 * 3,
                 Map.of("id", id.toString(),
                         "loginId", loginId)
         );
@@ -216,7 +217,7 @@ public class MemberService {
 
         //리프레시 토큰이 만료되었다면 로그아웃
         try {
-            Claims claims = JwtUtil.decode(refreshToken); // 여기서 에러 처리가 남
+            Claims claims = jwtUtil.decode(refreshToken); // 여기서 에러 처리가 남
         } catch (ExpiredJwtException e) {
             // 클라이언트한테 만료되었다고 알려주기
             throw MemberException.MEMBER_REFRESHTOKEN_EXPIRED.getMemberTaskException();
