@@ -42,3 +42,7 @@ nbe2_2_dev.trace.db
 
 #secret yml#
 application-secret.yml
+
+#terraform#
+terraform/.terraform
+terraform/prod.tfvars
