@@ -30,9 +30,14 @@ variable "public_az" {
   default = "ap-northeast-2a"
 }
 
-variable "private_az" {
+variable "private_az_a" {
   type    = string
   default = "ap-northeast-2a"
+}
+
+variable "private_az_b" {
+  type    = string
+  default = "ap-northeast-2b"
 }
 
 variable "ami_id" {
