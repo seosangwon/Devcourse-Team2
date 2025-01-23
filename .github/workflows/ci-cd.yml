@@ -1,0 +1,96 @@
+name: CI-CD
+
+on:
+  push:
+    branches: [ "release" ]  # release 브랜치에 push 될 때 동작
+
+jobs:
+  build-and-push:
+    name: Build & Push Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      # GHCR 로그인
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 1) 프론트 이미지 빌드 & Push
+      - name: Build frontend image
+        run: |
+          cd front
+          docker build -t ghcr.io/${{ github.repository }}-frontend:green .
+          docker push ghcr.io/${{ github.repository }}-frontend:green
+          cd ..
+
+      # 2) 백엔드 이미지 빌드 & Push (prod, secret.yml 적용)
+      - name: Build backend image (prod)
+        run: |
+          # (1) secret.yml 생성 - GitHub Secrets에서 가져온 내용을 로컬에 파일로 만든다
+          echo "${{ secrets.SECRET_YML }}" > src/main/resources/secret.yml
+
+          
+          # (2) Spring Boot prod 프로필 빌드 (Gradle 기준)
+          ./gradlew clean build -Pprod
+
+          # (3) Docker 빌드
+          docker build -t ghcr.io/${{ github.repository }}-backend:green .
+
+          # (4) 푸시
+          docker push ghcr.io/${{ github.repository }}-backend:green
+        # 보안을 위해 secret.yml을 빌드 후에 제거하거나 .gitignore 처리 권장
+
+  deploy:
+    name: Deploy to EC2 (Blue/Green)
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Deploy via SSM
+        run: |
+          aws ssm send-command \
+            --instance-ids "i-0abcd1234..." \
+            --document-name "AWS-RunShellScript" \
+            --comment "Blue/Green deploy script" \
+            --parameters commands='[
+              "docker pull ghcr.io/${{ github.repository }}-frontend:green",
+              "docker pull ghcr.io/${{ github.repository }}-backend:green",
+              "",
+              "# 1) stop existing green containers if any",
+              "docker stop app_green_front || true && docker rm app_green_front || true",
+              "docker stop app_green_back || true && docker rm app_green_back || true",
+              "",
+              "# 2) run new green containers",
+              "docker run -d --name app_green_front -p 8081:80 ghcr.io/${{ github.repository }}-frontend:green",
+              "docker run -d --name app_green_back -p 8082:8080 ghcr.io/${{ github.repository }}-backend:green",
+              "",
+              "# 3) health check (예: curl localhost:8082/actuator/health)",
+              "sleep 10",
+              "curl -f http://localhost:8082/actuator/health || exit 1",
+              "",
+              "# 4) update nginx config to point to 8081(front) / 8082(backend)",
+              "sudo sed -i \"s/8080/8082/g\" /etc/nginx/conf.d/myapp-backend.conf",
+              "sudo sed -i \"s/80/8081/g\" /etc/nginx/conf.d/myapp-frontend.conf",
+              "",
+              "# 5) reload nginx",
+              "sudo nginx -s reload",
+              "# 6) success => stop blue containers",
+              "docker stop app_blue_front || true && docker rm app_blue_front || true",
+              "docker stop app_blue_back || true && docker rm app_blue_back || true"
+            ]' \
+            --timeout-seconds 600 \
+            --max-concurrency "1" \
+            --max-errors "1" \
+            --region ap-northeast-2
+
