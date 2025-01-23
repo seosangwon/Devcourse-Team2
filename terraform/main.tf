@@ -41,6 +41,8 @@ resource "aws_iam_instance_profile" "ssm_instance_profile" {
 ///////////////////////////////////////////////////////////////////////////
 resource "aws_vpc" "main_vpc" {
   cidr_block = var.vpc_cidr
+  enable_dns_hostnames = true
+  enable_dns_support   = true
   tags = {
     Name = "MainVPC"
   }
@@ -128,6 +130,48 @@ resource "aws_route_table_association" "private_assoc_b" {
   route_table_id = aws_route_table.private_rt.id
 }
 
+///////////////////////////////////////////////////////////////////////////
+// 6) (선택) VPC Endpoints (SSM, SSM Messages, EC2 Messages)
+//  - Private Subnet에서 SSM Agent 통신 시 필요
+//  - 퍼블릭 서브넷에선 인터넷을 통해 SSM 연결 가능하므로 선택 사항
+///////////////////////////////////////////////////////////////////////////
+
+resource "aws_vpc_endpoint" "ssm" {
+  vpc_id            = aws_vpc.main_vpc.id
+  vpc_endpoint_type = "Interface"
+  service_name      = "com.amazonaws.${var.aws_region}.ssm"
+  subnet_ids        = [aws_subnet.private_subnet_a.id, aws_subnet.private_subnet_b.id]
+  security_group_ids = []
+  private_dns_enabled = true
+  tags = {
+    Name = "vpc-endpoint-ssm"
+  }
+}
+
+resource "aws_vpc_endpoint" "ssm_messages" {
+  vpc_id            = aws_vpc.main_vpc.id
+  vpc_endpoint_type = "Interface"
+  service_name      = "com.amazonaws.${var.aws_region}.ssmmessages"
+  subnet_ids        = [aws_subnet.private_subnet_a.id, aws_subnet.private_subnet_b.id]
+  security_group_ids = []
+  private_dns_enabled = true
+  tags = {
+    Name = "vpc-endpoint-ssmmessages"
+  }
+}
+
+resource "aws_vpc_endpoint" "ec2_messages" {
+  vpc_id            = aws_vpc.main_vpc.id
+  vpc_endpoint_type = "Interface"
+  service_name      = "com.amazonaws.${var.aws_region}.ec2messages"
+  subnet_ids        = [aws_subnet.private_subnet_a.id, aws_subnet.private_subnet_b.id]
+  security_group_ids = []
+  private_dns_enabled = true
+  tags = {
+    Name = "vpc-endpoint-ec2messages"
+  }
+}
+
 
 
 
@@ -178,7 +222,7 @@ resource "aws_security_group" "sg_private" {
 
   # RDS는 3306 포트를 열 수도 있음 (예: MySQL)
   ingress {
-    description = "Allow MySQL (3306) from ???"
+    description = "Allow MySQL (3306) "
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
@@ -221,11 +265,12 @@ resource "aws_instance" "ec2_nginx" {
 ///////////////////////////////////////////////////////////////////////////
 // 9) SSM Document & Association (Install Docker)
 ///////////////////////////////////////////////////////////////////////////
-resource "aws_ssm_document" "install_docker_doc" {
-  name          = "Install-Docker"
-  document_type = "Command"
 
-  content = <<EOF
+resource "aws_ssm_document" "install_docker_doc" {
+    name          = "Install-Docker"
+    document_type = "Command"
+
+    content = <<EOF
 {
   "schemaVersion": "2.2",
   "description": "Install Docker on EC2 (Linux)",
@@ -239,7 +284,7 @@ resource "aws_ssm_document" "install_docker_doc" {
           "sudo apt-get install -y docker.io || sudo yum install -y docker",
           "sudo systemctl enable docker",
           "sudo systemctl start docker",
-          "sudo usermod -aG docker \$USER",
+          "sudo usermod -aG docker \\$USER",
           "echo 'Docker installation completed.'"
         ]
       }
@@ -247,12 +292,22 @@ resource "aws_ssm_document" "install_docker_doc" {
   ]
 }
 EOF
-}
+  }
+
+
+
 
 # 하나의 EC2에서 Docker 설치(필요 시 Nginx, Spring Boot 컨테이너 동시 실행 가능)
 resource "aws_ssm_association" "install_docker_on_nginx" {
   name        = aws_ssm_document.install_docker_doc.name
-  instance_id = aws_instance.ec2_nginx.id
+  # instance_id = aws_instance.ec2_nginx.id    # 제거
+
+  # 대신 targets를 사용
+  targets {
+    key    = "InstanceIds"
+    values = [aws_instance.ec2_nginx.id]
+  }
+
 }
 
 
@@ -285,7 +340,7 @@ resource "aws_db_instance" "my_rds" {
 
   # private-subnet용 보안 그룹
   vpc_security_group_ids = [
-    # aws_security_group.sg_private.id
+     aws_security_group.sg_public.id
   ]
 
   tags = {
