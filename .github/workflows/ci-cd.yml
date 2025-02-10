@@ -24,8 +24,8 @@ jobs:
       - name: Build frontend image
         run: |
           cd front
-          docker build -t ghcr.io/nbe2_2_team2-frontend:green .
-          docker push ghcr.io/nbe2_2_team2-frontend:green
+          docker build -t ghcr.io/nbe2_2_team2-frontend_green .
+          docker push ghcr.io/nbe2_2_team2-frontend_green
           cd ..
 
       # 2) 백엔드 이미지 빌드 & Push (prod, secret.yml 적용)
@@ -38,10 +38,10 @@ jobs:
           ./gradlew clean build -Pprod
 
           # (3) Docker 빌드
-          docker build -t ghcr.io/nbe2_2_team2-backend:green .
+          docker build -t ghcr.io/nbe2_2_team2-backend_green .
 
           # (4) 푸시
-          docker push ghcr.io/nbe2_2_team2-backend:green
+          docker push ghcr.io/nbe2_2_team2-backend_green
         # 보안을 위해 secret.yml을 빌드 후에 제거하거나 .gitignore 처리 권장
 
   deploy:
@@ -63,16 +63,16 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Blue/Green deploy script" \
             --parameters commands='[
-              "docker pull ghcr.io/nbe2_2_team2-frontend:green",
-              "docker pull ghcr.io/nbe2_2_team2-backend:green",
+              "docker pull ghcr.io/nbe2_2_team2-frontend_green",
+              "docker pull ghcr.io/nbe2_2_team2-backend_green",
               "",
               "# 1) stop existing green containers if any",
               "docker stop app_green_front || true && docker rm app_green_front || true",
               "docker stop app_green_back || true && docker rm app_green_back || true",
               "",
               "# 2) run new green containers",
-              "docker run -d --name app_green_front -p 8081:80 ghcr.io/nbe2_2_team2-frontend:green",
-              "docker run -d --name app_green_back -p 8082:8080 ghcr.io/nbe2_2_team2-backend:green",
+              "docker run -d --name app_green_front -p 8081:80 ghcr.io/nbe2_2_team2-frontend_green",
+              "docker run -d --name app_green_back -p 8082:8080 ghcr.io/nbe2_2_team2-backend_green",
               "",
               "# 3) health check (예: curl localhost:8082/actuator/health)",
               "sleep 10",
