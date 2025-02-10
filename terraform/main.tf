@@ -285,6 +285,7 @@ resource "aws_ssm_document" "install_docker_doc" {
           "sudo systemctl enable docker",
           "sudo systemctl start docker",
           "sudo usermod -aG docker \\$USER",
+          "sudo chmod 666 /var/run/docker.sock",
           "echo 'Docker installation completed.'"
         ]
       }
@@ -337,6 +338,8 @@ resource "aws_db_instance" "my_rds" {
   publicly_accessible    = false
   skip_final_snapshot    = true
   db_subnet_group_name   = aws_db_subnet_group.my_db_subnet_group.name
+
+  db_name = "devcoursed" // 초기 데이터베이스 생성
 
   # private-subnet용 보안 그룹
   vpc_security_group_ids = [

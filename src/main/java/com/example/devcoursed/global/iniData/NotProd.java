@@ -20,11 +20,10 @@ import java.util.Random;
 @Configuration
 @RequiredArgsConstructor
 @Profile("!prod")
+@Lazy
 public class NotProd {
 
-    @Autowired
-    @Lazy
-    private NotProd self;
+
 
     private final MemberService memberService;
     private final MemberRepository memberRepository;
