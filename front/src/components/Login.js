@@ -30,7 +30,7 @@ function Login({ onLogin, handleBack }) {
     return (
         <form onSubmit={handleLogin}>
             <div className="inputform">
-                <div className='formInfo'>로그인</div>
+                <div className='formInfo'>로그인 cd/cd test-1</div>
             <div>
                 <span className="input-info">아이디 :</span>
                 <input className="auth-input" type="text" value={loginId} onChange={(e) => setLoginId(e.target.value)} placeholder="아이디를 입력하세요" required />
