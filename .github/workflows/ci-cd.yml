@@ -59,7 +59,7 @@ jobs:
       - name: Deploy via SSM
         run: |
           aws ssm send-command \
-            --instance-ids "i-06314af5d30c54e23" \
+            --instance-ids "i-06296abd66e2c87de" \
             --document-name "AWS-RunShellScript" \
             --comment "Blue/Green deploy script" \
             --parameters commands='[

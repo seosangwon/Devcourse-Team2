@@ -201,6 +201,16 @@ resource "aws_security_group" "sg_public" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  // 443 포트도 오픈
+  ingress {
+    description = " Allow HTTPS (443)"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
 
   egress {
     from_port   = 0
