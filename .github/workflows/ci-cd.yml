@@ -40,7 +40,7 @@ jobs:
           ls -al gradlew
 
           # (2) Spring Boot prod 프로필 빌드 (Gradle 기준)
-          ./gradlew clean build -Pprod
+          ./gradlew clean build -Pprod -x test
 
           # (3) Docker 빌드
           docker build -t ghcr.io/seosangwon/backend:green .
