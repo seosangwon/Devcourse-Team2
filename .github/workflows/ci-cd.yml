@@ -29,6 +29,7 @@ jobs:
           docker push ghcr.io/seosangwon/frontend:green
           cd ..
 
+
       # 2) 백엔드 이미지 빌드 & Push (prod, secret.yml 적용)
       - name: Build backend image (prod)
         run: |
