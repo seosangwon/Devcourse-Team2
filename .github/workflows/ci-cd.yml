@@ -34,6 +34,8 @@ jobs:
           # (1) secret.yml 생성 - GitHub Secrets에서 가져온 내용을 로컬에 파일로 만든다
           echo "${{ secrets.SECRET_YML }}" > src/main/resources/application-secret.yml
           pwd
+          ls -al
+          ls -al gradlew
 
           # (2) Spring Boot prod 프로필 빌드 (Gradle 기준)
           ./gradlew clean build -Pprod
