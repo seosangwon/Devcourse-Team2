@@ -20,6 +20,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
 
+
       # 1) 프론트 이미지 빌드 & Push
       - name: Build frontend image
         run: |
